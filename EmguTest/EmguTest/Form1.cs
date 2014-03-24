@@ -31,6 +31,8 @@ namespace EmguTest
 
         private bool UseGPUCascade = false;
 
+        private Disparity.DisparityBuilder DispBuilder;
+
         private long LastMill = 0;
         private int LastFpsCount = 0;
         public Form1()
@@ -54,8 +56,13 @@ namespace EmguTest
             // adjust path to find your xml
             haar = new HaarCascade(haarPath);
             gpuCC = new Emgu.CV.GPU.GpuCascadeClassifier(this.haarPath);
-            this.FeatureTracker = new LKFeatureTracker(cap);
-            this.FeatureTracker.Run();
+
+            //for feature tracker uncomment this
+            //this.FeatureTracker = new LKFeatureTracker(cap);
+            //if (this.timer2.Enabled)
+            //{
+            //    this.FeatureTracker.Run();
+            //}
 
             if (this.UseGPUCascade)
             {
@@ -65,6 +72,15 @@ namespace EmguTest
             {
                 deviceSwitchButton.Text = "CPU";
             }
+
+            //dispBuilder
+            String stereoPath = @"C:\CodeStuff\cvproj\resources\video1384849670808.mp4";
+            //String stereoPath = @"G:\0HowToTrainYourDragon\How to Train Your Dragon.3d.1080p.hsbs.mkv";
+            Capture stereoCap = new Capture(stereoPath);
+            
+            this.DispBuilder = new Disparity.DisparityBuilder(stereoCap);
+            this.timer3.Enabled = true;
+            ////
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -178,7 +194,28 @@ namespace EmguTest
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.FeatureTracker.Stop();
+            try
+            {
+                this.FeatureTracker.Stop();
+            }
+            catch
+            {
+            }
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            var res = this.DispBuilder.GetNextDisparityMap();
+            if (res != null)
+            {
+                this.pictureBox1.Image = res;
+            }
+
+            var rawRes = this.DispBuilder.CurrentFrame;
+            if (rawRes != null)
+            {
+                this.pictureBox2.Image = rawRes;
+            }
         }
 
         //private void CPUDetect()

@@ -27,8 +27,8 @@ namespace EmguTest
         public double QualityLevel = 0.01;
         public double MinDistance = 1;
         public int BlockSize = 10;
-        public Size WinSize = new Size(40, 40);
-        public int PyrLevel = 2;
+        public Size WinSize = new Size(80, 80);
+        public int PyrLevel = 4;
         public MCvTermCriteria PyrLkTerm = new MCvTermCriteria(100, 0.001);
 
         protected override void MainProcessing()

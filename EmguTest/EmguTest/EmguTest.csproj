@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Disparity\DisparityBuilder.cs" />
     <Compile Include="EmguMain.cs" />
     <Compile Include="FeatureTracker\FeatureTracker.cs" />
     <Compile Include="FeatureTracker\FeatureTrackerMainLoopPart.cs" />
