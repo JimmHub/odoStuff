@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
-
 
 namespace EmguTest
 {
@@ -35,6 +35,9 @@ namespace EmguTest
 
         private long LastMill = 0;
         private int LastFpsCount = 0;
+
+        public Wpf3DControl.UserControl1 Wpf3DControl;
+
         public Form1()
         {
             InitializeComponent();
@@ -49,8 +52,29 @@ namespace EmguTest
             this.EmguMain.Run();
         }
 
+        private void LoadWpf3dControl()
+        {
+            // Create the ElementHost control for hosting the
+            // WPF UserControl.
+            ElementHost host = this.elementHost1;
+            //host.Dock = DockStyle.Fill;
+
+            // Create the WPF UserControl.
+            this.Wpf3DControl =
+                new Wpf3DControl.UserControl1();
+
+            // Assign the WPF UserControl to the ElementHost control's
+            // Child property.
+            host.Child = this.Wpf3DControl;
+            
+            // Add the ElementHost control to the form's
+            // collection of child controls.
+            this.Controls.Add(host);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.LoadWpf3dControl();
             // passing 0 gets zeroth webcam
             cap = new Capture(0);
             // adjust path to find your xml
@@ -216,6 +240,19 @@ namespace EmguTest
             {
                 this.pictureBox2.Image = rawRes;
             }
+
+            this.RotateWpfContent();
+
+        }
+
+        private void RotateWpfContent()
+        {
+            this.Wpf3DControl.RotateTest();
+        }
+
+        private void elementHost1_ChildChanged(object sender, ChildChangedEventArgs e)
+        {
+
         }
 
         //private void CPUDetect()
