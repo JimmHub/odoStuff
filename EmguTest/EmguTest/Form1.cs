@@ -75,6 +75,8 @@ namespace EmguTest
         private void Form1_Load(object sender, EventArgs e)
         {
             this.LoadWpf3dControl();
+            StereoCameraCalibrator calib = new StereoCameraCalibrator();
+            calib.Calibrate(@"C:\CodeStuff\cvproj\resources\calibImages", new Size(9, 6));
             // passing 0 gets zeroth webcam
             cap = new Capture(0);
             // adjust path to find your xml

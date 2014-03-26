@@ -73,6 +73,7 @@
     <Compile Include="Odometry\VisualOdometer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StereoCameraCalibrator.cs" />
     <Compile Include="VideoSource\StereoFrameSequenceElement.cs" />
     <Compile Include="VideoSource\StereoVideoStreamProvider.cs" />
     <EmbeddedResource Include="Form1.resx">
