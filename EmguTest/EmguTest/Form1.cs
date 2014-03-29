@@ -43,15 +43,20 @@ namespace EmguTest
 
         //readings test
         TestMEMSProvider MemsProvider;
+        
+        //
         //String accPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\acc1396085909463.rdn";
         //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\magnet1396085909463.rdn";
         //String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\gyro1396085909463.rdn";
+        //
 
         //
         String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
         String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
         String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
         //
+
+        MEMS.MEMSOrientationCalculator OrientationCalc;
         ////
         public Form1()
         {
@@ -62,6 +67,7 @@ namespace EmguTest
 
             //testMEMS
             this.MemsProvider = new TestMEMSProvider(this.accPath, this.magnetPath, this.gyroPath);
+            this.OrientationCalc = new MEMSOrientationCalculator();
             ////
         }
 
@@ -296,8 +302,7 @@ namespace EmguTest
             this.ReadingsTestOuptut(nextReadings);
 
             //this.RotateWpfContent();
-            MEMS.MEMSOrientationCalculator orientationCalc = new MEMSOrientationCalculator();
-            var orientMatr3f = orientationCalc.GetAccMagnetOrientationMatrix(nextReadings);
+            var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.9);
             if (nextReadings.IsNotEmpty())
             {
                 this.Wpf3DControl.SetTransformMatrix(orientMatr3f);

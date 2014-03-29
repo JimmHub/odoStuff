@@ -13,7 +13,11 @@ namespace EmguTest.MEMS
 {
     class MEMSOrientationCalculator
     {
-        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings)
+
+        public MCvPoint3D32f? oldAcc;
+        public MCvPoint3D32f? oldMagnet;
+
+        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useLowpassFilter, double lowPassFilterCoeff)
         {
             double[][] res = new double[3][];
             for (int i = 0; i < 3; ++i)
@@ -23,6 +27,14 @@ namespace EmguTest.MEMS
 
             MCvPoint3D32f accPoint = new MCvPoint3D32f(newReadings.AccVector3f.Values[0], newReadings.AccVector3f.Values[1], newReadings.AccVector3f.Values[2]);
             MCvPoint3D32f magnetPoint = new MCvPoint3D32f(newReadings.MagnetVector3f.Values[0], newReadings.MagnetVector3f.Values[1], newReadings.MagnetVector3f.Values[2]);
+
+            if (useLowpassFilter)
+            {
+                this.FilterAccMagnet(ref accPoint, ref magnetPoint, lowPassFilterCoeff);
+            }
+
+            this.oldAcc = accPoint;
+            this.oldMagnet = magnetPoint;
 
             MCvPoint3D32f x;
             MCvPoint3D32f y;
@@ -47,6 +59,22 @@ namespace EmguTest.MEMS
             }
 
             return res;
+        }
+
+        public void FilterAccMagnet(ref MCvPoint3D32f newAcc, ref MCvPoint3D32f newMagnet, double oldCoeff)
+        {
+            double newCoeff = 1 - oldCoeff;
+            if (this.oldAcc == null || this.oldMagnet == null)
+            {
+                return;
+            }
+
+            MCvPoint3D32f ta = new MCvPoint3D32f((float)(this.oldAcc.Value.x * oldCoeff + newAcc.x * newCoeff), (float)(this.oldAcc.Value.y * oldCoeff + newAcc.y * newCoeff), (float)(this.oldAcc.Value.z * oldCoeff + newAcc.z * newCoeff));
+            MCvPoint3D32f tm = new MCvPoint3D32f((float)(this.oldMagnet.Value.x * oldCoeff + newMagnet.x * newCoeff), (float)(this.oldMagnet.Value.y * oldCoeff + newMagnet.y * newCoeff), (float)(this.oldMagnet.Value.z * oldCoeff + newMagnet.z * newCoeff));
+
+            newAcc = ta;
+            newMagnet = tm;
+
         }
 
         public void GetOrthoNormalAccMagnetBasis(MCvPoint3D32f accPoint, MCvPoint3D32f magnetPoint, out MCvPoint3D32f x, out MCvPoint3D32f y, out MCvPoint3D32f z)
