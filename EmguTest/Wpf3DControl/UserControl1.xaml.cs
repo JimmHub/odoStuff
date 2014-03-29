@@ -32,6 +32,9 @@ namespace Wpf3DControl
             var ModelVisual3D = this.GetModel();
             MatrixTransform3D mTransform = new MatrixTransform3D();
             ModelVisual3D.Transform = myRotateTransform;
+
+            //model
+            ////
         }
 
         public ModelVisual3D GetModel()

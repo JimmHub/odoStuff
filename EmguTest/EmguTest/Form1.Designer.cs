@@ -47,7 +47,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 36);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(810, 504);
+            this.pictureBox1.Size = new System.Drawing.Size(469, 368);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -96,18 +96,18 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(828, 36);
+            this.pictureBox2.Location = new System.Drawing.Point(489, 36);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(810, 504);
+            this.pictureBox2.Size = new System.Drawing.Size(469, 368);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
             // 
             // elementHost1
             // 
-            this.elementHost1.Location = new System.Drawing.Point(489, 546);
+            this.elementHost1.Location = new System.Drawing.Point(12, 429);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(200, 100);
+            this.elementHost1.Size = new System.Drawing.Size(343, 201);
             this.elementHost1.TabIndex = 5;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.elementHost1_ChildChanged);
