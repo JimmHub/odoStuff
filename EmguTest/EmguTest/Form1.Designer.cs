@@ -38,6 +38,7 @@
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -112,6 +113,11 @@
             this.elementHost1.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.elementHost1_ChildChanged);
             this.elementHost1.Child = null;
             // 
+            // memsTestOutputTimer
+            // 
+            this.memsTestOutputTimer.Interval = 1;
+            this.memsTestOutputTimer.Tick += new System.EventHandler(this.memsTestOutputTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -145,6 +151,7 @@
         private System.Windows.Forms.Timer timer3;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private System.Windows.Forms.Timer memsTestOutputTimer;
     }
 }
 

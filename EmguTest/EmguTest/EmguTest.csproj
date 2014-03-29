@@ -41,6 +41,12 @@
     <Reference Include="Emgu.Util">
       <HintPath>..\..\..\..\..\..\..\CodeStuff\emgucv-windows-universal-cuda 2.9.0.1922\bin\Emgu.Util.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\..\..\emgucv-windows-universal-cuda 2.9.0.1922\lib\3rdParty\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\..\..\..\emgucv-windows-universal-cuda 2.9.0.1922\lib\3rdParty\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -70,6 +76,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logger\ConsoleLogger.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\StdOutLogger.cs" />
+    <Compile Include="MEMS\AccelReadingsVector.cs" />
+    <Compile Include="MEMS\GyroReadingsVector.cs" />
+    <Compile Include="MEMS\MagnetReadingsVector.cs" />
+    <Compile Include="MEMS\MEMSProvider.cs" />
+    <Compile Include="MEMS\MEMSReadingsSet3f.cs" />
+    <Compile Include="MEMS\ReadingsVector.cs" />
+    <Compile Include="MEMS\ReadingsVector3f.cs" />
+    <Compile Include="MEMS\TestMEMSProvider.cs" />
+    <Compile Include="MonoCameraCalibrator.cs" />
     <Compile Include="Odometry\VisualOdometer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -89,9 +89,12 @@ namespace EmguTest
 
         private PointF[] GetFeaturesToTrack(Image<Gray, byte> image)
         {
-            //var img = image;
-            //var features = img.GoodFeaturesToTrack(this.MaxFeaturesCount, this.QualityLevel, this.MinDistance, this.BlockSize);
-            //return features[0];
+            //good features to track
+            var img = image;
+            var features = img.GoodFeaturesToTrack(this.MaxFeaturesCount, this.QualityLevel, this.MinDistance, this.BlockSize);
+            return features[0];
+            
+            //regular lattice
             int widthDiv = 20;
             int heightDiv = 20;
 

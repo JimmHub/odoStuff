@@ -14,10 +14,13 @@ using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 
+using EmguTest.MEMS;
+
 namespace EmguTest
 {
     public partial class Form1 : Form
     {
+        private EmguTest.Logger.ILogger Logger { get; set; }
         private Capture cap;
         private HaarCascade haar;
         private Emgu.CV.GPU.GpuCascadeClassifier gpuCC;
@@ -38,10 +41,22 @@ namespace EmguTest
 
         public Wpf3DControl.UserControl1 Wpf3DControl;
 
+        //readings test
+        TestMEMSProvider MemsProvider;
+        String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
+        String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
+        String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
+        ////
         public Form1()
         {
             InitializeComponent();
             //this.RunEmgu();
+            this.Logger = new EmguTest.Logger.StdOutLogger();
+            this.Logger.WriteLn("qwe");
+
+            //testMEMS
+            this.MemsProvider = new TestMEMSProvider(this.accPath, this.magnetPath, this.gyroPath);
+            ////
         }
 
         private EmguMain EmguMain;
@@ -76,19 +91,17 @@ namespace EmguTest
         {
             this.LoadWpf3dControl();
             StereoCameraCalibrator calib = new StereoCameraCalibrator();
+            //uncomment for calibration
             calib.Calibrate(@"C:\CodeStuff\cvproj\resources\calibImages", new Size(9, 6));
             // passing 0 gets zeroth webcam
             cap = new Capture(0);
             // adjust path to find your xml
             haar = new HaarCascade(haarPath);
             gpuCC = new Emgu.CV.GPU.GpuCascadeClassifier(this.haarPath);
+            
+          
 
             //for feature tracker uncomment this
-            //this.FeatureTracker = new LKFeatureTracker(cap);
-            //if (this.timer2.Enabled)
-            //{
-            //    this.FeatureTracker.Run();
-            //}
 
             if (this.UseGPUCascade)
             {
@@ -100,13 +113,27 @@ namespace EmguTest
             }
 
             //dispBuilder
-            String stereoPath = @"C:\CodeStuff\cvproj\resources\video1384849670808.mp4";
+            //String stereoPath = @"C:\CodeStuff\cvproj\resources\video1384849670808.mp4";
             //String stereoPath = @"G:\0HowToTrainYourDragon\How to Train Your Dragon.3d.1080p.hsbs.mkv";
+            String stereoPath = @"C:\CodeStuff\cvproj\resources\video1381158297548.mp4";
             Capture stereoCap = new Capture(stereoPath);
             
             this.DispBuilder = new Disparity.DisparityBuilder(stereoCap);
-            this.timer3.Enabled = true;
             ////
+
+            //timers
+            this.timer1.Enabled = false;
+            this.timer2.Enabled = true;
+            this.timer3.Enabled = false;
+            this.memsTestOutputTimer.Enabled = true;
+            ////
+
+            this.FeatureTracker = new LKFeatureTracker(stereoCap);
+
+            if (this.timer2.Enabled)
+            {
+                this.FeatureTracker.Run();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -255,6 +282,26 @@ namespace EmguTest
         private void elementHost1_ChildChanged(object sender, ChildChangedEventArgs e)
         {
 
+        }
+
+        private void memsTestOutputTimer_Tick(object sender, EventArgs e)
+        {
+            var nextReadings = this.MemsProvider.GetNextReadingsSet();
+
+            Console.WriteLine("timestamp: " + nextReadings.TimeStampI.ToString());
+            Console.WriteLine("acc: "
+                + " Xa=" + nextReadings.AccVector3f.Values[0]
+                + " Ya=" + nextReadings.AccVector3f.Values[1]
+                + " Za=" + nextReadings.AccVector3f.Values[2]
+                + "\nmagnet: "
+                + " Xm=" + nextReadings.MagnetVector3f.Values[0]
+                + " Ym=" + nextReadings.MagnetVector3f.Values[1]
+                + " Zm=" + nextReadings.MagnetVector3f.Values[2]
+                + "\ngyro: "
+                + " Xg=" + nextReadings.GyroVector3f.Values[0]
+                + " Yg=" + nextReadings.GyroVector3f.Values[1]
+                + " Zg=" + nextReadings.GyroVector3f.Values[2]
+                +"\n\n");
         }
 
         //private void CPUDetect()
