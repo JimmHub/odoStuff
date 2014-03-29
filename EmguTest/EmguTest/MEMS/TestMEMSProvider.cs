@@ -79,7 +79,7 @@ namespace EmguTest.MEMS
             
             res.AccVector3f = this.GetNextAccVector3f();
             res.MagnetVector3f = this.GetNextMagnetVector3f();
-            res.GyroVector3f = this.GetNextMagnetVector3f();
+            res.GyroVector3f = this.GetNextGyroVector3f();
 
             if (res.IsNotEmpty())
             {

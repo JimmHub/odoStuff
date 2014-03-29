@@ -43,9 +43,15 @@ namespace EmguTest
 
         //readings test
         TestMEMSProvider MemsProvider;
+        //String accPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\acc1396085909463.rdn";
+        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\magnet1396085909463.rdn";
+        //String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\gyro1396085909463.rdn";
+
+        //
         String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
         String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
         String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
+        //
         ////
         public Form1()
         {
@@ -287,6 +293,27 @@ namespace EmguTest
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
         {
             var nextReadings = this.MemsProvider.GetNextReadingsSet();
+            this.ReadingsTestOuptut(nextReadings);
+
+            //this.RotateWpfContent();
+            MEMS.MEMSOrientationCalculator orientationCalc = new MEMSOrientationCalculator();
+            var orientMatr3f = orientationCalc.GetAccMagnetOrientationMatrix(nextReadings);
+            if (nextReadings.IsNotEmpty())
+            {
+                this.Wpf3DControl.SetTransformMatrix(orientMatr3f);
+            }
+
+            //points test
+            MCvPoint3D32f pointA = new MCvPoint3D32f(0, 1, 0);
+            MCvPoint3D32f pointB = new MCvPoint3D32f(1, 0, 0);
+            var pointC = pointA.CrossProduct(pointB);
+
+            ////
+        }
+
+        private void ReadingsTestOuptut(MEMSReadingsSet3f nextReadings)
+        {
+            nextReadings = this.MemsProvider.GetNextReadingsSet();
 
             Console.WriteLine("timestamp: " + nextReadings.TimeStampI.ToString());
             Console.WriteLine("acc: "
@@ -301,7 +328,7 @@ namespace EmguTest
                 + " Xg=" + nextReadings.GyroVector3f.Values[0]
                 + " Yg=" + nextReadings.GyroVector3f.Values[1]
                 + " Zg=" + nextReadings.GyroVector3f.Values[2]
-                +"\n\n");
+                + "\n\n");
         }
 
         //private void CPUDetect()

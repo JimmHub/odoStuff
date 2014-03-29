@@ -82,6 +82,7 @@
     <Compile Include="MEMS\AccelReadingsVector.cs" />
     <Compile Include="MEMS\GyroReadingsVector.cs" />
     <Compile Include="MEMS\MagnetReadingsVector.cs" />
+    <Compile Include="MEMS\MEMSOrientationCalculator.cs" />
     <Compile Include="MEMS\MEMSProvider.cs" />
     <Compile Include="MEMS\MEMSReadingsSet3f.cs" />
     <Compile Include="MEMS\ReadingsVector.cs" />
