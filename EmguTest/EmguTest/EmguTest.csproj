@@ -77,9 +77,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Logger\ConsoleLogger.cs" />
+    <Compile Include="Logger\EmptyLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\RichTextBoxLogger.cs" />
     <Compile Include="Logger\StdOutLogger.cs" />
     <Compile Include="MEMS\AccelReadingsVector.cs" />
+    <Compile Include="MEMS\DeviceRTWebMEMSProvider.cs" />
     <Compile Include="MEMS\GyroReadingsVector.cs" />
     <Compile Include="MEMS\MagnetReadingsVector.cs" />
     <Compile Include="MEMS\MEMSOrientationCalculator.cs" />
@@ -93,6 +96,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StereoCameraCalibrator.cs" />
+    <Compile Include="Utils\StoppableThreadLoop.cs" />
     <Compile Include="VideoSource\StereoFrameSequenceElement.cs" />
     <Compile Include="VideoSource\StereoVideoStreamProvider.cs" />
     <EmbeddedResource Include="Form1.resx">

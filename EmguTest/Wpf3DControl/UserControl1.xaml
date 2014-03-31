@@ -13,7 +13,7 @@
 				TextBlock.TextAlignment="Center" 
 				FontSize="20" 
 				Foreground="Red" 
-				Content="Model: Cone"/>
+				Content="Model: Cube"/>
 
         <!-- Viewport3D is the rendering surface. -->
         <Viewport3D Name="myViewport" >

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using EmguTest.MEMS;
+
 namespace EmguTest.MEMS
 {
-    public class MEMSProvider
+    abstract class MEMSProvider
     {
-        public MEMSProvider()
-        {
-        }
+        abstract public MEMSReadingsSet3f GetCurrentReadingsSet();
+        abstract public MEMSReadingsSet3f GetNextReadingsSet();
     }
 }

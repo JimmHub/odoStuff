@@ -20,7 +20,8 @@ namespace EmguTest
 {
     public partial class Form1 : Form
     {
-        private EmguTest.Logger.ILogger Logger { get; set; }
+        private Logger.ILogger Logger { get; set; }
+        private Logger.ILogger MEMSRTBLogger { get; set; }
         private Capture cap;
         private HaarCascade haar;
         private Emgu.CV.GPU.GpuCascadeClassifier gpuCC;
@@ -51,10 +52,24 @@ namespace EmguTest
         //
 
         //
-        String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
-        String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
-        String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
+        //String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
+        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
+        //String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
         //
+
+        //
+        //String accPath =    @"C:\CodeStuff\cvproj\resources\str1396117763898\acc1396117763898.rdn";
+        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396117763898\magnet1396117763898.rdn";
+        //String gyroPath =   @"C:\CodeStuff\cvproj\resources\str1396117763898\gyro1396117763898.rdn";
+        //
+
+        //
+        String accPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\acc1396261734695.rdn";
+        String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\magnet1396261734695.rdn";
+        String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\gyro1396261734695.rdn";
+        //
+
+        
 
         MEMS.MEMSOrientationCalculator OrientationCalc;
         ////
@@ -66,6 +81,7 @@ namespace EmguTest
             this.Logger.WriteLn("qwe");
 
             //testMEMS
+            this.MEMSRTBLogger = new Logger.RichTextBoxLogger(this.logMEMSRichTextBox);
             this.MemsProvider = new TestMEMSProvider(this.accPath, this.magnetPath, this.gyroPath);
             this.OrientationCalc = new MEMSOrientationCalculator();
             ////
@@ -96,7 +112,7 @@ namespace EmguTest
             
             // Add the ElementHost control to the form's
             // collection of child controls.
-            this.Controls.Add(host);
+            //this.Controls.Add(host);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -302,9 +318,24 @@ namespace EmguTest
             this.ReadingsTestOuptut(nextReadings);
 
             //this.RotateWpfContent();
-            var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.9);
-            if (nextReadings.IsNotEmpty())
+            if (nextReadings.IsNotEmpty() && nextReadings.TimeStampI != 0)
             {
+                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.8);
+
+                var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
+
+                //log readings check
+                this.MEMSRTBLogger.WriteLn("readings check");
+                this.PrintVector(this.MEMSRTBLogger, res);
+                this.MEMSRTBLogger.WriteLn("");
+                //
+
+                //log matrix
+                this.MEMSRTBLogger.WriteLn("orientationMatrix:");
+                this.PrintMatrix(this.MEMSRTBLogger, orientMatr3f);
+                this.MEMSRTBLogger.WriteLn("");
+                ////
+
                 this.Wpf3DControl.SetTransformMatrix(orientMatr3f);
             }
 
@@ -314,6 +345,59 @@ namespace EmguTest
             var pointC = pointA.CrossProduct(pointB);
 
             ////
+        }
+
+        private double[] MulReadingsVect(double[][] orientMatix, ReadingsVector3f readings, bool normalize = false)
+        {
+            Matrix<double> m = new Matrix<double>(3, 3);
+            Matrix<double> v = new Matrix<double>(3, 1);
+
+            for (int i = 0; i < 3; ++i)
+            {
+                for (int j = 0; j < 3; ++j)
+                {
+                    m.Data[i, j] = orientMatix[i][j];
+                }
+            }
+
+            for (int i = 0; i < 3; ++i)
+            {
+                v.Data[i, 0] = readings.Values[i];
+            }
+
+            var res = m.Transpose().Mul(v);
+
+            if (normalize)
+            {
+                var norm = res.Norm;
+                for (int i = 0; i < 3; ++i)
+                {
+                    res.Data[i, 0] /= norm;
+                }
+            }
+
+            return new double[] { res.Data[0, 0], res.Data[1, 0], res.Data[2, 0] };
+        }
+
+        private void PrintMatrix(Logger.ILogger logger, double[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; ++i)
+            {
+                for (int j = 0; j < matrix[i].Length; ++j)
+                {
+                    logger.Write(matrix[i][j].ToString() + "; ");
+                }
+                logger.WriteLn("");
+            }
+        }
+
+        private void PrintVector(Logger.ILogger logger, double[] vector)
+        {
+            for (int i = 0; i < vector.Length; ++i)
+            {
+                logger.Write(vector[i].ToString() + "; ");
+            }
+            logger.WriteLn("");
         }
 
         private void ReadingsTestOuptut(MEMSReadingsSet3f nextReadings)
@@ -334,6 +418,11 @@ namespace EmguTest
                 + " Yg=" + nextReadings.GyroVector3f.Values[1]
                 + " Zg=" + nextReadings.GyroVector3f.Values[2]
                 + "\n\n");
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private void CPUDetect()

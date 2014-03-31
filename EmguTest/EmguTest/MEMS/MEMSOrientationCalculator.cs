@@ -88,7 +88,8 @@ namespace EmguTest.MEMS
             var amNorm = accMagnetCross.GetNormalizedPoint();
 
             x = mNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D32f(1, 0, 0) : mNorm;
-            y = aNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D32f(0, 1, 0) : new MCvPoint3D32f(-aNorm.x, -aNorm.y, -aNorm.z);
+            //y = aNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D32f(0, 1, 0) : new MCvPoint3D32f(-aNorm.x, -aNorm.y, -aNorm.z);
+            y = aNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D32f(0, 1, 0) : aNorm;
             z = amNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D32f(0, 0, 1) : amNorm;
         }
     }

@@ -73,7 +73,12 @@ namespace EmguTest.MEMS
 
         public MEMSReadingsSet3f CurrentReadingsSet3f { get; protected set; }
 
-        public MEMSReadingsSet3f GetNextReadingsSet()
+        public override MEMSReadingsSet3f GetCurrentReadingsSet()
+        {
+            return this.CurrentReadingsSet3f;
+        }
+
+        public override MEMSReadingsSet3f GetNextReadingsSet()
         {
             MEMSReadingsSet3f res = new MEMSReadingsSet3f();
             
