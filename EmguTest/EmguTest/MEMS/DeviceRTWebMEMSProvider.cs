@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
+using System.Net;
 
 namespace EmguTest.MEMS
 {
@@ -18,6 +19,19 @@ namespace EmguTest.MEMS
             this.ServerSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             this.StartServerRoutine();
             this.LastRecSet = new MEMSReadingsSet3f();
+
+            //TODO: remove debug
+            this.LastRecSet.GyroVector3f = new ReadingsVector3f()
+            {
+                Values = new float[]
+                {
+                    0, 1, 1
+                },
+
+                IsEmpty = false,
+                TimeStampI = 8
+            };
+            ////
         }
 
         public int? Port { get; set; }
@@ -33,7 +47,12 @@ namespace EmguTest.MEMS
 
         protected void StartServerRoutine()
         {
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.104"), this.Port == null ? 4243 : this.Port.Value);
+            this.ServerSocket.Bind(localEndPoint);
+            this.ServerSocket.Listen(4);
+
             this.ServerRoutineThread = new Thread(this.MainServerRoutine);
+            this.ServerRoutineThread.Start();
         }
 
         protected Thread ServerRoutineThread { get; set; }
@@ -80,6 +99,21 @@ namespace EmguTest.MEMS
                         {
                             var readType = recBuffer[0];
                             var readingVect = recBuffer.Skip(1).ToArray();
+
+                            var readingsVector = this.Get3fReadings(readingVect);
+                            switch (readType)
+                            {
+                                case READINGS_TYPE_ACC:
+                                    this.LastRecSet.AccVector3f = readingsVector;
+                                    break;
+                                case READINGS_TYPE_MAGNET:
+                                    this.LastRecSet.MagnetVector3f = readingsVector;
+                                    break;
+                                case READINGS_TYPE_GYRO:
+                                    this.LastRecSet.GyroVector3f = readingsVector;
+                                    break;
+                            }
+                            this.LastRecIsGiven = false;
                         }
                     }
                 }
@@ -102,14 +136,7 @@ namespace EmguTest.MEMS
             //res.MagnetVector3f = this.GetNextMagnetVector3f();
             //res.GyroVector3f = this.GetNextGyroVector3f();
 
-            if (res.IsNotEmpty())
-            {
-                res.TimeStampI = Convert.ToInt64(((double)res.AccVector3f.TimeStampI + (double)res.MagnetVector3f.TimeStampI + (double)res.GyroVector3f.TimeStampI) / 3);
-            }
-            else
-            {
-                res.TimeStampI = 0;
-            }
+            
 
             return res;
         }
@@ -120,7 +147,7 @@ namespace EmguTest.MEMS
             try
             {
                 int ptr = 0;
-                if (bufferPart.Length <= (sizeof(float) * 3 + sizeof(int)))
+                if (bufferPart.Length < (sizeof(float) * 3 + sizeof(int)))
                 {
                     res.IsEmpty = true;
                 }
@@ -187,12 +214,14 @@ namespace EmguTest.MEMS
             {
                 if (!this.IsThreadRunning)
                 {
-                    throw new Exception("Thread is not running");
+                    return new MEMSReadingsSet3f();
+                    //throw new Exception("Thread is not running");
                 }
 
                 if (!this.IsConnected)
                 {
-                    throw new Exception("Client is not connected");
+                    return new MEMSReadingsSet3f();
+                    //throw new Exception("Client is not connected");
                 }
             }
 

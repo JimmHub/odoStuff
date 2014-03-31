@@ -86,14 +86,7 @@ namespace EmguTest.MEMS
             res.MagnetVector3f = this.GetNextMagnetVector3f();
             res.GyroVector3f = this.GetNextGyroVector3f();
 
-            if (res.IsNotEmpty())
-            {
-                res.TimeStampI = Convert.ToInt64(((double)res.AccVector3f.TimeStampI + (double)res.MagnetVector3f.TimeStampI +(double) res.GyroVector3f.TimeStampI) / 3);
-            }
-            else
-            {
-                res.TimeStampI = 0;
-            }
+            
             this.CurrentReadingsSet3f = res;
 
             return res;

@@ -43,7 +43,7 @@ namespace EmguTest
         public Wpf3DControl.UserControl1 Wpf3DControl;
 
         //readings test
-        TestMEMSProvider MemsProvider;
+        MEMSProvider MemsProvider;
         
         //
         //String accPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\acc1396085909463.rdn";
@@ -82,7 +82,12 @@ namespace EmguTest
 
             //testMEMS
             this.MEMSRTBLogger = new Logger.RichTextBoxLogger(this.logMEMSRichTextBox);
-            this.MemsProvider = new TestMEMSProvider(this.accPath, this.magnetPath, this.gyroPath);
+            
+            //offline mems
+            //this.MemsProvider = new TestMEMSProvider(this.accPath, this.magnetPath, this.gyroPath);
+            
+            //online mems
+            this.MemsProvider = new DeviceRTWebMEMSProvider(4243, new Logger.EmptyLogger());
             this.OrientationCalc = new MEMSOrientationCalculator();
             ////
         }
@@ -325,15 +330,15 @@ namespace EmguTest
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 
                 //log readings check
-                this.MEMSRTBLogger.WriteLn("readings check");
-                this.PrintVector(this.MEMSRTBLogger, res);
-                this.MEMSRTBLogger.WriteLn("");
-                //
+                //this.MEMSRTBLogger.WriteLn("readings check");
+                //this.PrintVector(this.MEMSRTBLogger, res);
+                //this.MEMSRTBLogger.WriteLn("");
+                ////
 
-                //log matrix
-                this.MEMSRTBLogger.WriteLn("orientationMatrix:");
-                this.PrintMatrix(this.MEMSRTBLogger, orientMatr3f);
-                this.MEMSRTBLogger.WriteLn("");
+                ////log matrix
+                //this.MEMSRTBLogger.WriteLn("orientationMatrix:");
+                //this.PrintMatrix(this.MEMSRTBLogger, orientMatr3f);
+                //this.MEMSRTBLogger.WriteLn("");
                 ////
 
                 this.Wpf3DControl.SetTransformMatrix(orientMatr3f);
