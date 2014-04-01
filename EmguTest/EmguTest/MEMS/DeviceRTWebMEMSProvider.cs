@@ -19,7 +19,7 @@ namespace EmguTest.MEMS
             this.ServerSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             this.StartServerRoutine();
             this.LastRecSet = new MEMSReadingsSet3f();
-
+            this.EmptyReadingsSet = new MEMSReadingsSet3f();
             //TODO: remove debug
             this.LastRecSet.GyroVector3f = new ReadingsVector3f()
             {
@@ -51,6 +51,7 @@ namespace EmguTest.MEMS
         public Logger.ILogger Logger { get; set; }
         protected MEMSReadingsSet3f LastRecSet { get; set; }
         protected bool LastRecIsGiven { get; set; }
+        protected MEMSReadingsSet3f EmptyReadingsSet { get; set; }
 
         protected const int RecMessageSize = (3 * sizeof(float) + sizeof(int) + sizeof(byte));
 
@@ -235,6 +236,7 @@ namespace EmguTest.MEMS
         {
             while (this.LastRecIsGiven)
             {
+                return this.EmptyReadingsSet;
                 //if (!this.IsThreadRunning)
                 //{
                 //    return new MEMSReadingsSet3f();

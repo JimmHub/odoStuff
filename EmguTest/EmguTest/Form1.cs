@@ -317,15 +317,32 @@ namespace EmguTest
 
         }
 
+        private bool IsActualReadingsSet(MEMSReadingsSet3f set)
+        {
+            if (set == null)
+            {
+                return false;
+            }
+            if (!set.IsNotEmpty())
+            {
+                return false;
+            }
+            if (set.TimeStampI == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
         {
             var nextReadings = this.MemsProvider.GetNextReadingsSet();
-            //this.ReadingsTestOuptut(nextReadings);
             //
             //
             //this.RotateWpfContent();
-            if (nextReadings.IsNotEmpty() && nextReadings.TimeStampI != 0)
+            if (this.IsActualReadingsSet(nextReadings))
             {
+                //this.ReadingsTestOuptut(nextReadings);
                 var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.8);
 
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
