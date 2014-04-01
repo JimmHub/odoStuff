@@ -35,7 +35,16 @@ namespace EmguTest.MEMS
         }
 
         public int? Port { get; set; }
-        public bool IsConnected { get; protected set; }
+        public bool IsConnected 
+        {
+            get
+            {
+                return this.SocketConnected(this.ClientSocket);
+            }
+            protected set
+            {
+            }
+        }
         public Socket ServerSocket { get; protected set; }
         protected bool ShouldStop { get; set; }
         public Socket ClientSocket { get; protected set; }
@@ -92,7 +101,7 @@ namespace EmguTest.MEMS
                 try
                 {
                     byte[] recBuffer = new byte[RecMessageSize];
-                    while (this.ClientSocket.Connected)
+                    while (this.SocketConnected(this.ClientSocket))
                     {
                         var count = this.ClientSocket.Receive(recBuffer);
                         if (count == RecMessageSize)
@@ -121,6 +130,20 @@ namespace EmguTest.MEMS
                 {
                 }
             }
+        }
+
+        protected bool SocketConnected(Socket s)
+        {
+            if (s == null)
+            {
+                return false;
+            }
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0);
+            if (part1 & part2)
+                return false;
+            else
+                return true;
         }
 
         protected MEMSReadingsSet3f ConvertToMEMSReadingsSet3f(byte[] buffer)
@@ -212,17 +235,17 @@ namespace EmguTest.MEMS
         {
             while (this.LastRecIsGiven)
             {
-                if (!this.IsThreadRunning)
-                {
-                    return new MEMSReadingsSet3f();
-                    //throw new Exception("Thread is not running");
-                }
+                //if (!this.IsThreadRunning)
+                //{
+                //    return new MEMSReadingsSet3f();
+                //    //throw new Exception("Thread is not running");
+                //}
 
-                if (!this.IsConnected)
-                {
-                    return new MEMSReadingsSet3f();
-                    //throw new Exception("Client is not connected");
-                }
+                //if (!this.IsConnected)
+                //{
+                //    return new MEMSReadingsSet3f();
+                //    //throw new Exception("Client is not connected");
+                //}
             }
 
             this.LastRecIsGiven = true;

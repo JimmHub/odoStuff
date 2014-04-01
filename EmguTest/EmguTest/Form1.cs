@@ -156,7 +156,7 @@ namespace EmguTest
 
             //timers
             this.timer1.Enabled = false;
-            this.timer2.Enabled = true;
+            this.timer2.Enabled = false;
             this.timer3.Enabled = false;
             this.memsTestOutputTimer.Enabled = true;
             ////
@@ -320,8 +320,9 @@ namespace EmguTest
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
         {
             var nextReadings = this.MemsProvider.GetNextReadingsSet();
-            this.ReadingsTestOuptut(nextReadings);
-
+            //this.ReadingsTestOuptut(nextReadings);
+            //
+            //
             //this.RotateWpfContent();
             if (nextReadings.IsNotEmpty() && nextReadings.TimeStampI != 0)
             {
@@ -407,7 +408,7 @@ namespace EmguTest
 
         private void ReadingsTestOuptut(MEMSReadingsSet3f nextReadings)
         {
-            nextReadings = this.MemsProvider.GetNextReadingsSet();
+            //nextReadings = this.MemsProvider.GetNextReadingsSet();
 
             Console.WriteLine("timestamp: " + nextReadings.TimeStampI.ToString());
             Console.WriteLine("acc: "
