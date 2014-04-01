@@ -491,4 +491,44 @@ public class ThreadSender implements SensorEventListener {
 	    sensorManager.unregisterListener(this);
 	}
 	
+	public void Disconnect()
+	{
+		try
+		{
+			text1.setText("disconnecting...");
+			try {
+				this.outputStream.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				this.oInput.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				this.oOutput.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				this.socket.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}////
+			this.isConnected = false;
+			text1.setText("disconnected!");
+		}
+		catch(Exception ex)
+		{
+			text1.setText("errDisconnected");
+			ex.printStackTrace();
+		}
+	
+	}
+	
 }

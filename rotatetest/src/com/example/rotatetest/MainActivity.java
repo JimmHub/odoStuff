@@ -1,5 +1,7 @@
 package com.example.rotatetest;
 
+import java.util.Dictionary;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -29,8 +31,13 @@ public class MainActivity extends Activity {
 		text1 = (TextView) findViewById(R.id.textView01);
 		ipText = (EditText) findViewById(R.id.ipText);
 		portText = (EditText) findViewById(R.id.portText);
+		
 		Button button = (Button)findViewById(R.id.button1);
 		button.setOnClickListener(buttonOnClickListener);
+		
+		Button disconnectButton = (Button)findViewById(R.id.button2);
+		disconnectButton.setOnClickListener(disconnectButtonOnClickListener);
+		
 		sender = null;
 	}
 
@@ -55,6 +62,28 @@ public class MainActivity extends Activity {
 				int port = Integer.parseInt(portText.getText().toString());
 				sender = new ThreadSender(sensorManager, text1, ip, port);
 			}
+		}
+	};
+	
+	Button.OnClickListener disconnectButtonOnClickListener
+	 = new Button.OnClickListener(){
+
+		@Override
+		public void onClick(View arg0) {
+			try
+			{
+				if(sender != null)
+				{
+					sender.Disconnect();
+				}
+			}
+			catch(Exception ex)
+			{
+				
+			}
+			
+			//sender = null;
+			
 		}
 	};
 	
