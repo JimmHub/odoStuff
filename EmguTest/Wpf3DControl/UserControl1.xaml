@@ -53,7 +53,7 @@
 
                                 <!-- Lights, MeshGeometry3D and DiffuseMaterial objects are added to the ModelVisual3D. -->
                                 <DirectionalLight Color="#FFFFFFFF" Direction="3,-4,5" />
-
+                                <AmbientLight     Color="#44444444" />
                                 <!-- Define a red cone. -->
                                 <GeometryModel3D>
 

@@ -342,8 +342,8 @@ namespace EmguTest
             //this.RotateWpfContent();
             if (this.IsActualReadingsSet(nextReadings))
             {
-                //this.ReadingsTestOuptut(nextReadings);
-                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.8);
+                this.ReadingsTestOuptut(nextReadings);
+                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.8, 0.5);
 
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 

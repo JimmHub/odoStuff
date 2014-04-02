@@ -50,10 +50,35 @@ namespace EmguTest.MEMS
         public Socket ClientSocket { get; protected set; }
         public Logger.ILogger Logger { get; set; }
         protected MEMSReadingsSet3f LastRecSet { get; set; }
-        protected bool LastRecIsGiven { get; set; }
+        protected bool HasNewSetToGive
+        {
+            get
+            {
+                if (this.IsEagerNextReadings)
+                {
+                    return this.NewAccReceived || this.NewMagnetReceived || this.NewGyroReceived;
+                }
+                else
+                {
+                    return this.NewAccReceived && this.NewMagnetReceived && this.NewGyroReceived;
+                }
+            }
+        }
+
+        protected bool NewAccReceived { get; set; }
+        protected bool NewMagnetReceived { get; set; }
+        protected bool NewGyroReceived { get; set; }
         protected MEMSReadingsSet3f EmptyReadingsSet { get; set; }
+        public bool IsEagerNextReadings { get; set; }
 
         protected const int RecMessageSize = (3 * sizeof(float) + sizeof(int) + sizeof(byte));
+
+        protected void DropRecStates()
+        {
+            this.NewAccReceived = false;
+            this.NewMagnetReceived = false;
+            this.NewGyroReceived = false;
+        }
 
         protected void StartServerRoutine()
         {
@@ -115,15 +140,18 @@ namespace EmguTest.MEMS
                             {
                                 case READINGS_TYPE_ACC:
                                     this.LastRecSet.AccVector3f = readingsVector;
+                                    this.NewAccReceived = true;
                                     break;
                                 case READINGS_TYPE_MAGNET:
                                     this.LastRecSet.MagnetVector3f = readingsVector;
+                                    this.NewMagnetReceived = true;
                                     break;
                                 case READINGS_TYPE_GYRO:
                                     this.LastRecSet.GyroVector3f = readingsVector;
+                                    this.NewGyroReceived = true;
                                     break;
                             }
-                            this.LastRecIsGiven = false;
+                            
                         }
                     }
                 }
@@ -234,7 +262,7 @@ namespace EmguTest.MEMS
 
         public override MEMSReadingsSet3f GetNextReadingsSet()
         {
-            while (this.LastRecIsGiven)
+            while (!this.HasNewSetToGive)
             {
                 return this.EmptyReadingsSet;
                 //if (!this.IsThreadRunning)
@@ -250,7 +278,7 @@ namespace EmguTest.MEMS
                 //}
             }
 
-            this.LastRecIsGiven = true;
+            this.DropRecStates();
             return this.LastRecSet;
         }
 
