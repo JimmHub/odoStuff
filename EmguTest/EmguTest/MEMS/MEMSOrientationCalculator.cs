@@ -25,7 +25,7 @@ namespace EmguTest.MEMS
                 res[i] = new double[3];
             }
 
-            MCvPoint3D32f accPoint = new MCvPoint3D32f(newReadings.AccVector3f.Values[0], newReadings.AccVector3f.Values[1], newReadings.AccVector3f.Values[2]);
+            MCvPoint3D32f accPoint = new MCvPoint3D32f(-newReadings.AccVector3f.Values[0], -newReadings.AccVector3f.Values[1], -newReadings.AccVector3f.Values[2]);
             MCvPoint3D32f magnetPoint = new MCvPoint3D32f(newReadings.MagnetVector3f.Values[0], newReadings.MagnetVector3f.Values[1], newReadings.MagnetVector3f.Values[2]);
 
             if (useLowpassFilter)

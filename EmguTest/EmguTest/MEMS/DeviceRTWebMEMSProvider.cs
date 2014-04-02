@@ -57,7 +57,7 @@ namespace EmguTest.MEMS
 
         protected void StartServerRoutine()
         {
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.104"), this.Port == null ? 4243 : this.Port.Value);
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, this.Port == null ? 4243 : this.Port.Value);
             this.ServerSocket.Bind(localEndPoint);
             this.ServerSocket.Listen(4);
 
