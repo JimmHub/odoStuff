@@ -334,16 +334,37 @@ namespace EmguTest
             return true;
         }
 
+        private void CalcFilterCoeffs(MEMSReadingsSet3f readings, out double gyroCoeff, out double magnetCoeff)
+        {
+            var gyroVect = readings.GyroVector3f.Values;
+            var gyroMagn = Math.Sqrt(gyroVect[0] * gyroVect[0] + gyroVect[1] * gyroVect[1] + gyroVect[2] * gyroVect[2]);
+
+            double gs = 2;
+            double gm = 4;
+            double gmin = 0.2;
+            var gCoeff = gmin + (1 - 1 / (1 + gyroMagn * gm)) * (1 - gmin);
+
+            gyroCoeff = gCoeff;
+
+            magnetCoeff = 0.1;
+        }
+
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
         {
+            (this.MemsProvider as DeviceRTWebMEMSProvider).IsEagerNextReadings = false;
             var nextReadings = this.MemsProvider.GetNextReadingsSet();
             //
             //
             //this.RotateWpfContent();
             if (this.IsActualReadingsSet(nextReadings))
             {
+                double gyroCoeff;
+                double magnetCoeff;
+                this.CalcFilterCoeffs(nextReadings, out gyroCoeff, out magnetCoeff);
+                Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + magnetCoeff.ToString());
+
                 this.ReadingsTestOuptut(nextReadings);
-                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, 0.8, 0.5);
+                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, magnetCoeff, gyroCoeff);
 
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 

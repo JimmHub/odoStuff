@@ -43,7 +43,7 @@
                                 </RotateTransform3D.Rotation>
                             </RotateTransform3D>
                             <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
-                            <TranslateTransform3D OffsetY="-0.086"/>
+                            <TranslateTransform3D OffsetY="0"/>
                         </Transform3DGroup>
                     </ModelVisual3D.Transform>
                     <ModelVisual3D.Content>
@@ -52,7 +52,21 @@
                             <Model3DGroup.Children>
 
                                 <!-- Lights, MeshGeometry3D and DiffuseMaterial objects are added to the ModelVisual3D. -->
-                                <DirectionalLight Color="#FFFFFFFF" Direction="3,-4,5" />
+                                <DirectionalLight Color="#FFFFFFFF" Direction="3,-4,5" >
+                                    <DirectionalLight.Transform>
+                                        <Transform3DGroup>
+                                            <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                                            <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
+                                            <RotateTransform3D d:EulerAngles="0,0,-62.154">
+                                                <RotateTransform3D.Rotation>
+                                                    <AxisAngleRotation3D Axis="0,0,-1" Angle="62.154"/>
+                                                </RotateTransform3D.Rotation>
+                                            </RotateTransform3D>
+                                            <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                                            <TranslateTransform3D OffsetY="0.24" OffsetX="-0.232"/>
+                                        </Transform3DGroup>
+                                    </DirectionalLight.Transform>
+                                </DirectionalLight>
                                 <AmbientLight     Color="#44444444" />
                                 <!-- Define a red cone. -->
                                 <GeometryModel3D>
