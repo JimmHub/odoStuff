@@ -68,11 +68,12 @@ namespace EmguTest
         String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\magnet1396261734695.rdn";
         String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\gyro1396261734695.rdn";
         //
-
-        
-
         MEMS.MEMSOrientationCalculator OrientationCalc;
         ////
+        public Capture CamLeft;
+        public Capture CamRight;
+        public int CamLeftId = 2;
+        public int CamRightId = 3;
         public Form1()
         {
             InitializeComponent();
@@ -89,6 +90,23 @@ namespace EmguTest
             //online mems
             this.MemsProvider = new DeviceRTWebMEMSProvider(4243, new Logger.EmptyLogger());
             this.OrientationCalc = new MEMSOrientationCalculator();
+            try
+            {
+                this.CamLeft = new Capture(this.CamLeftId);
+            }
+            catch
+            {
+                this.CamLeft = null;
+            }
+
+            try
+            {
+                this.CamRight = new Capture(this.CamRightId);
+            }
+            catch
+            {
+                this.CamRight = null;
+            }
             ////
         }
 
@@ -127,7 +145,11 @@ namespace EmguTest
             //uncomment for calibration
             calib.Calibrate(@"C:\CodeStuff\cvproj\resources\calibImages", new Size(9, 6));
             // passing 0 gets zeroth webcam
-            cap = new Capture(0);
+            try
+            {
+                cap = new Capture(0);
+            }
+            catch { }
             // adjust path to find your xml
             haar = new HaarCascade(haarPath);
             gpuCC = new Emgu.CV.GPU.GpuCascadeClassifier(this.haarPath);
@@ -159,6 +181,7 @@ namespace EmguTest
             this.timer2.Enabled = false;
             this.timer3.Enabled = false;
             this.memsTestOutputTimer.Enabled = true;
+            this.stereoCapTimer.Enabled = true;
             ////
 
             this.FeatureTracker = new LKFeatureTracker(stereoCap);
@@ -334,20 +357,7 @@ namespace EmguTest
             return true;
         }
 
-        private void CalcFilterCoeffs(MEMSReadingsSet3f readings, out double gyroCoeff, out double magnetCoeff)
-        {
-            var gyroVect = readings.GyroVector3f.Values;
-            var gyroMagn = Math.Sqrt(gyroVect[0] * gyroVect[0] + gyroVect[1] * gyroVect[1] + gyroVect[2] * gyroVect[2]);
-
-            double gs = 2;
-            double gm = 4;
-            double gmin = 0.2;
-            var gCoeff = gmin + (1 - 1 / (1 + gyroMagn * gm)) * (1 - gmin);
-
-            gyroCoeff = gCoeff;
-
-            magnetCoeff = 0.1;
-        }
+        
 
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
         {
@@ -358,13 +368,11 @@ namespace EmguTest
             //this.RotateWpfContent();
             if (this.IsActualReadingsSet(nextReadings))
             {
-                double gyroCoeff;
-                double magnetCoeff;
-                this.CalcFilterCoeffs(nextReadings, out gyroCoeff, out magnetCoeff);
-                Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + magnetCoeff.ToString());
+                double gyroCoeff = 0.5;
+                double accMagnetCoeff = 0.3;
 
                 this.ReadingsTestOuptut(nextReadings);
-                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(nextReadings, true, magnetCoeff, gyroCoeff);
+                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(newReadings: nextReadings, useLowpassFilter: true, useAdaptiveFiltering: true, accMagnetFilterCoeff: accMagnetCoeff, gyroFilterCoeff: gyroCoeff);
 
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 
@@ -466,6 +474,45 @@ namespace EmguTest
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void stereoCapTimer_Tick(object sender, EventArgs e)
+        {
+            Image<Bgr, byte> leftFrame = null;
+            Image<Bgr, byte> rightFrame = null;
+            if (this.CamLeft != null)
+            {
+                try
+                {
+                    leftFrame = this.CamLeft.QueryFrame();
+                }
+                catch 
+                {
+                    leftFrame = null;
+                }
+            }
+
+            if (this.CamRight != null)
+            {
+                try
+                {
+                    rightFrame = this.CamRight.QueryFrame();
+                }
+                catch 
+                {
+                    rightFrame = null;
+                }
+            }
+
+            if (leftFrame != null)
+            {
+                this.pictureBox1.Image = leftFrame.ToBitmap();
+            }
+            if (rightFrame != null)
+            {
+                this.pictureBox2.Image = rightFrame.ToBitmap();
+            }
 
         }
 

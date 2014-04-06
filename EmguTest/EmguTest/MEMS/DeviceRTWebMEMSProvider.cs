@@ -25,7 +25,7 @@ namespace EmguTest.MEMS
             {
                 Values = new float[]
                 {
-                    0, 1, 1
+                    0, 0, 0
                 },
 
                 IsEmpty = false,

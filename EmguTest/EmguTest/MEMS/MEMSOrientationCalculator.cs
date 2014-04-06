@@ -23,10 +23,17 @@ namespace EmguTest.MEMS
 
         public ReadingsVector3f OldGyroReadings;
 
-        public Matrix<double> OldGAMFusedMatrix; 
+        public Matrix<double> OldGAMFusedMatrix;
 
-        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useLowpassFilter, double accMagnetFilterCoeff, double gyroFilterCoeff)
+        public double GyroSpeedMul = 1.410;
+
+        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useLowpassFilter, bool useAdaptiveFiltering, double accMagnetFilterCoeff, double gyroFilterCoeff)
         {
+            if (useAdaptiveFiltering)
+            {
+                this.CalcFilterCoeffs(newReadings, out gyroFilterCoeff, out accMagnetFilterCoeff);
+            }
+
             double[][] res = new double[3][];
             for (int i = 0; i < 3; ++i)
             {
@@ -123,13 +130,20 @@ namespace EmguTest.MEMS
             //m = this.OldGyroMatrix;
             //m = m.Transpose();
             //
-            for (int i = 0; i < 3; ++i)
-            {
-                for (int j = 0; j < 3; ++j)
-                {
-                    res[i][j] = resMatrix[i, j];
-                }
-            }
+            //auto res set up
+            //for (int i = 0; i < 3; ++i)
+            //{
+            //    for (int j = 0; j < 3; ++j)
+            //    {
+            //        res[i][j] = resMatrix[i, j];
+            //    }
+            //}
+            ////
+            //manual res set up
+            res[0][0] = -resMatrix[0, 0]; res[0][1] = resMatrix[0, 1]; res[0][2] = resMatrix[0, 2];
+            res[1][0] = -resMatrix[1, 0]; res[1][1] = resMatrix[1, 1]; res[1][2] = resMatrix[1, 2];
+            res[2][0] = -resMatrix[2, 0]; res[2][1] = resMatrix[2, 1]; res[2][2] = resMatrix[2, 2];
+            ////
 
             return res;
         }
@@ -224,6 +238,24 @@ namespace EmguTest.MEMS
             }
         }
 
+        public void CalcFilterCoeffs(MEMSReadingsSet3f readings, out double gyroCoeff, out double accMagnetCoeff)
+        {
+            var gyroVect = readings.GyroVector3f.Values;
+            var gyroMagn = Math.Sqrt(gyroVect[0] * gyroVect[0] + gyroVect[1] * gyroVect[1] + gyroVect[2] * gyroVect[2]);
+
+            double gs = 2;
+            double gm = 1;
+            double gmin = 0.5;
+            double gmax = 0.8;
+            var gCoeff = gmin + (1 - 1 / (1 + gyroMagn * gm)) * (gmax - gmin);
+
+            gyroCoeff = gCoeff;
+
+            accMagnetCoeff = 0.1;
+
+            Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + accMagnetCoeff.ToString());
+        }
+
         public Matrix<double> GetGyroRotationMatrix(ReadingsVector3f gyroVect)
         {
             Matrix<double> res = new Matrix<double>(3, 3);
@@ -235,9 +267,9 @@ namespace EmguTest.MEMS
             {
                 long diffMS = gyroVect.TimeStampI - this.OldGyroReadings.TimeStampI;
 
-                double xr = -((double)gyroVect.Values[0] * diffMS) / 1000;
-                double yr = ((double)gyroVect.Values[1] * diffMS) / 1000;
-                double zr = -((double)gyroVect.Values[2] * diffMS) / 1000;
+                double xr = -((double)gyroVect.Values[0] * diffMS) / 1000 * this.GyroSpeedMul;
+                double yr = ((double)gyroVect.Values[1] * diffMS) / 1000 * this.GyroSpeedMul;
+                double zr = -((double)gyroVect.Values[2] * diffMS) / 1000 * this.GyroSpeedMul;
 
                 double sinxr = Math.Sin(xr);
                 double cosxr = Math.Cos(xr);

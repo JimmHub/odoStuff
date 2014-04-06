@@ -41,8 +41,9 @@
             this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MEMSRotationTabPage = new System.Windows.Forms.TabPage();
-            this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
             this.logMEMSRichTextBox = new System.Windows.Forms.RichTextBox();
+            this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
+            this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -148,6 +149,14 @@
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
             // 
+            // logMEMSRichTextBox
+            // 
+            this.logMEMSRichTextBox.Location = new System.Drawing.Point(470, 6);
+            this.logMEMSRichTextBox.Name = "logMEMSRichTextBox";
+            this.logMEMSRichTextBox.Size = new System.Drawing.Size(533, 428);
+            this.logMEMSRichTextBox.TabIndex = 6;
+            this.logMEMSRichTextBox.Text = "";
+            // 
             // featureDetectionTabPage
             // 
             this.featureDetectionTabPage.Controls.Add(this.pictureBox1);
@@ -163,13 +172,10 @@
             this.featureDetectionTabPage.Text = "featureDetection";
             this.featureDetectionTabPage.UseVisualStyleBackColor = true;
             // 
-            // logMEMSRichTextBox
+            // stereoCapTimer
             // 
-            this.logMEMSRichTextBox.Location = new System.Drawing.Point(470, 6);
-            this.logMEMSRichTextBox.Name = "logMEMSRichTextBox";
-            this.logMEMSRichTextBox.Size = new System.Drawing.Size(533, 428);
-            this.logMEMSRichTextBox.TabIndex = 6;
-            this.logMEMSRichTextBox.Text = "";
+            this.stereoCapTimer.Interval = 1;
+            this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
             // 
             // Form1
             // 
@@ -207,6 +213,7 @@
         private System.Windows.Forms.TabPage featureDetectionTabPage;
         private System.Windows.Forms.TabPage MEMSRotationTabPage;
         private System.Windows.Forms.RichTextBox logMEMSRichTextBox;
+        private System.Windows.Forms.Timer stereoCapTimer;
     }
 }
 
