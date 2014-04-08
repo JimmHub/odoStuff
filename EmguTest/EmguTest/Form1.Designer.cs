@@ -41,13 +41,19 @@
             this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MEMSRotationTabPage = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.accMagnetFilterTrackBar = new System.Windows.Forms.TrackBar();
+            this.gyroCheckBox = new System.Windows.Forms.CheckBox();
+            this.accMagnetCheckBox = new System.Windows.Forms.CheckBox();
             this.logMEMSRichTextBox = new System.Windows.Forms.RichTextBox();
             this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
+            this.adoptiveFilterCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.MEMSRotationTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.accMagnetFilterTrackBar)).BeginInit();
             this.featureDetectionTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,7 +122,7 @@
             // 
             this.elementHost1.Location = new System.Drawing.Point(6, 6);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(432, 295);
+            this.elementHost1.Size = new System.Drawing.Size(419, 318);
             this.elementHost1.TabIndex = 5;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.elementHost1_ChildChanged);
@@ -139,6 +145,11 @@
             // 
             // MEMSRotationTabPage
             // 
+            this.MEMSRotationTabPage.Controls.Add(this.adoptiveFilterCheckBox);
+            this.MEMSRotationTabPage.Controls.Add(this.label2);
+            this.MEMSRotationTabPage.Controls.Add(this.accMagnetFilterTrackBar);
+            this.MEMSRotationTabPage.Controls.Add(this.gyroCheckBox);
+            this.MEMSRotationTabPage.Controls.Add(this.accMagnetCheckBox);
             this.MEMSRotationTabPage.Controls.Add(this.logMEMSRichTextBox);
             this.MEMSRotationTabPage.Controls.Add(this.elementHost1);
             this.MEMSRotationTabPage.Location = new System.Drawing.Point(4, 22);
@@ -149,11 +160,54 @@
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(172, 382);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(83, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "accMagnet filter";
+            // 
+            // accMagnetFilterTrackBar
+            // 
+            this.accMagnetFilterTrackBar.Location = new System.Drawing.Point(6, 398);
+            this.accMagnetFilterTrackBar.Maximum = 1000;
+            this.accMagnetFilterTrackBar.Name = "accMagnetFilterTrackBar";
+            this.accMagnetFilterTrackBar.Size = new System.Drawing.Size(419, 45);
+            this.accMagnetFilterTrackBar.TabIndex = 9;
+            this.accMagnetFilterTrackBar.Value = 100;
+            this.accMagnetFilterTrackBar.Scroll += new System.EventHandler(this.accMagnetFilterTrackBar_Scroll);
+            // 
+            // gyroCheckBox
+            // 
+            this.gyroCheckBox.AutoSize = true;
+            this.gyroCheckBox.Checked = true;
+            this.gyroCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gyroCheckBox.Location = new System.Drawing.Point(6, 363);
+            this.gyroCheckBox.Name = "gyroCheckBox";
+            this.gyroCheckBox.Size = new System.Drawing.Size(75, 17);
+            this.gyroCheckBox.TabIndex = 8;
+            this.gyroCheckBox.Text = "gyroscope";
+            this.gyroCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // accMagnetCheckBox
+            // 
+            this.accMagnetCheckBox.AutoSize = true;
+            this.accMagnetCheckBox.Checked = true;
+            this.accMagnetCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.accMagnetCheckBox.Location = new System.Drawing.Point(6, 340);
+            this.accMagnetCheckBox.Name = "accMagnetCheckBox";
+            this.accMagnetCheckBox.Size = new System.Drawing.Size(79, 17);
+            this.accMagnetCheckBox.TabIndex = 7;
+            this.accMagnetCheckBox.Text = "accmagnet";
+            this.accMagnetCheckBox.UseVisualStyleBackColor = true;
+            // 
             // logMEMSRichTextBox
             // 
-            this.logMEMSRichTextBox.Location = new System.Drawing.Point(470, 6);
+            this.logMEMSRichTextBox.Location = new System.Drawing.Point(467, 6);
             this.logMEMSRichTextBox.Name = "logMEMSRichTextBox";
-            this.logMEMSRichTextBox.Size = new System.Drawing.Size(533, 428);
+            this.logMEMSRichTextBox.Size = new System.Drawing.Size(548, 428);
             this.logMEMSRichTextBox.TabIndex = 6;
             this.logMEMSRichTextBox.Text = "";
             // 
@@ -177,6 +231,18 @@
             this.stereoCapTimer.Interval = 1;
             this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
             // 
+            // adoptiveFilterCheckBox
+            // 
+            this.adoptiveFilterCheckBox.AutoSize = true;
+            this.adoptiveFilterCheckBox.Checked = true;
+            this.adoptiveFilterCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.adoptiveFilterCheckBox.Location = new System.Drawing.Point(201, 340);
+            this.adoptiveFilterCheckBox.Name = "adoptiveFilterCheckBox";
+            this.adoptiveFilterCheckBox.Size = new System.Drawing.Size(89, 17);
+            this.adoptiveFilterCheckBox.TabIndex = 11;
+            this.adoptiveFilterCheckBox.Text = "adoptive filter";
+            this.adoptiveFilterCheckBox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -191,6 +257,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.MEMSRotationTabPage.ResumeLayout(false);
+            this.MEMSRotationTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.accMagnetFilterTrackBar)).EndInit();
             this.featureDetectionTabPage.ResumeLayout(false);
             this.featureDetectionTabPage.PerformLayout();
             this.ResumeLayout(false);
@@ -214,6 +282,11 @@
         private System.Windows.Forms.TabPage MEMSRotationTabPage;
         private System.Windows.Forms.RichTextBox logMEMSRichTextBox;
         private System.Windows.Forms.Timer stereoCapTimer;
+        private System.Windows.Forms.CheckBox gyroCheckBox;
+        private System.Windows.Forms.CheckBox accMagnetCheckBox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TrackBar accMagnetFilterTrackBar;
+        private System.Windows.Forms.CheckBox adoptiveFilterCheckBox;
     }
 }
 

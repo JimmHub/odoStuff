@@ -27,11 +27,11 @@ namespace EmguTest.MEMS
 
         public double GyroSpeedMul = 1.410;
 
-        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useLowpassFilter, bool useAdaptiveFiltering, double accMagnetFilterCoeff, double gyroFilterCoeff)
+        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useAccMagnet, bool useGyroscope, bool useLowpassFilter, bool useAdaptiveFiltering, double accMagnetFilterCoeff, double gyroFilterCoeff)
         {
             if (useAdaptiveFiltering)
             {
-                this.CalcFilterCoeffs(newReadings, out gyroFilterCoeff, out accMagnetFilterCoeff);
+                this.CalcFilterCoeffs(newReadings, out gyroFilterCoeff, out accMagnetFilterCoeff, accMagnetFilterCoeff, gyroFilterCoeff);
             }
 
             double[][] res = new double[3][];
@@ -42,25 +42,41 @@ namespace EmguTest.MEMS
 
             MCvPoint3D64f rawAccPoint = new MCvPoint3D64f(newReadings.AccVector3f.Values[0], newReadings.AccVector3f.Values[1], newReadings.AccVector3f.Values[2]);
             MCvPoint3D64f rawMagnetPoint = new MCvPoint3D64f(newReadings.MagnetVector3f.Values[0], newReadings.MagnetVector3f.Values[1], newReadings.MagnetVector3f.Values[2]);
-            var gyroDiffMatr = this.GetGyroRotationMatrix(newReadings.GyroVector3f);
+            double gyroSpeedMul = 1;
+            if (useAdaptiveFiltering)
+            {
+                if(useAccMagnet)
+                {
+                    gyroSpeedMul = this.GyroSpeedMul;
+                }
+            }
+            var gyroDiffMatr = this.GetGyroRotationMatrix(newReadings.GyroVector3f, gyroSpeedMul);
 
             MCvPoint3D64f accFilteredPoint;
             MCvPoint3D64f magnetFilteredPoint;
 
             if (useLowpassFilter && this.OldAMGFusedAcc != null && this.OldAMGFusedMagnet != null)
             {
-                //this.FilterAccMagnet(ref resAccPoint, ref resMagnetPoint, accMagnetFilterCoeff);
-                accFilteredPoint = new MCvPoint3D64f(
-                    rawAccPoint.x * accMagnetFilterCoeff + OldAMGFusedAcc.Value.x * (1 - accMagnetFilterCoeff),
-                    rawAccPoint.y * accMagnetFilterCoeff + OldAMGFusedAcc.Value.y * (1 - accMagnetFilterCoeff),
-                    rawAccPoint.z * accMagnetFilterCoeff + OldAMGFusedAcc.Value.z * (1 - accMagnetFilterCoeff)
-                    );
+                if (useAccMagnet)
+                {
+                    //this.FilterAccMagnet(ref resAccPoint, ref resMagnetPoint, accMagnetFilterCoeff);
+                    accFilteredPoint = new MCvPoint3D64f(
+                        rawAccPoint.x * accMagnetFilterCoeff + OldAMGFusedAcc.Value.x * (1 - accMagnetFilterCoeff),
+                        rawAccPoint.y * accMagnetFilterCoeff + OldAMGFusedAcc.Value.y * (1 - accMagnetFilterCoeff),
+                        rawAccPoint.z * accMagnetFilterCoeff + OldAMGFusedAcc.Value.z * (1 - accMagnetFilterCoeff)
+                        );
 
-                magnetFilteredPoint = new MCvPoint3D64f(
-                    rawMagnetPoint.x * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.x * (1 - accMagnetFilterCoeff),
-                    rawMagnetPoint.y * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.y * (1 - accMagnetFilterCoeff),
-                    rawMagnetPoint.z * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.z * (1 - accMagnetFilterCoeff)
-                    );
+                    magnetFilteredPoint = new MCvPoint3D64f(
+                        rawMagnetPoint.x * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.x * (1 - accMagnetFilterCoeff),
+                        rawMagnetPoint.y * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.y * (1 - accMagnetFilterCoeff),
+                        rawMagnetPoint.z * accMagnetFilterCoeff + OldAMGFusedMagnet.Value.z * (1 - accMagnetFilterCoeff)
+                        );
+                }
+                else
+                {
+                    accFilteredPoint = new MCvPoint3D64f(this.OldAMGFusedAcc.Value.x, this.OldAMGFusedAcc.Value.y, this.OldAMGFusedAcc.Value.z);
+                    magnetFilteredPoint = new MCvPoint3D64f(this.OldAMGFusedMagnet.Value.x, this.OldAMGFusedMagnet.Value.y, this.OldAMGFusedMagnet.Value.z);
+                }
             }
             else
             {
@@ -68,8 +84,8 @@ namespace EmguTest.MEMS
                 magnetFilteredPoint = new MCvPoint3D64f(rawMagnetPoint.x, rawMagnetPoint.y, rawMagnetPoint.z);
             }
             
-            MCvPoint3D64f resAccPoint;
-            MCvPoint3D64f resMagnetPoint;
+            MCvPoint3D64f resAccPoint = new MCvPoint3D64f(0, 9, 0);
+            MCvPoint3D64f resMagnetPoint = new MCvPoint3D64f(48, 2, 0);
 
 
             if(this.OldAMGFusedAcc == null || this.OldAMGFusedMagnet == null)
@@ -79,8 +95,21 @@ namespace EmguTest.MEMS
             }
             else
             {
-                resAccPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedAcc.Value).Mul(gyroDiffMatr).Mul(gyroFilterCoeff).Add(MCvPoint3D64fToMatrix(accFilteredPoint).Mul(1 - gyroFilterCoeff)));
-                resMagnetPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedMagnet.Value).Mul(gyroDiffMatr).Mul(gyroFilterCoeff).Add(MCvPoint3D64fToMatrix(magnetFilteredPoint).Mul(1 - gyroFilterCoeff)));
+                if (useGyroscope && useAccMagnet)
+                {
+                    resAccPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedAcc.Value).Mul(gyroDiffMatr).Mul(gyroFilterCoeff).Add(MCvPoint3D64fToMatrix(accFilteredPoint).Mul(1 - gyroFilterCoeff)));
+                    resMagnetPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedMagnet.Value).Mul(gyroDiffMatr).Mul(gyroFilterCoeff).Add(MCvPoint3D64fToMatrix(magnetFilteredPoint).Mul(1 - gyroFilterCoeff)));
+                }
+                else if (useAccMagnet)
+                {
+                    resAccPoint = accFilteredPoint;
+                    resMagnetPoint = magnetFilteredPoint;
+                }
+                else if(useGyroscope)
+                {
+                    resAccPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedAcc.Value).Mul(gyroDiffMatr));
+                    resMagnetPoint = MatrixToMCvPoint3D64f(MCvPoint3D64fToMatrix(OldAMGFusedMagnet.Value).Mul(gyroDiffMatr));
+                }
             }
 
             this.OldAMGFusedAcc = resAccPoint;
@@ -140,9 +169,9 @@ namespace EmguTest.MEMS
             //}
             ////
             //manual res set up
-            res[0][0] = -resMatrix[0, 0]; res[0][1] = resMatrix[0, 1]; res[0][2] = resMatrix[0, 2];
-            res[1][0] = -resMatrix[1, 0]; res[1][1] = resMatrix[1, 1]; res[1][2] = resMatrix[1, 2];
-            res[2][0] = -resMatrix[2, 0]; res[2][1] = resMatrix[2, 1]; res[2][2] = resMatrix[2, 2];
+            res[0][0] = -resMatrix[0, 0]; res[0][1] = -resMatrix[0, 1]; res[0][2] = resMatrix[0, 2];
+            res[1][0] = -resMatrix[1, 0]; res[1][1] = -resMatrix[1, 1]; res[1][2] = resMatrix[1, 2];
+            res[2][0] = -resMatrix[2, 0]; res[2][1] = -resMatrix[2, 1]; res[2][2] = resMatrix[2, 2];
             ////
 
             return res;
@@ -238,7 +267,7 @@ namespace EmguTest.MEMS
             }
         }
 
-        public void CalcFilterCoeffs(MEMSReadingsSet3f readings, out double gyroCoeff, out double accMagnetCoeff)
+        public void CalcFilterCoeffs(MEMSReadingsSet3f readings, out double gyroCoeff, out double accMagnetCoeff, double initAccMagnet, double initGyro)
         {
             var gyroVect = readings.GyroVector3f.Values;
             var gyroMagn = Math.Sqrt(gyroVect[0] * gyroVect[0] + gyroVect[1] * gyroVect[1] + gyroVect[2] * gyroVect[2]);
@@ -251,12 +280,12 @@ namespace EmguTest.MEMS
 
             gyroCoeff = gCoeff;
 
-            accMagnetCoeff = 0.1;
+            accMagnetCoeff = initAccMagnet;
 
             Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + accMagnetCoeff.ToString());
         }
 
-        public Matrix<double> GetGyroRotationMatrix(ReadingsVector3f gyroVect)
+        public Matrix<double> GetGyroRotationMatrix(ReadingsVector3f gyroVect, double gyroSpeedMul)
         {
             Matrix<double> res = new Matrix<double>(3, 3);
             if (this.OldGyroReadings == null)
@@ -267,9 +296,9 @@ namespace EmguTest.MEMS
             {
                 long diffMS = gyroVect.TimeStampI - this.OldGyroReadings.TimeStampI;
 
-                double xr = -((double)gyroVect.Values[0] * diffMS) / 1000 * this.GyroSpeedMul;
-                double yr = ((double)gyroVect.Values[1] * diffMS) / 1000 * this.GyroSpeedMul;
-                double zr = -((double)gyroVect.Values[2] * diffMS) / 1000 * this.GyroSpeedMul;
+                double xr = -((double)gyroVect.Values[0] * diffMS) / 1000 * gyroSpeedMul;
+                double yr = ((double)gyroVect.Values[1] * diffMS) / 1000 * gyroSpeedMul;
+                double zr = -((double)gyroVect.Values[2] * diffMS) / 1000 * gyroSpeedMul;
 
                 double sinxr = Math.Sin(xr);
                 double cosxr = Math.Cos(xr);

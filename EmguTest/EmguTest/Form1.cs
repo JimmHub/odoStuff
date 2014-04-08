@@ -369,10 +369,21 @@ namespace EmguTest
             if (this.IsActualReadingsSet(nextReadings))
             {
                 double gyroCoeff = 0.5;
-                double accMagnetCoeff = 0.3;
+                double accMagnetCoeff = (double)this.accMagnetFilterTrackBar.Value / this.accMagnetFilterTrackBar.Maximum;
+
+                bool useAccMagnet = this.accMagnetCheckBox.Checked;
+                bool useGyro = this.gyroCheckBox.Checked;
+                bool useAdoptiveFilter = this.adoptiveFilterCheckBox.Checked;
 
                 this.ReadingsTestOuptut(nextReadings);
-                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(newReadings: nextReadings, useLowpassFilter: true, useAdaptiveFiltering: true, accMagnetFilterCoeff: accMagnetCoeff, gyroFilterCoeff: gyroCoeff);
+                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(
+                    newReadings: nextReadings,
+                    useAccMagnet: useAccMagnet,
+                    useGyroscope: useGyro,
+                    useLowpassFilter: true,
+                    useAdaptiveFiltering: useAdoptiveFilter,
+                    accMagnetFilterCoeff: accMagnetCoeff,
+                    gyroFilterCoeff: gyroCoeff);
 
                 var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 
@@ -513,6 +524,11 @@ namespace EmguTest
             {
                 this.pictureBox2.Image = rightFrame.ToBitmap();
             }
+
+        }
+
+        private void accMagnetFilterTrackBar_Scroll(object sender, EventArgs e)
+        {
 
         }
 
