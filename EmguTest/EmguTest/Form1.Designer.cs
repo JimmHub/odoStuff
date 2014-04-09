@@ -49,13 +49,16 @@
             this.logMEMSRichTextBox = new System.Windows.Forms.RichTextBox();
             this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.calibrationStatusLabel = new System.Windows.Forms.Label();
+            this.imageIdxLabel = new System.Windows.Forms.Label();
             this.PrevCalibButton = new System.Windows.Forms.Button();
             this.nextCalibButton = new System.Windows.Forms.Button();
             this.calibPictureBoxUndist = new System.Windows.Forms.PictureBox();
             this.calibPictureBoxOriginal = new System.Windows.Forms.PictureBox();
             this.monoCameraCalibrateButton = new System.Windows.Forms.Button();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
-            this.imageIdxLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -151,7 +154,7 @@
             this.tabControl1.Location = new System.Drawing.Point(10, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1029, 516);
+            this.tabControl1.Size = new System.Drawing.Size(1029, 599);
             this.tabControl1.TabIndex = 6;
             // 
             // MEMSRotationTabPage
@@ -251,6 +254,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.calibrationStatusLabel);
             this.tabPage1.Controls.Add(this.imageIdxLabel);
             this.tabPage1.Controls.Add(this.PrevCalibButton);
             this.tabPage1.Controls.Add(this.nextCalibButton);
@@ -260,10 +266,28 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1021, 490);
+            this.tabPage1.Size = new System.Drawing.Size(1021, 573);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // calibrationStatusLabel
+            // 
+            this.calibrationStatusLabel.AutoSize = true;
+            this.calibrationStatusLabel.Location = new System.Drawing.Point(355, 26);
+            this.calibrationStatusLabel.Name = "calibrationStatusLabel";
+            this.calibrationStatusLabel.Size = new System.Drawing.Size(31, 13);
+            this.calibrationStatusLabel.TabIndex = 6;
+            this.calibrationStatusLabel.Text = "none";
+            // 
+            // imageIdxLabel
+            // 
+            this.imageIdxLabel.AutoSize = true;
+            this.imageIdxLabel.Location = new System.Drawing.Point(644, 21);
+            this.imageIdxLabel.Name = "imageIdxLabel";
+            this.imageIdxLabel.Size = new System.Drawing.Size(16, 13);
+            this.imageIdxLabel.TabIndex = 5;
+            this.imageIdxLabel.Text = "-1";
             // 
             // PrevCalibButton
             // 
@@ -287,7 +311,7 @@
             // 
             // calibPictureBoxUndist
             // 
-            this.calibPictureBoxUndist.Location = new System.Drawing.Point(487, 55);
+            this.calibPictureBoxUndist.Location = new System.Drawing.Point(487, 115);
             this.calibPictureBoxUndist.Name = "calibPictureBoxUndist";
             this.calibPictureBoxUndist.Size = new System.Drawing.Size(420, 420);
             this.calibPictureBoxUndist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -296,7 +320,7 @@
             // 
             // calibPictureBoxOriginal
             // 
-            this.calibPictureBoxOriginal.Location = new System.Drawing.Point(24, 55);
+            this.calibPictureBoxOriginal.Location = new System.Drawing.Point(24, 115);
             this.calibPictureBoxOriginal.Name = "calibPictureBoxOriginal";
             this.calibPictureBoxOriginal.Size = new System.Drawing.Size(420, 420);
             this.calibPictureBoxOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -318,14 +342,23 @@
             this.stereoCapTimer.Interval = 1;
             this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
             // 
-            // imageIdxLabel
+            // label3
             // 
-            this.imageIdxLabel.AutoSize = true;
-            this.imageIdxLabel.Location = new System.Drawing.Point(644, 21);
-            this.imageIdxLabel.Name = "imageIdxLabel";
-            this.imageIdxLabel.Size = new System.Drawing.Size(16, 13);
-            this.imageIdxLabel.TabIndex = 5;
-            this.imageIdxLabel.Text = "-1";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "original";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(484, 99);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "undistorted";
             // 
             // Form1
             // 
@@ -382,6 +415,9 @@
         private System.Windows.Forms.PictureBox calibPictureBoxUndist;
         private System.Windows.Forms.PictureBox calibPictureBoxOriginal;
         private System.Windows.Forms.Label imageIdxLabel;
+        private System.Windows.Forms.Label calibrationStatusLabel;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
     }
 }
 

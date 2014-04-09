@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.IO;
+using System.Threading;
 
 using Emgu.CV;
 using Emgu.Util;
@@ -42,7 +43,7 @@ namespace EmguTest
         private int LastFpsCount = 0;
 
         private MonoCameraParams MonoCameraParams;
-        private String MonoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\calibImages";
+        private String MonoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonemonocalibimages";
         private List<String> MonoCalibTestFiles;
         public int CalibIdx = 0;
 
@@ -540,6 +541,8 @@ namespace EmguTest
 
         private void monoCameraCalibrateButton_Click(object sender, EventArgs e)
         {
+            this.calibrationStatusLabel.Text = "calibrating...";
+            
             this.MonoCalibTestFiles = Directory.GetFiles(this.MonoCalibTestFolder).ToList();
             var calibData = new MonoCameraCalibrationData()
             {
@@ -553,8 +556,8 @@ namespace EmguTest
             //var img = new Image<Bgr, byte>(images[0]);
 
             //var undistRes = cameraRes.IntrinsicCameraParameters.Undistort(img);
-            
-            
+
+            this.calibrationStatusLabel.Text = "calibrated!";
         }
 
         private void nextCalibButton_Click(object sender, EventArgs e)
@@ -592,8 +595,11 @@ namespace EmguTest
             var rawImg = new Image<Bgr, byte>(this.MonoCalibTestFiles[this.CalibIdx]);
             var undistImg = this.MonoCameraParams.IntrinsicCameraParameters.Undistort(rawImg);
 
-            this.calibPictureBoxOriginal.Image = rawImg.ToBitmap();
-            this.calibPictureBoxUndist.Image = undistImg.ToBitmap();
+            var rawBmp = rawImg.ToBitmap();
+            var undistBmp = undistImg.ToBitmap();
+
+            this.calibPictureBoxOriginal.Image = rawBmp;
+            this.calibPictureBoxUndist.Image = undistBmp;
         }
         //private void CPUDetect()
         //{
