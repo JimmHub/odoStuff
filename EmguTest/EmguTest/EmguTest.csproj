@@ -76,11 +76,16 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logger\ConsoleLogger.cs" />
-    <Compile Include="Logger\EmptyLogger.cs" />
-    <Compile Include="Logger\ILogger.cs" />
-    <Compile Include="Logger\RichTextBoxLogger.cs" />
-    <Compile Include="Logger\StdOutLogger.cs" />
+    <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
+    <Compile Include="Odometry\MonoCameraParams.cs" />
+    <Compile Include="Odometry\StereoCameraCalibrationData.cs" />
+    <Compile Include="Odometry\CameraCalibrator.cs" />
+    <Compile Include="Odometry\StereoCameraParams.cs" />
+    <Compile Include="Utils\Logger\ConsoleLogger.cs" />
+    <Compile Include="Utils\Logger\EmptyLogger.cs" />
+    <Compile Include="Utils\Logger\ILogger.cs" />
+    <Compile Include="Utils\Logger\RichTextBoxLogger.cs" />
+    <Compile Include="Utils\Logger\StdOutLogger.cs" />
     <Compile Include="MEMS\AccelReadingsVector.cs" />
     <Compile Include="MEMS\DeviceRTWebMEMSProvider.cs" />
     <Compile Include="MEMS\GyroReadingsVector.cs" />

@@ -41,20 +41,30 @@
             this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MEMSRotationTabPage = new System.Windows.Forms.TabPage();
+            this.adoptiveFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.accMagnetFilterTrackBar = new System.Windows.Forms.TrackBar();
             this.gyroCheckBox = new System.Windows.Forms.CheckBox();
             this.accMagnetCheckBox = new System.Windows.Forms.CheckBox();
             this.logMEMSRichTextBox = new System.Windows.Forms.RichTextBox();
             this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.PrevCalibButton = new System.Windows.Forms.Button();
+            this.nextCalibButton = new System.Windows.Forms.Button();
+            this.calibPictureBoxUndist = new System.Windows.Forms.PictureBox();
+            this.calibPictureBoxOriginal = new System.Windows.Forms.PictureBox();
+            this.monoCameraCalibrateButton = new System.Windows.Forms.Button();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
-            this.adoptiveFilterCheckBox = new System.Windows.Forms.CheckBox();
+            this.imageIdxLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.MEMSRotationTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.accMagnetFilterTrackBar)).BeginInit();
             this.featureDetectionTabPage.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxUndist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxOriginal)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -137,6 +147,7 @@
             // 
             this.tabControl1.Controls.Add(this.MEMSRotationTabPage);
             this.tabControl1.Controls.Add(this.featureDetectionTabPage);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(10, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -159,6 +170,18 @@
             this.MEMSRotationTabPage.TabIndex = 1;
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
+            // 
+            // adoptiveFilterCheckBox
+            // 
+            this.adoptiveFilterCheckBox.AutoSize = true;
+            this.adoptiveFilterCheckBox.Checked = true;
+            this.adoptiveFilterCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.adoptiveFilterCheckBox.Location = new System.Drawing.Point(201, 340);
+            this.adoptiveFilterCheckBox.Name = "adoptiveFilterCheckBox";
+            this.adoptiveFilterCheckBox.Size = new System.Drawing.Size(89, 17);
+            this.adoptiveFilterCheckBox.TabIndex = 11;
+            this.adoptiveFilterCheckBox.Text = "adoptive filter";
+            this.adoptiveFilterCheckBox.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -226,22 +249,83 @@
             this.featureDetectionTabPage.Text = "featureDetection";
             this.featureDetectionTabPage.UseVisualStyleBackColor = true;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.imageIdxLabel);
+            this.tabPage1.Controls.Add(this.PrevCalibButton);
+            this.tabPage1.Controls.Add(this.nextCalibButton);
+            this.tabPage1.Controls.Add(this.calibPictureBoxUndist);
+            this.tabPage1.Controls.Add(this.calibPictureBoxOriginal);
+            this.tabPage1.Controls.Add(this.monoCameraCalibrateButton);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1021, 490);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // PrevCalibButton
+            // 
+            this.PrevCalibButton.Location = new System.Drawing.Point(537, 6);
+            this.PrevCalibButton.Name = "PrevCalibButton";
+            this.PrevCalibButton.Size = new System.Drawing.Size(91, 43);
+            this.PrevCalibButton.TabIndex = 4;
+            this.PrevCalibButton.Text = "Prev";
+            this.PrevCalibButton.UseVisualStyleBackColor = true;
+            this.PrevCalibButton.Click += new System.EventHandler(this.PrevCalibButton_Click);
+            // 
+            // nextCalibButton
+            // 
+            this.nextCalibButton.Location = new System.Drawing.Point(685, 6);
+            this.nextCalibButton.Name = "nextCalibButton";
+            this.nextCalibButton.Size = new System.Drawing.Size(91, 43);
+            this.nextCalibButton.TabIndex = 3;
+            this.nextCalibButton.Text = "Next";
+            this.nextCalibButton.UseVisualStyleBackColor = true;
+            this.nextCalibButton.Click += new System.EventHandler(this.nextCalibButton_Click);
+            // 
+            // calibPictureBoxUndist
+            // 
+            this.calibPictureBoxUndist.Location = new System.Drawing.Point(487, 55);
+            this.calibPictureBoxUndist.Name = "calibPictureBoxUndist";
+            this.calibPictureBoxUndist.Size = new System.Drawing.Size(420, 420);
+            this.calibPictureBoxUndist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.calibPictureBoxUndist.TabIndex = 2;
+            this.calibPictureBoxUndist.TabStop = false;
+            // 
+            // calibPictureBoxOriginal
+            // 
+            this.calibPictureBoxOriginal.Location = new System.Drawing.Point(24, 55);
+            this.calibPictureBoxOriginal.Name = "calibPictureBoxOriginal";
+            this.calibPictureBoxOriginal.Size = new System.Drawing.Size(420, 420);
+            this.calibPictureBoxOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.calibPictureBoxOriginal.TabIndex = 1;
+            this.calibPictureBoxOriginal.TabStop = false;
+            // 
+            // monoCameraCalibrateButton
+            // 
+            this.monoCameraCalibrateButton.Location = new System.Drawing.Point(24, 26);
+            this.monoCameraCalibrateButton.Name = "monoCameraCalibrateButton";
+            this.monoCameraCalibrateButton.Size = new System.Drawing.Size(308, 23);
+            this.monoCameraCalibrateButton.TabIndex = 0;
+            this.monoCameraCalibrateButton.Text = "monoCameraCalibrateButton";
+            this.monoCameraCalibrateButton.UseVisualStyleBackColor = true;
+            this.monoCameraCalibrateButton.Click += new System.EventHandler(this.monoCameraCalibrateButton_Click);
+            // 
             // stereoCapTimer
             // 
             this.stereoCapTimer.Interval = 1;
             this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
             // 
-            // adoptiveFilterCheckBox
+            // imageIdxLabel
             // 
-            this.adoptiveFilterCheckBox.AutoSize = true;
-            this.adoptiveFilterCheckBox.Checked = true;
-            this.adoptiveFilterCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.adoptiveFilterCheckBox.Location = new System.Drawing.Point(201, 340);
-            this.adoptiveFilterCheckBox.Name = "adoptiveFilterCheckBox";
-            this.adoptiveFilterCheckBox.Size = new System.Drawing.Size(89, 17);
-            this.adoptiveFilterCheckBox.TabIndex = 11;
-            this.adoptiveFilterCheckBox.Text = "adoptive filter";
-            this.adoptiveFilterCheckBox.UseVisualStyleBackColor = true;
+            this.imageIdxLabel.AutoSize = true;
+            this.imageIdxLabel.Location = new System.Drawing.Point(644, 21);
+            this.imageIdxLabel.Name = "imageIdxLabel";
+            this.imageIdxLabel.Size = new System.Drawing.Size(16, 13);
+            this.imageIdxLabel.TabIndex = 5;
+            this.imageIdxLabel.Text = "-1";
             // 
             // Form1
             // 
@@ -261,6 +345,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.accMagnetFilterTrackBar)).EndInit();
             this.featureDetectionTabPage.ResumeLayout(false);
             this.featureDetectionTabPage.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxUndist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxOriginal)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -287,6 +375,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TrackBar accMagnetFilterTrackBar;
         private System.Windows.Forms.CheckBox adoptiveFilterCheckBox;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Button monoCameraCalibrateButton;
+        private System.Windows.Forms.Button PrevCalibButton;
+        private System.Windows.Forms.Button nextCalibButton;
+        private System.Windows.Forms.PictureBox calibPictureBoxUndist;
+        private System.Windows.Forms.PictureBox calibPictureBoxOriginal;
+        private System.Windows.Forms.Label imageIdxLabel;
     }
 }
 

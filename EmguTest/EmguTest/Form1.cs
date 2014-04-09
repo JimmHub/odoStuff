@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.IO;
 
 using Emgu.CV;
 using Emgu.Util;
@@ -15,7 +16,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 
 using EmguTest.MEMS;
-
+using EmguTest.Odometry;
 namespace EmguTest
 {
     public partial class Form1 : Form
@@ -39,6 +40,11 @@ namespace EmguTest
 
         private long LastMill = 0;
         private int LastFpsCount = 0;
+
+        private MonoCameraParams MonoCameraParams;
+        private String MonoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\calibImages";
+        private List<String> MonoCalibTestFiles;
+        public int CalibIdx = 0;
 
         public Wpf3DControl.UserControl1 Wpf3DControl;
 
@@ -532,6 +538,63 @@ namespace EmguTest
 
         }
 
+        private void monoCameraCalibrateButton_Click(object sender, EventArgs e)
+        {
+            this.MonoCalibTestFiles = Directory.GetFiles(this.MonoCalibTestFolder).ToList();
+            var calibData = new MonoCameraCalibrationData()
+            {
+                SquareSize = 1.0,
+                SampleImagesNames = this.MonoCalibTestFiles,
+                BoardSquareSize = new Size(9, 6)
+            };
+            var cameraRes = CameraCalibrator.CalibrateMono(calibData);
+
+            this.MonoCameraParams = cameraRes;
+            //var img = new Image<Bgr, byte>(images[0]);
+
+            //var undistRes = cameraRes.IntrinsicCameraParameters.Undistort(img);
+            
+            
+        }
+
+        private void nextCalibButton_Click(object sender, EventArgs e)
+        {
+            if (this.MonoCameraParams != null && this.MonoCalibTestFiles != null)
+            {
+                ++this.CalibIdx;
+                if (this.CalibIdx > this.MonoCalibTestFiles.Count - 1)
+                {
+                    this.CalibIdx = this.MonoCalibTestFiles.Count - 1;
+                }
+
+                this.RenderMonoCalibTestImages();
+            }
+        }
+
+        private void PrevCalibButton_Click(object sender, EventArgs e)
+        {
+            if (this.MonoCameraParams != null && this.MonoCalibTestFiles != null)
+            {
+                --this.CalibIdx;
+                if (this.CalibIdx < 0)
+                {
+                    this.CalibIdx = 0;
+                }
+
+                this.RenderMonoCalibTestImages();
+            }
+        }
+
+        private void RenderMonoCalibTestImages()
+        {
+            this.imageIdxLabel.Text = this.CalibIdx.ToString();
+
+            var rawImg = new Image<Bgr, byte>(this.MonoCalibTestFiles[this.CalibIdx]);
+            var undistImg = this.MonoCameraParams.IntrinsicCameraParameters.Undistort(rawImg);
+
+            this.calibPictureBoxOriginal.Image = rawImg.ToBitmap();
+            this.calibPictureBoxUndist.Image = undistImg.ToBitmap();
+        }
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())
