@@ -9,9 +9,13 @@ namespace EmguTest.Odometry
 {
     class MonoCameraCalibrationData
     {
+        //board params
         public Size BoardSquareSize { get; set; }
         public double SquareSize { get; set; }
-
+        ////
+        //image list
         public List<String> SampleImagesNames { get; set; }
+        ////
+
     }
 }
