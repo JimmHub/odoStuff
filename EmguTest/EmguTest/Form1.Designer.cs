@@ -49,6 +49,8 @@
             this.logMEMSRichTextBox = new System.Windows.Forms.RichTextBox();
             this.featureDetectionTabPage = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.calibrationStatusLabel = new System.Windows.Forms.Label();
             this.imageIdxLabel = new System.Windows.Forms.Label();
             this.PrevCalibButton = new System.Windows.Forms.Button();
@@ -56,9 +58,23 @@
             this.calibPictureBoxUndist = new System.Windows.Forms.PictureBox();
             this.calibPictureBoxOriginal = new System.Windows.Forms.PictureBox();
             this.monoCameraCalibrateButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.stereoCalibUseRectificationCheckBox = new System.Windows.Forms.CheckBox();
+            this.stereoCalibDrawLinesCheckBox = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.stereoCalibPrevButton = new System.Windows.Forms.Button();
+            this.stereoCalibNextButton = new System.Windows.Forms.Button();
+            this.stereoImageNumLabel = new System.Windows.Forms.Label();
+            this.stereoCalibrationStatusLabel = new System.Windows.Forms.Label();
+            this.stereoCalibrateButton = new System.Windows.Forms.Button();
+            this.rightStereoCalibPictureBox = new System.Windows.Forms.PictureBox();
+            this.leftStereoCalibPictureBox = new System.Windows.Forms.PictureBox();
+            this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
+            this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -68,6 +84,11 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxUndist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxOriginal)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rightStereoCalibPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftStereoCalibPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rightStereoOriginalPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -151,10 +172,11 @@
             this.tabControl1.Controls.Add(this.MEMSRotationTabPage);
             this.tabControl1.Controls.Add(this.featureDetectionTabPage);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(10, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1029, 599);
+            this.tabControl1.Size = new System.Drawing.Size(1029, 738);
             this.tabControl1.TabIndex = 6;
             // 
             // MEMSRotationTabPage
@@ -169,7 +191,7 @@
             this.MEMSRotationTabPage.Location = new System.Drawing.Point(4, 22);
             this.MEMSRotationTabPage.Name = "MEMSRotationTabPage";
             this.MEMSRotationTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.MEMSRotationTabPage.Size = new System.Drawing.Size(1021, 490);
+            this.MEMSRotationTabPage.Size = new System.Drawing.Size(1021, 712);
             this.MEMSRotationTabPage.TabIndex = 1;
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
@@ -247,7 +269,7 @@
             this.featureDetectionTabPage.Location = new System.Drawing.Point(4, 22);
             this.featureDetectionTabPage.Name = "featureDetectionTabPage";
             this.featureDetectionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.featureDetectionTabPage.Size = new System.Drawing.Size(1021, 490);
+            this.featureDetectionTabPage.Size = new System.Drawing.Size(1021, 712);
             this.featureDetectionTabPage.TabIndex = 0;
             this.featureDetectionTabPage.Text = "featureDetection";
             this.featureDetectionTabPage.UseVisualStyleBackColor = true;
@@ -266,10 +288,28 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1021, 573);
+            this.tabPage1.Size = new System.Drawing.Size(1021, 712);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(484, 99);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "undistorted";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "original";
             // 
             // calibrationStatusLabel
             // 
@@ -337,34 +377,185 @@
             this.monoCameraCalibrateButton.UseVisualStyleBackColor = true;
             this.monoCameraCalibrateButton.Click += new System.EventHandler(this.monoCameraCalibrateButton_Click);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.stereoCalibUseRectificationCheckBox);
+            this.tabPage2.Controls.Add(this.stereoCalibDrawLinesCheckBox);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.stereoCalibPrevButton);
+            this.tabPage2.Controls.Add(this.stereoCalibNextButton);
+            this.tabPage2.Controls.Add(this.stereoImageNumLabel);
+            this.tabPage2.Controls.Add(this.stereoCalibrationStatusLabel);
+            this.tabPage2.Controls.Add(this.stereoCalibrateButton);
+            this.tabPage2.Controls.Add(this.rightStereoCalibPictureBox);
+            this.tabPage2.Controls.Add(this.leftStereoCalibPictureBox);
+            this.tabPage2.Controls.Add(this.rightStereoOriginalPictureBox);
+            this.tabPage2.Controls.Add(this.leftStereoOriginalPictureBox);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1021, 712);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // stereoCalibUseRectificationCheckBox
+            // 
+            this.stereoCalibUseRectificationCheckBox.AutoSize = true;
+            this.stereoCalibUseRectificationCheckBox.Location = new System.Drawing.Point(870, 262);
+            this.stereoCalibUseRectificationCheckBox.Name = "stereoCalibUseRectificationCheckBox";
+            this.stereoCalibUseRectificationCheckBox.Size = new System.Drawing.Size(100, 17);
+            this.stereoCalibUseRectificationCheckBox.TabIndex = 16;
+            this.stereoCalibUseRectificationCheckBox.Text = "use rectification";
+            this.stereoCalibUseRectificationCheckBox.UseVisualStyleBackColor = true;
+            this.stereoCalibUseRectificationCheckBox.CheckedChanged += new System.EventHandler(this.stereoCalibUseRectificationCheckBox_CheckedChanged);
+            // 
+            // stereoCalibDrawLinesCheckBox
+            // 
+            this.stereoCalibDrawLinesCheckBox.AutoSize = true;
+            this.stereoCalibDrawLinesCheckBox.Location = new System.Drawing.Point(870, 239);
+            this.stereoCalibDrawLinesCheckBox.Name = "stereoCalibDrawLinesCheckBox";
+            this.stereoCalibDrawLinesCheckBox.Size = new System.Drawing.Size(73, 17);
+            this.stereoCalibDrawLinesCheckBox.TabIndex = 15;
+            this.stereoCalibDrawLinesCheckBox.Text = "draw lines";
+            this.stereoCalibDrawLinesCheckBox.UseVisualStyleBackColor = true;
+            this.stereoCalibDrawLinesCheckBox.CheckedChanged += new System.EventHandler(this.stereoCalibDrawLinesCheckBox_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 461);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(29, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "calib";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 129);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(24, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "orig";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(457, 13);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(27, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "right";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(30, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(21, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "left";
+            // 
+            // stereoCalibPrevButton
+            // 
+            this.stereoCalibPrevButton.Location = new System.Drawing.Point(870, 157);
+            this.stereoCalibPrevButton.Name = "stereoCalibPrevButton";
+            this.stereoCalibPrevButton.Size = new System.Drawing.Size(45, 54);
+            this.stereoCalibPrevButton.TabIndex = 10;
+            this.stereoCalibPrevButton.Text = "prev";
+            this.stereoCalibPrevButton.UseVisualStyleBackColor = true;
+            this.stereoCalibPrevButton.Click += new System.EventHandler(this.stereoCalibPrevButton_Click);
+            // 
+            // stereoCalibNextButton
+            // 
+            this.stereoCalibNextButton.Location = new System.Drawing.Point(943, 157);
+            this.stereoCalibNextButton.Name = "stereoCalibNextButton";
+            this.stereoCalibNextButton.Size = new System.Drawing.Size(45, 54);
+            this.stereoCalibNextButton.TabIndex = 9;
+            this.stereoCalibNextButton.Text = "next";
+            this.stereoCalibNextButton.UseVisualStyleBackColor = true;
+            this.stereoCalibNextButton.Click += new System.EventHandler(this.stereoCalibNextButton_Click);
+            // 
+            // stereoImageNumLabel
+            // 
+            this.stereoImageNumLabel.AutoSize = true;
+            this.stereoImageNumLabel.Location = new System.Drawing.Point(921, 178);
+            this.stereoImageNumLabel.Name = "stereoImageNumLabel";
+            this.stereoImageNumLabel.Size = new System.Drawing.Size(16, 13);
+            this.stereoImageNumLabel.TabIndex = 8;
+            this.stereoImageNumLabel.Text = "-1";
+            // 
+            // stereoCalibrationStatusLabel
+            // 
+            this.stereoCalibrationStatusLabel.AutoSize = true;
+            this.stereoCalibrationStatusLabel.Location = new System.Drawing.Point(880, 87);
+            this.stereoCalibrationStatusLabel.Name = "stereoCalibrationStatusLabel";
+            this.stereoCalibrationStatusLabel.Size = new System.Drawing.Size(35, 13);
+            this.stereoCalibrationStatusLabel.TabIndex = 7;
+            this.stereoCalibrationStatusLabel.Text = "status";
+            // 
+            // stereoCalibrateButton
+            // 
+            this.stereoCalibrateButton.Location = new System.Drawing.Point(883, 29);
+            this.stereoCalibrateButton.Name = "stereoCalibrateButton";
+            this.stereoCalibrateButton.Size = new System.Drawing.Size(118, 41);
+            this.stereoCalibrateButton.TabIndex = 6;
+            this.stereoCalibrateButton.Text = "stereoCalibrateButton";
+            this.stereoCalibrateButton.UseVisualStyleBackColor = true;
+            this.stereoCalibrateButton.Click += new System.EventHandler(this.stereoCalibrateButton_Click);
+            // 
+            // rightStereoCalibPictureBox
+            // 
+            this.rightStereoCalibPictureBox.Location = new System.Drawing.Point(460, 335);
+            this.rightStereoCalibPictureBox.Name = "rightStereoCalibPictureBox";
+            this.rightStereoCalibPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.rightStereoCalibPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.rightStereoCalibPictureBox.TabIndex = 5;
+            this.rightStereoCalibPictureBox.TabStop = false;
+            // 
+            // leftStereoCalibPictureBox
+            // 
+            this.leftStereoCalibPictureBox.Location = new System.Drawing.Point(33, 335);
+            this.leftStereoCalibPictureBox.Name = "leftStereoCalibPictureBox";
+            this.leftStereoCalibPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.leftStereoCalibPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.leftStereoCalibPictureBox.TabIndex = 4;
+            this.leftStereoCalibPictureBox.TabStop = false;
+            // 
+            // rightStereoOriginalPictureBox
+            // 
+            this.rightStereoOriginalPictureBox.Location = new System.Drawing.Point(460, 29);
+            this.rightStereoOriginalPictureBox.Name = "rightStereoOriginalPictureBox";
+            this.rightStereoOriginalPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.rightStereoOriginalPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.rightStereoOriginalPictureBox.TabIndex = 3;
+            this.rightStereoOriginalPictureBox.TabStop = false;
+            this.rightStereoOriginalPictureBox.Click += new System.EventHandler(this.pictureBox4_Click);
+            // 
+            // leftStereoOriginalPictureBox
+            // 
+            this.leftStereoOriginalPictureBox.Location = new System.Drawing.Point(33, 29);
+            this.leftStereoOriginalPictureBox.Name = "leftStereoOriginalPictureBox";
+            this.leftStereoOriginalPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.leftStereoOriginalPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.leftStereoOriginalPictureBox.TabIndex = 2;
+            this.leftStereoOriginalPictureBox.TabStop = false;
+            // 
             // stereoCapTimer
             // 
             this.stereoCapTimer.Interval = 1;
             this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 99);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "original";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(484, 99);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "undistorted";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1051, 648);
+            this.ClientSize = new System.Drawing.Size(1051, 677);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -382,6 +573,12 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxUndist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.calibPictureBoxOriginal)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rightStereoCalibPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftStereoCalibPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rightStereoOriginalPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -418,6 +615,22 @@
         private System.Windows.Forms.Label calibrationStatusLabel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.PictureBox rightStereoOriginalPictureBox;
+        private System.Windows.Forms.PictureBox leftStereoOriginalPictureBox;
+        private System.Windows.Forms.PictureBox rightStereoCalibPictureBox;
+        private System.Windows.Forms.PictureBox leftStereoCalibPictureBox;
+        private System.Windows.Forms.Label stereoCalibrationStatusLabel;
+        private System.Windows.Forms.Button stereoCalibrateButton;
+        private System.Windows.Forms.Button stereoCalibPrevButton;
+        private System.Windows.Forms.Button stereoCalibNextButton;
+        private System.Windows.Forms.Label stereoImageNumLabel;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox stereoCalibDrawLinesCheckBox;
+        private System.Windows.Forms.CheckBox stereoCalibUseRectificationCheckBox;
     }
 }
 

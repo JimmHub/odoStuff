@@ -41,12 +41,18 @@ namespace EmguTest
 
         private long LastMill = 0;
         private int LastFpsCount = 0;
-
+        //mono calibration
         private MonoCameraParams MonoCameraParams;
         private String MonoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonemonocalibimages";
         private List<String> MonoCalibTestFiles;
-        public int CalibIdx = 0;
-
+        public int MonoCalibIdx = 0;
+        ////
+        //stereo calibration
+        private StereoCameraParams StereoCameraParams;
+        private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\StereoCalibTest";
+        private List<Tuple<String, String>> StereoCalibTestFiles;
+        private int StereoCalibIdx = 0;
+        ////
         public Wpf3DControl.UserControl1 Wpf3DControl;
 
         //readings test
@@ -564,10 +570,10 @@ namespace EmguTest
         {
             if (this.MonoCameraParams != null && this.MonoCalibTestFiles != null)
             {
-                ++this.CalibIdx;
-                if (this.CalibIdx > this.MonoCalibTestFiles.Count - 1)
+                ++this.MonoCalibIdx;
+                if (this.MonoCalibIdx > this.MonoCalibTestFiles.Count - 1)
                 {
-                    this.CalibIdx = this.MonoCalibTestFiles.Count - 1;
+                    this.MonoCalibIdx = this.MonoCalibTestFiles.Count - 1;
                 }
 
                 this.RenderMonoCalibTestImages();
@@ -578,10 +584,10 @@ namespace EmguTest
         {
             if (this.MonoCameraParams != null && this.MonoCalibTestFiles != null)
             {
-                --this.CalibIdx;
-                if (this.CalibIdx < 0)
+                --this.MonoCalibIdx;
+                if (this.MonoCalibIdx < 0)
                 {
-                    this.CalibIdx = 0;
+                    this.MonoCalibIdx = 0;
                 }
 
                 this.RenderMonoCalibTestImages();
@@ -590,9 +596,9 @@ namespace EmguTest
 
         private void RenderMonoCalibTestImages()
         {
-            this.imageIdxLabel.Text = this.CalibIdx.ToString();
+            this.imageIdxLabel.Text = this.MonoCalibIdx.ToString();
 
-            var rawImg = new Image<Bgr, byte>(this.MonoCalibTestFiles[this.CalibIdx]);
+            var rawImg = new Image<Bgr, byte>(this.MonoCalibTestFiles[this.MonoCalibIdx]);
             var undistImg = this.MonoCameraParams.IntrinsicCameraParameters.Undistort(rawImg);
 
             var rawBmp = rawImg.ToBitmap();
@@ -600,6 +606,162 @@ namespace EmguTest
 
             this.calibPictureBoxOriginal.Image = rawBmp;
             this.calibPictureBoxUndist.Image = undistBmp;
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stereoCalibrateButton_Click(object sender, EventArgs e)
+        {
+            this.stereoCalibrationStatusLabel.Text = "calibrating...";
+
+            this.StereoCalibTestFiles = this.ParseStereoFolder(this.StereoCalibTestFolder);
+            var stereoCalibData = new StereoCameraCalibrationData()
+            {
+                SquareSize = 1.0,
+                SampleImagesNames = this.StereoCalibTestFiles,
+                BoardSquareSize = new Size(9, 6)
+            };
+
+            this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
+
+            this.stereoCalibrationStatusLabel.Text = "calibrated";
+        }
+
+        private List<Tuple<String, String>> ParseStereoFolder(String path)
+        {
+            var res = new List<Tuple<String, String>>();
+
+            var files = Directory.GetFiles(path);
+
+            var leftFiles = files.Where(x => x.Contains("left")).OrderBy(x => x).ToList();
+            var rightFiles = files.Where(x => x.Contains("right")).OrderBy(x => x).ToList();
+
+            var count = Math.Min(leftFiles.Count(), rightFiles.Count());
+            for (int i = 0; i < count; ++i)
+            {
+                res.Add(new Tuple<String, String>(leftFiles[i], rightFiles[i]));
+            }
+
+            return res;
+        }
+
+        private void stereoCalibPrevButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            {
+                --this.StereoCalibIdx;
+                if (this.StereoCalibIdx < 0)
+                {
+                    this.StereoCalibIdx = 0;
+                }
+
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void stereoCalibNextButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            {
+                ++this.StereoCalibIdx;
+                if (this.StereoCalibIdx > this.StereoCalibTestFiles.Count - 1)
+                {
+                    this.StereoCalibIdx = this.StereoCalibTestFiles.Count - 1;
+                }
+
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void RenderStereoCalibTestImages()
+        {
+            this.stereoImageNumLabel.Text = this.StereoCalibIdx.ToString();
+
+            var leftPath = this.StereoCalibTestFiles[StereoCalibIdx].Item1;
+            var rightPath = this.StereoCalibTestFiles[StereoCalibIdx].Item2;
+
+            var leftOriginalImg = new Image<Bgr, byte>(leftPath);
+            var rightOriginalImg = new Image<Bgr, byte>(rightPath);
+
+            this.leftStereoOriginalPictureBox.Image = leftOriginalImg.ToBitmap();
+            this.rightStereoOriginalPictureBox.Image = rightOriginalImg.ToBitmap();
+
+            var leftCalibImg = this.StereoCameraParams.LeftIntrinsicCameraParameters.Undistort(leftOriginalImg);
+            var rightCalibImg = this.StereoCameraParams.RightIntrinsicCameraParameters.Undistort(rightOriginalImg);
+
+            var resLeftImg = leftCalibImg;
+            var resRightImg = rightCalibImg;
+            if (stereoCalibUseRectificationCheckBox.Checked)
+            {
+                //remap
+                var leftCalibRectImg = new Image<Bgr, byte>(leftOriginalImg.ToBitmap());
+                var rightCalibRectImg = new Image<Bgr, byte>(rightOriginalImg.ToBitmap());
+
+                CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX, this.StereoCameraParams.LeftMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX, this.StereoCameraParams.RightMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                ////
+                resLeftImg = leftCalibRectImg;
+                resRightImg = rightCalibRectImg;
+            }
+
+            this.leftStereoCalibPictureBox.Image = resLeftImg.ToBitmap();
+            this.rightStereoCalibPictureBox.Image = resRightImg.ToBitmap();
+
+            
+
+            this.StereoDrawLines();
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void StereoDrawLines()
+        {
+            int linesCount = 10;
+            if (this.stereoCalibDrawLinesCheckBox.Checked)
+            {
+                List<PictureBox> boxes = new List<PictureBox>(new PictureBox[]
+                {
+                    leftStereoOriginalPictureBox,
+                    leftStereoCalibPictureBox,
+                    rightStereoOriginalPictureBox,
+                    rightStereoCalibPictureBox
+                });
+
+                foreach (var box in boxes)
+                {
+                    var g = Graphics.FromImage(box.Image);
+
+                    int step = box.Image.Height / linesCount;
+
+                    for (int i = 0; i < linesCount; ++i)
+                    {
+                        g.DrawLine(Pens.Red, new Point(0, i * step), new Point(box.Image.Width, i * step));
+                    }
+                    //g.Save();
+                }
+            }
+        }
+
+        private void stereoCalibDrawLinesCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void stereoCalibUseRectificationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
         }
         //private void CPUDetect()
         //{

@@ -122,8 +122,50 @@ namespace EmguTest.Odometry
                 validPixROI1: ref Rec1,
                 validPixROI2: ref Rec2
                 );
+
+            var leftMapX = new Matrix<float>(imgSize.Value.Height, imgSize.Value.Width);
+            var rightMapX = new Matrix<float>(imgSize.Value.Height, imgSize.Value.Width);
+            var leftMapY = new Matrix<float>(imgSize.Value.Height, imgSize.Value.Width);
+            var rightMapY = new Matrix<float>(imgSize.Value.Height, imgSize.Value.Width);
+            
+            CvInvoke.cvInitUndistortRectifyMap(
+                cameraMatrix: leftIntrinsicCameraParameters.IntrinsicMatrix,
+                distCoeffs: leftIntrinsicCameraParameters.DistortionCoeffs,
+                R: R1,
+                newCameraMatrix: P1,
+                mapx: leftMapX,
+                mapy: leftMapY
+                );
+
+            CvInvoke.cvInitUndistortRectifyMap(
+                cameraMatrix: rightIntrinsicCameraParameters.IntrinsicMatrix,
+                distCoeffs: rightIntrinsicCameraParameters.DistortionCoeffs,
+                R: R2,
+                newCameraMatrix: P2,
+                mapx: rightMapX,
+                mapy: rightMapY
+                );
+
             ////
-            throw new NotImplementedException();
+            return new StereoCameraParams()
+            {
+                EssentialMatrix = essential,
+                ExtrinsicCameraParams = extrinsic,
+                FoundamentalMatrix = foundamental,
+                LeftIntrinsicCameraParameters = leftIntrinsicCameraParameters,
+                RightIntrinsicCameraParameters = rightIntrinsicCameraParameters,
+                Rec1 = Rec1,
+                Rec2 = Rec2,
+                Q = Q,
+                R1 = R1,
+                R2 = R2,
+                P1 = P1,
+                P2 = P2,
+                LeftMapX = leftMapX, 
+                LeftMapY = leftMapY,
+                RightMapX = rightMapX,
+                RightMapY = rightMapY
+            };
         }
 
         protected static FindCornersCalibrationResult FindCorners(Image<Bgr, byte> image, StereoCameraCalibrationData calibData, ref Size? imgSize)
