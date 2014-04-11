@@ -49,7 +49,7 @@ namespace EmguTest
         ////
         //stereo calibration
         private StereoCameraParams StereoCameraParams;
-        private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\StereoCalibTest";
+        private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonestereocalibtest";
         private List<Tuple<String, String>> StereoCalibTestFiles;
         private int StereoCalibIdx = 0;
         ////
