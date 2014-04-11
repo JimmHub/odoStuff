@@ -700,8 +700,10 @@ namespace EmguTest
                 var leftCalibRectImg = new Image<Bgr, byte>(leftOriginalImg.ToBitmap());
                 var rightCalibRectImg = new Image<Bgr, byte>(rightOriginalImg.ToBitmap());
 
-                CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX, this.StereoCameraParams.LeftMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
-                CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX, this.StereoCameraParams.RightMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX.Mul(2).Add(-500), this.StereoCameraParams.LeftMapY.Mul(2).Add(-500), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX.Mul(2).Add(-500), this.StereoCameraParams.RightMapY.Mul(2).Add(-500), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                //leftCalibRectImg = leftCalibRectImg.Resize(0.01, INTER.CV_INTER_LINEAR);
+                //rightCalibRectImg = rightCalibRectImg.Resize(0.01, INTER.CV_INTER_LINEAR);
                 ////
                 resLeftImg = leftCalibRectImg;
                 resRightImg = rightCalibRectImg;
