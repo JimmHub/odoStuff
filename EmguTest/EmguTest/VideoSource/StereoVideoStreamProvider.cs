@@ -21,6 +21,13 @@ namespace EmguTest.VideoSource
         StereoFrameSequenceElement GetCurrentFrame();
         StereoFrameSequenceElement GetNextFrame();
         bool IsFunctioning();
+
+        bool CanChangeLeftCap();
+        bool CanChangeRightCap();
+        
+        void ChangeLeftCap(int leftCapId);
+        void ChangeRightCap(int rightCapId);
+        
         bool StartStream();
         bool PauseStream();
         bool StopStream();

@@ -86,5 +86,27 @@ namespace EmguTest.VideoSource
         {
             throw new NotImplementedException();
         }
+
+
+        public bool CanChangeLeftCap()
+        {
+            return false;
+        }
+
+        public bool CanChangeRightCap()
+        {
+            return false;
+        }
+
+
+        public void ChangeLeftCap(int leftCapId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeRightCap(int rightCapId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -18,6 +18,7 @@ using Emgu.CV.CvEnum;
 
 using EmguTest.MEMS;
 using EmguTest.Odometry;
+using DirectShowLib;
 namespace EmguTest
 {
     public partial class Form1 : Form
@@ -711,7 +712,7 @@ namespace EmguTest
             {
             }
             
-            if (this.StereoVideoStreamProvider != null && this.StereoVideoStreamProvider.IsFunctioning())
+            if (this.StereoVideoStreamProvider != null)
             {
                 this.stereoStreamRenderTimer.Enabled = true;
             }
@@ -719,12 +720,11 @@ namespace EmguTest
 
         private void InitStereoVideoStreamFromCamCap()
         {
-            Capture leftCap = null;
-            Capture rightCap = null;
+            int leftCapId = 0; 
+            int rightCapId = 0;
             try
             {
-                leftCap = new Capture(Int32.Parse(this.leftCaptureTextBox.Text));
-
+                leftCapId = Int32.Parse(this.leftCaptureTextBox.Text);
             }
             catch (Exception ex)
             {
@@ -733,30 +733,47 @@ namespace EmguTest
 
             try
             {
-                rightCap = new Capture(Int32.Parse(this.rightCaptureTextBox.Text));
+                rightCapId = Int32.Parse(this.rightCaptureTextBox.Text);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error while creating rightCap from cap number:\n" + ex.Message);
             }
-            this.StereoVideoStreamProvider = new VideoSource.StereoCamVideoStreamProvider(
-                leftCap: leftCap,
-                rightCap: rightCap);
+            this.StereoVideoStreamProvider = new VideoSource.StereoAForgeCamVideoStreamProvider(
+                leftCapId: leftCapId,
+                rightCapId: rightCapId);
+
+            this.StereoVideoStreamProvider.StartStream();
         }
 
-        private void ChangeLeftCamCapStereoStreamProvider(Capture cap)
+        private void ChangeLeftCamCapStereoStreamProvider(int cap)
         {
-            if (this.StereoVideoStreamProvider is VideoSource.StereoCamVideoStreamProvider)
+            if (this.StereoVideoStreamProvider.CanChangeLeftCap())
             {
-                (this.StereoVideoStreamProvider as VideoSource.StereoCamVideoStreamProvider).LeftCapture = cap;
+                try
+                {
+                    this.StereoVideoStreamProvider.ChangeLeftCap(cap);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while changing leftCap from cap number:\n" + ex.Message);
+                }
+                
             }
         }
 
-        private void ChangeRightCamCapStereoStreamProvider(Capture cap)
+        private void ChangeRightCamCapStereoStreamProvider(int cap)
         {
-            if (this.StereoVideoStreamProvider is VideoSource.StereoCamVideoStreamProvider)
+            if (this.StereoVideoStreamProvider.CanChangeRightCap())
             {
-                (this.StereoVideoStreamProvider as VideoSource.StereoCamVideoStreamProvider).RightCapture = cap;
+                try
+                {
+                    this.StereoVideoStreamProvider.ChangeRightCap(cap);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while changing rightCap from cap number:\n" + ex.Message);
+                }
             }
         }
 
@@ -771,7 +788,7 @@ namespace EmguTest
             {
                 try
                 {
-                    this.ChangeLeftCamCapStereoStreamProvider(new Capture(Int32.Parse(this.leftCaptureTextBox.Text)));
+                    this.ChangeLeftCamCapStereoStreamProvider(Int32.Parse(this.leftCaptureTextBox.Text));
                 }
                 catch (Exception ex)
                 {
@@ -786,7 +803,7 @@ namespace EmguTest
             {
                 try
                 {
-                    this.ChangeRightCamCapStereoStreamProvider(new Capture(Int32.Parse(this.rightCaptureTextBox.Text)));
+                    this.ChangeRightCamCapStereoStreamProvider(Int32.Parse(this.rightCaptureTextBox.Text));
                 }
                 catch (Exception ex)
                 {
@@ -800,12 +817,15 @@ namespace EmguTest
             if (this.StereoVideoStreamProvider.IsFunctioning())
             {
                 var frame = this.StereoVideoStreamProvider.GetNextFrame();
-                this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
-                this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
+                this.calibStereoCapLeftPictureBox.Image = new Bitmap(frame.LeftRawFrame);
+                this.calibStereoCapRightPictureBox.Image = new Bitmap(frame.RightRawFrame);
             }
         }
-        
 
+        private void TestMethod()
+        {
+               
+        }
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())

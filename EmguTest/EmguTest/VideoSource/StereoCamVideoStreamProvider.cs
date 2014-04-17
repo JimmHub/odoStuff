@@ -24,6 +24,12 @@ namespace EmguTest.VideoSource
             this.RightCapture = rightCap;
         }
 
+        public StereoCamVideoStreamProvider(int leftCapId, int rightCapId)
+        {
+            this.LeftCapture = new Capture(leftCapId);
+            this.RightCapture = new Capture(rightCapId);
+        }
+
         public Capture LeftCapture { get; set; }
         public Capture RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;
@@ -70,6 +76,28 @@ namespace EmguTest.VideoSource
                 return true;
             }
             return false;
+        }
+
+
+        public bool CanChangeLeftCap()
+        {
+            return true;
+        }
+
+        public bool CanChangeRightCap()
+        {
+            return true;
+        }
+
+
+        public void ChangeLeftCap(int leftCapId)
+        {
+            this.LeftCapture = new Capture(leftCapId);
+        }
+
+        public void ChangeRightCap(int rightCapId)
+        {
+            this.RightCapture = new Capture(rightCapId);
         }
     }
 }
