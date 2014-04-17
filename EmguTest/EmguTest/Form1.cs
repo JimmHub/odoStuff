@@ -22,71 +22,6 @@ namespace EmguTest
 {
     public partial class Form1 : Form
     {
-        private Logger.ILogger Logger { get; set; }
-        private Logger.ILogger MEMSRTBLogger { get; set; }
-        private Capture cap;
-        private HaarCascade haar;
-        private Emgu.CV.GPU.GpuCascadeClassifier gpuCC;
-        private FeatureTracker FeatureTracker;
-        //classifier params
-        private const double scaleFactor = 1.01;
-        private const int minNeighbors = 5;
-        //
-        private String haarPath = "C:\\CodeStuff\\cvproj\\resources\\javacv\\haarcascade_frontalface_alt.xml";
-        private String videoPath = @"G:\Karty,_den'gi,_dva_stvola_DVDRip_by_Matysh.avi";
-
-        private bool UseGPUCascade = false;
-
-        private Disparity.DisparityBuilder DispBuilder;
-
-        private long LastMill = 0;
-        private int LastFpsCount = 0;
-        //mono calibration
-        private MonoCameraParams MonoCameraParams;
-        private String MonoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonemonocalibimages";
-        private List<String> MonoCalibTestFiles;
-        public int MonoCalibIdx = 0;
-        ////
-        //stereo calibration
-        private StereoCameraParams StereoCameraParams;
-        private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonestereocalibtest";
-        private List<Tuple<String, String>> StereoCalibTestFiles;
-        private int StereoCalibIdx = 0;
-        ////
-        public Wpf3DControl.UserControl1 Wpf3DControl;
-
-        //readings test
-        MEMSProvider MemsProvider;
-        
-        //
-        //String accPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\acc1396085909463.rdn";
-        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\magnet1396085909463.rdn";
-        //String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396085909463\gyro1396085909463.rdn";
-        //
-
-        //
-        //String accPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\acc1381158297548.rdn";
-        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\magnet1381158297548.rdn";
-        //String gyroPath = @"C:\CodeStuff\cvproj\resources\str1381158297548\gyro1381158297548.rdn";
-        //
-
-        //
-        //String accPath =    @"C:\CodeStuff\cvproj\resources\str1396117763898\acc1396117763898.rdn";
-        //String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396117763898\magnet1396117763898.rdn";
-        //String gyroPath =   @"C:\CodeStuff\cvproj\resources\str1396117763898\gyro1396117763898.rdn";
-        //
-
-        //
-        String accPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\acc1396261734695.rdn";
-        String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\magnet1396261734695.rdn";
-        String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\gyro1396261734695.rdn";
-        //
-        MEMS.MEMSOrientationCalculator OrientationCalc;
-        ////
-        public Capture CamLeft;
-        public Capture CamRight;
-        public int CamLeftId = 2;
-        public int CamRightId = 3;
         public Form1()
         {
             InitializeComponent();
@@ -105,7 +40,7 @@ namespace EmguTest
             this.OrientationCalc = new MEMSOrientationCalculator();
             try
             {
-                this.CamLeft = new Capture(this.CamLeftId);
+                //this.CamLeft = new Capture(this.CamLeftId);
             }
             catch
             {
@@ -114,7 +49,7 @@ namespace EmguTest
 
             try
             {
-                this.CamRight = new Capture(this.CamRightId);
+                //this.CamRight = new Capture(this.CamRightId);
             }
             catch
             {
@@ -160,7 +95,7 @@ namespace EmguTest
             // passing 0 gets zeroth webcam
             try
             {
-                cap = new Capture(0);
+                //cap = new Capture(0);
             }
             catch { }
             // adjust path to find your xml
@@ -765,6 +700,112 @@ namespace EmguTest
                 this.RenderStereoCalibTestImages();
             }
         }
+
+        private void startStereoCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.camCapRadioButton.Checked)
+            {
+                this.InitStereoVideoStreamFromCamCap();
+            }
+            else if (this.fileCapRadioButton.Checked)
+            {
+            }
+            
+            if (this.StereoVideoStreamProvider != null && this.StereoVideoStreamProvider.IsFunctioning())
+            {
+                this.stereoStreamRenderTimer.Enabled = true;
+            }
+        }
+
+        private void InitStereoVideoStreamFromCamCap()
+        {
+            Capture leftCap = null;
+            Capture rightCap = null;
+            try
+            {
+                leftCap = new Capture(Int32.Parse(this.leftCaptureTextBox.Text));
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while creating leftCap from cap number:\n" + ex.Message);
+            }
+
+            try
+            {
+                rightCap = new Capture(Int32.Parse(this.rightCaptureTextBox.Text));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while creating rightCap from cap number:\n" + ex.Message);
+            }
+            this.StereoVideoStreamProvider = new VideoSource.StereoCamVideoStreamProvider(
+                leftCap: leftCap,
+                rightCap: rightCap);
+        }
+
+        private void ChangeLeftCamCapStereoStreamProvider(Capture cap)
+        {
+            if (this.StereoVideoStreamProvider is VideoSource.StereoCamVideoStreamProvider)
+            {
+                (this.StereoVideoStreamProvider as VideoSource.StereoCamVideoStreamProvider).LeftCapture = cap;
+            }
+        }
+
+        private void ChangeRightCamCapStereoStreamProvider(Capture cap)
+        {
+            if (this.StereoVideoStreamProvider is VideoSource.StereoCamVideoStreamProvider)
+            {
+                (this.StereoVideoStreamProvider as VideoSource.StereoCamVideoStreamProvider).RightCapture = cap;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeLeftCamCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider != null)
+            {
+                try
+                {
+                    this.ChangeLeftCamCapStereoStreamProvider(new Capture(Int32.Parse(this.leftCaptureTextBox.Text)));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while changing leftCap from cap number:\n" + ex.Message);
+                }
+            }
+        }
+
+        private void changeRightCamCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider != null)
+            {
+                try
+                {
+                    this.ChangeRightCamCapStereoStreamProvider(new Capture(Int32.Parse(this.rightCaptureTextBox.Text)));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while changing rightCap from cap number:\n" + ex.Message);
+                }
+            }
+        }
+
+        private void stereoStreamRenderTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider.IsFunctioning())
+            {
+                var frame = this.StereoVideoStreamProvider.GetNextFrame();
+                this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
+                this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
+            }
+        }
+        
+
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())

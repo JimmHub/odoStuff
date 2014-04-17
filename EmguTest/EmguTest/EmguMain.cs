@@ -44,7 +44,7 @@ namespace EmguTest
 
         public void FaceDetectorRun()
         {
-            Capture cap = new Capture(0);
+            //Capture cap = new Capture(0);
             
             
         }

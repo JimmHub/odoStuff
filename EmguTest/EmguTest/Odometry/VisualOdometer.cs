@@ -19,12 +19,12 @@ namespace EmguTest.Odometry
     class VisualOdometer
     {
         public VisualOdometer(
-            VideoSource.StereoVideoStreamProvider videoProvider
+            VideoSource.StereoGeminateVideoStreamProvider videoProvider
             )
         {
             this.VideoProvider = videoProvider;
         }
 
-        public VideoSource.StereoVideoStreamProvider VideoProvider;
+        public VideoSource.StereoGeminateVideoStreamProvider VideoProvider;
     }
 }

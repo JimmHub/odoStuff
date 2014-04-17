@@ -74,7 +74,24 @@
             this.leftStereoCalibPictureBox = new System.Windows.Forms.PictureBox();
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
+            this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.changeRightCamCapButton = new System.Windows.Forms.Button();
+            this.changeLeftCamCapButton = new System.Windows.Forms.Button();
+            this.fileCapRadioButton = new System.Windows.Forms.RadioButton();
+            this.camCapRadioButton = new System.Windows.Forms.RadioButton();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.rightCaptureTextBox = new System.Windows.Forms.TextBox();
+            this.leftCaptureTextBox = new System.Windows.Forms.TextBox();
+            this.stereoCapProgressTrackBar = new System.Windows.Forms.TrackBar();
+            this.pauseStereoCapButton = new System.Windows.Forms.Button();
+            this.startStereoCapButton = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.calibStereoCapRightPictureBox = new System.Windows.Forms.PictureBox();
+            this.calibStereoCapLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
+            this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -89,6 +106,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoCalibPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightStereoOriginalPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).BeginInit();
+            this.calibratedStereoCaptureTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapRightPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapLeftPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -173,6 +194,7 @@
             this.tabControl1.Controls.Add(this.featureDetectionTabPage);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.calibratedStereoCaptureTabPage);
             this.tabControl1.Location = new System.Drawing.Point(10, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -546,10 +568,176 @@
             this.leftStereoOriginalPictureBox.TabIndex = 2;
             this.leftStereoOriginalPictureBox.TabStop = false;
             // 
+            // calibratedStereoCaptureTabPage
+            // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.changeRightCamCapButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.changeLeftCamCapButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.fileCapRadioButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.camCapRadioButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label11);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.textBox1);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.rightCaptureTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.leftCaptureTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoCapProgressTrackBar);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.pauseStereoCapButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.startStereoCapButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label9);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label10);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.calibStereoCapRightPictureBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.calibStereoCapLeftPictureBox);
+            this.calibratedStereoCaptureTabPage.Location = new System.Drawing.Point(4, 22);
+            this.calibratedStereoCaptureTabPage.Name = "calibratedStereoCaptureTabPage";
+            this.calibratedStereoCaptureTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.calibratedStereoCaptureTabPage.Size = new System.Drawing.Size(1021, 712);
+            this.calibratedStereoCaptureTabPage.TabIndex = 4;
+            this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
+            this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
+            // 
+            // changeRightCamCapButton
+            // 
+            this.changeRightCamCapButton.Location = new System.Drawing.Point(661, 166);
+            this.changeRightCamCapButton.Name = "changeRightCamCapButton";
+            this.changeRightCamCapButton.Size = new System.Drawing.Size(75, 23);
+            this.changeRightCamCapButton.TabIndex = 27;
+            this.changeRightCamCapButton.Text = "change";
+            this.changeRightCamCapButton.UseVisualStyleBackColor = true;
+            this.changeRightCamCapButton.Click += new System.EventHandler(this.changeRightCamCapButton_Click);
+            // 
+            // changeLeftCamCapButton
+            // 
+            this.changeLeftCamCapButton.Location = new System.Drawing.Point(228, 167);
+            this.changeLeftCamCapButton.Name = "changeLeftCamCapButton";
+            this.changeLeftCamCapButton.Size = new System.Drawing.Size(75, 23);
+            this.changeLeftCamCapButton.TabIndex = 26;
+            this.changeLeftCamCapButton.Text = "change";
+            this.changeLeftCamCapButton.UseVisualStyleBackColor = true;
+            this.changeLeftCamCapButton.Click += new System.EventHandler(this.changeLeftCamCapButton_Click);
+            // 
+            // fileCapRadioButton
+            // 
+            this.fileCapRadioButton.AutoSize = true;
+            this.fileCapRadioButton.Checked = true;
+            this.fileCapRadioButton.Location = new System.Drawing.Point(586, 78);
+            this.fileCapRadioButton.Name = "fileCapRadioButton";
+            this.fileCapRadioButton.Size = new System.Drawing.Size(116, 17);
+            this.fileCapRadioButton.TabIndex = 25;
+            this.fileCapRadioButton.TabStop = true;
+            this.fileCapRadioButton.Text = "fileCapRadioButton";
+            this.fileCapRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // camCapRadioButton
+            // 
+            this.camCapRadioButton.AutoSize = true;
+            this.camCapRadioButton.Location = new System.Drawing.Point(586, 55);
+            this.camCapRadioButton.Name = "camCapRadioButton";
+            this.camCapRadioButton.Size = new System.Drawing.Size(123, 17);
+            this.camCapRadioButton.TabIndex = 24;
+            this.camCapRadioButton.Text = "camCapRadioButton";
+            this.camCapRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(489, 32);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(91, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "stereo movie path";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(586, 29);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(339, 20);
+            this.textBox1.TabIndex = 22;
+            // 
+            // rightCaptureTextBox
+            // 
+            this.rightCaptureTextBox.Location = new System.Drawing.Point(555, 169);
+            this.rightCaptureTextBox.Name = "rightCaptureTextBox";
+            this.rightCaptureTextBox.Size = new System.Drawing.Size(100, 20);
+            this.rightCaptureTextBox.TabIndex = 21;
+            this.rightCaptureTextBox.Text = "1";
+            // 
+            // leftCaptureTextBox
+            // 
+            this.leftCaptureTextBox.Location = new System.Drawing.Point(122, 169);
+            this.leftCaptureTextBox.Name = "leftCaptureTextBox";
+            this.leftCaptureTextBox.Size = new System.Drawing.Size(100, 20);
+            this.leftCaptureTextBox.TabIndex = 20;
+            this.leftCaptureTextBox.Text = "0";
+            // 
+            // stereoCapProgressTrackBar
+            // 
+            this.stereoCapProgressTrackBar.Location = new System.Drawing.Point(98, 113);
+            this.stereoCapProgressTrackBar.Name = "stereoCapProgressTrackBar";
+            this.stereoCapProgressTrackBar.Size = new System.Drawing.Size(827, 45);
+            this.stereoCapProgressTrackBar.TabIndex = 19;
+            // 
+            // pauseStereoCapButton
+            // 
+            this.pauseStereoCapButton.Location = new System.Drawing.Point(194, 71);
+            this.pauseStereoCapButton.Name = "pauseStereoCapButton";
+            this.pauseStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.pauseStereoCapButton.TabIndex = 18;
+            this.pauseStereoCapButton.Text = "Pause";
+            this.pauseStereoCapButton.UseVisualStyleBackColor = true;
+            // 
+            // startStereoCapButton
+            // 
+            this.startStereoCapButton.Location = new System.Drawing.Point(98, 71);
+            this.startStereoCapButton.Name = "startStereoCapButton";
+            this.startStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.startStereoCapButton.TabIndex = 17;
+            this.startStereoCapButton.Text = "Start";
+            this.startStereoCapButton.UseVisualStyleBackColor = true;
+            this.startStereoCapButton.Click += new System.EventHandler(this.startStereoCapButton_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(522, 169);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(27, 13);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "right";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(95, 169);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(21, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "left";
+            // 
+            // calibStereoCapRightPictureBox
+            // 
+            this.calibStereoCapRightPictureBox.Location = new System.Drawing.Point(525, 201);
+            this.calibStereoCapRightPictureBox.Name = "calibStereoCapRightPictureBox";
+            this.calibStereoCapRightPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.calibStereoCapRightPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.calibStereoCapRightPictureBox.TabIndex = 14;
+            this.calibStereoCapRightPictureBox.TabStop = false;
+            // 
+            // calibStereoCapLeftPictureBox
+            // 
+            this.calibStereoCapLeftPictureBox.Location = new System.Drawing.Point(98, 201);
+            this.calibStereoCapLeftPictureBox.Name = "calibStereoCapLeftPictureBox";
+            this.calibStereoCapLeftPictureBox.Size = new System.Drawing.Size(400, 300);
+            this.calibStereoCapLeftPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.calibStereoCapLeftPictureBox.TabIndex = 13;
+            this.calibStereoCapLeftPictureBox.TabStop = false;
+            // 
             // stereoCapTimer
             // 
             this.stereoCapTimer.Interval = 1;
             this.stereoCapTimer.Tick += new System.EventHandler(this.stereoCapTimer_Tick);
+            // 
+            // stereoStreamRenderTimer
+            // 
+            this.stereoStreamRenderTimer.Interval = 1;
+            this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
             // 
             // Form1
             // 
@@ -579,6 +767,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoCalibPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightStereoOriginalPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).EndInit();
+            this.calibratedStereoCaptureTabPage.ResumeLayout(false);
+            this.calibratedStereoCaptureTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapRightPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapLeftPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -631,6 +824,23 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox stereoCalibDrawLinesCheckBox;
         private System.Windows.Forms.CheckBox stereoCalibUseRectificationCheckBox;
+        private System.Windows.Forms.TabPage calibratedStereoCaptureTabPage;
+        private System.Windows.Forms.TrackBar stereoCapProgressTrackBar;
+        private System.Windows.Forms.Button pauseStereoCapButton;
+        private System.Windows.Forms.Button startStereoCapButton;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.PictureBox calibStereoCapRightPictureBox;
+        private System.Windows.Forms.PictureBox calibStereoCapLeftPictureBox;
+        private System.Windows.Forms.TextBox rightCaptureTextBox;
+        private System.Windows.Forms.TextBox leftCaptureTextBox;
+        private System.Windows.Forms.RadioButton fileCapRadioButton;
+        private System.Windows.Forms.RadioButton camCapRadioButton;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button changeRightCamCapButton;
+        private System.Windows.Forms.Button changeLeftCamCapButton;
+        private System.Windows.Forms.Timer stereoStreamRenderTimer;
     }
 }
 
