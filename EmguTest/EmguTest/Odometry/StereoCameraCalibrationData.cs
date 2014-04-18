@@ -7,14 +7,16 @@ using System.Drawing;
 
 namespace EmguTest.Odometry
 {
-    class StereoCameraCalibrationData
+    abstract class StereoCameraCalibrationData
     {
         //board params
         public Size BoardSquareSize { get; set; }
         public double SquareSize { get; set; }
         ////
         //image list
-        public List<Tuple<String, String>> SampleImagesNames { get; set; }
         ////
+        abstract public VideoSource.StereoFrameSequenceElement GetFrameById(int id);
+        abstract public int GetCalibListSize();
+
     }
 }

@@ -59,8 +59,6 @@ namespace EmguTest
             ////
         }
 
-        private EmguMain EmguMain;
-
         private void RunEmgu()
         {
             this.EmguMain = new EmguMain();
@@ -553,14 +551,14 @@ namespace EmguTest
         {
             this.stereoCalibrationStatusLabel.Text = "calibrating...";
 
-            this.StereoCalibTestFiles = this.ParseStereoFolder(this.StereoCalibTestFolder);
-            var stereoCalibData = new StereoCameraCalibrationData()
+            var stereoCalibTestFiles = this.ParseStereoFolder(this.stereoCalibFolderTextBox.Text);
+            var stereoCalibData = new StereoCameraCalibrationFilesData()
             {
                 SquareSize = 1.0,
-                SampleImagesNames = this.StereoCalibTestFiles,
+                SampleImagesNames = stereoCalibTestFiles,
                 BoardSquareSize = new Size(9, 6)
             };
-
+            this.StereoCalibData = stereoCalibData;
             this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
@@ -586,7 +584,7 @@ namespace EmguTest
 
         private void stereoCalibPrevButton_Click(object sender, EventArgs e)
         {
-            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
             {
                 --this.StereoCalibIdx;
                 if (this.StereoCalibIdx < 0)
@@ -600,12 +598,12 @@ namespace EmguTest
 
         private void stereoCalibNextButton_Click(object sender, EventArgs e)
         {
-            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
             {
                 ++this.StereoCalibIdx;
-                if (this.StereoCalibIdx > this.StereoCalibTestFiles.Count - 1)
+                if (this.StereoCalibIdx > this.StereoCalibData.GetCalibListSize() - 1)
                 {
-                    this.StereoCalibIdx = this.StereoCalibTestFiles.Count - 1;
+                    this.StereoCalibIdx = this.StereoCalibData.GetCalibListSize() - 1;
                 }
 
                 this.RenderStereoCalibTestImages();
@@ -616,8 +614,8 @@ namespace EmguTest
         {
             this.stereoImageNumLabel.Text = this.StereoCalibIdx.ToString();
 
-            var leftPath = this.StereoCalibTestFiles[StereoCalibIdx].Item1;
-            var rightPath = this.StereoCalibTestFiles[StereoCalibIdx].Item2;
+            var leftPath = this.StereoCalibData.GetFrameById(StereoCalibIdx).LeftRawFrame;
+            var rightPath = this.StereoCalibData.GetFrameById(StereoCalibIdx).RightRawFrame;
 
             var leftOriginalImg = new Image<Bgr, byte>(leftPath);
             var rightOriginalImg = new Image<Bgr, byte>(rightPath);
@@ -688,7 +686,7 @@ namespace EmguTest
 
         private void stereoCalibDrawLinesCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
             {
                 this.RenderStereoCalibTestImages();
             }
@@ -696,7 +694,7 @@ namespace EmguTest
 
         private void stereoCalibUseRectificationCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.StereoCameraParams != null && this.StereoCalibTestFiles != null)
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
             {
                 this.RenderStereoCalibTestImages();
             }
@@ -724,7 +722,7 @@ namespace EmguTest
             String fileName = this.stereoFileNameTextBox.Text;
             if (File.Exists(fileName))
             {
-                this.StereoVideoStreamProvider = new VideoSource.StereoGeminateAForgeFileVideoStreamProvider(fileName);
+                this.StereoVideoStreamProvider = new VideoSource.StereoGeminateCVFileVideoStreamProvider(fileName, 1.0 / 30 * 1000);
                 this.StereoVideoStreamProvider.StartStream();
             }
             else
@@ -849,7 +847,9 @@ namespace EmguTest
         {
             if (this.StereoVideoStreamProvider != null)
             {
-                this.StereoVideoStreamProvider.PauseStream();
+                //this.StereoVideoStreamProvider.PauseStream();
+                //TODO: fix this dirty hack
+                this.stereoStreamRenderTimer.Enabled = false;
             }
         }
 
@@ -857,8 +857,44 @@ namespace EmguTest
         {
             if (this.StereoVideoStreamProvider != null)
             {
-                this.StereoVideoStreamProvider.ResumeStream();
+                //this.StereoVideoStreamProvider.ResumeStream();
+                //TODO: fix this dirty hack
+                this.stereoStreamRenderTimer.Enabled = true;
             }
+        }
+
+        private void grabFrameForCalibrationButton_Click(object sender, EventArgs e)
+        {
+            this.StereoCalibrationGrabbedList.Add(this.StereoVideoStreamProvider.GetCurrentFrame());
+            this.RenderStereoCalibGrabbedListCount();
+        }
+
+        private void clearCalibrationListButton_Click(object sender, EventArgs e)
+        {
+            this.StereoCalibrationGrabbedList.Clear();
+            this.RenderStereoCalibGrabbedListCount();
+        }
+
+        private void RenderStereoCalibGrabbedListCount()
+        {
+            this.calibListCountLabel.Text = this.StereoCalibrationGrabbedList.Count.ToString();
+        }
+
+        private void calibrateFromGrabbedListButton_Click(object sender, EventArgs e)
+        {
+            //todo
+            this.stereoCalibrationStatusLabel.Text = "calibrating...";
+
+            var stereoCalibData = new StereoCameraCalibrationGrabbedData()
+            {
+                SquareSize = 1.0,
+                BoardSquareSize = new Size(9, 6),
+                GrabbedFrames = this.StereoCalibrationGrabbedList
+            };
+            this.StereoCalibData = stereoCalibData;
+            this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
+
+            this.stereoCalibrationStatusLabel.Text = "calibrated";
         }
         //private void CPUDetect()
         //{

@@ -51,8 +51,9 @@ namespace EmguTest
         ////
         //stereo calibration
         private StereoCameraParams StereoCameraParams;
-        private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonestereocalibtest";
-        private List<Tuple<String, String>> StereoCalibTestFiles;
+        //private String StereoCalibTestFolder = @"C:\CodeStuff\cvproj\resources\phonestereocalibtest";
+        //private List<Tuple<String, String>> StereoCalibTestFiles;
+        private Odometry.StereoCameraCalibrationData StereoCalibData;
         private int StereoCalibIdx = 0;
         ////
         public Wpf3DControl.UserControl1 Wpf3DControl;
@@ -92,5 +93,8 @@ namespace EmguTest
 
         private bool StereoCapIsPaused { get; set; }
         private StereoVideoStreamProvider StereoVideoStreamProvider;
+        private EmguMain EmguMain;
+
+        private List<VideoSource.StereoFrameSequenceElement> StereoCalibrationGrabbedList = new List<StereoFrameSequenceElement>();
     }
 }

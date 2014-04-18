@@ -16,7 +16,7 @@ namespace EmguTest.Odometry
     {
         public static StereoCameraParams CalibrateStereo(StereoCameraCalibrationData calibData)
         {
-            var imgCount = calibData.SampleImagesNames.Count;
+            var imgCount = calibData.GetCalibListSize();
             
             var leftImagePoints = new List<List<PointF>>();
             var rightImagePoints = new List<List<PointF>>();
@@ -27,7 +27,7 @@ namespace EmguTest.Odometry
             for (int i = 0; i < imgCount; ++i)
             {
                 //left
-                var leftFileName = calibData.SampleImagesNames[i].Item1;
+                var leftFileName = calibData.GetFrameById(i).LeftRawFrame;
                 var leftImage = new Image<Bgr, byte>(leftFileName);
 
                 var leftRes = FindCorners(leftImage, calibData, ref imgSize);
@@ -37,7 +37,7 @@ namespace EmguTest.Odometry
                 }
                 ////
                 //right
-                var rightFileName = calibData.SampleImagesNames[i].Item2;
+                var rightFileName = calibData.GetFrameById(i).RightRawFrame;
                 var rightImage = new Image<Bgr, byte>(rightFileName);
 
                 var rightRes = FindCorners(rightImage, calibData, ref imgSize);

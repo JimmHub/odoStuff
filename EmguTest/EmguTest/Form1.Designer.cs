@@ -59,6 +59,8 @@
             this.calibPictureBoxOriginal = new System.Windows.Forms.PictureBox();
             this.monoCameraCalibrateButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.stereoCalibFolderTextBox = new System.Windows.Forms.TextBox();
+            this.calibrateFromGrabbedListButton = new System.Windows.Forms.Button();
             this.stereoCalibUseRectificationCheckBox = new System.Windows.Forms.CheckBox();
             this.stereoCalibDrawLinesCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -75,6 +77,10 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.calibListCountLabel = new System.Windows.Forms.Label();
+            this.clearCalibrationListButton = new System.Windows.Forms.Button();
+            this.grabFrameForCalibrationButton = new System.Windows.Forms.Button();
+            this.resumeStereoCapButton = new System.Windows.Forms.Button();
             this.changeRightCamCapButton = new System.Windows.Forms.Button();
             this.changeLeftCamCapButton = new System.Windows.Forms.Button();
             this.fileCapRadioButton = new System.Windows.Forms.RadioButton();
@@ -92,7 +98,6 @@
             this.calibStereoCapLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
-            this.resumeStereoCapButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -402,6 +407,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.stereoCalibFolderTextBox);
+            this.tabPage2.Controls.Add(this.calibrateFromGrabbedListButton);
             this.tabPage2.Controls.Add(this.stereoCalibUseRectificationCheckBox);
             this.tabPage2.Controls.Add(this.stereoCalibDrawLinesCheckBox);
             this.tabPage2.Controls.Add(this.label8);
@@ -425,10 +432,27 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // stereoCalibFolderTextBox
+            // 
+            this.stereoCalibFolderTextBox.Location = new System.Drawing.Point(866, 112);
+            this.stereoCalibFolderTextBox.Name = "stereoCalibFolderTextBox";
+            this.stereoCalibFolderTextBox.Size = new System.Drawing.Size(149, 20);
+            this.stereoCalibFolderTextBox.TabIndex = 18;
+            // 
+            // calibrateFromGrabbedListButton
+            // 
+            this.calibrateFromGrabbedListButton.Location = new System.Drawing.Point(883, 185);
+            this.calibrateFromGrabbedListButton.Name = "calibrateFromGrabbedListButton";
+            this.calibrateFromGrabbedListButton.Size = new System.Drawing.Size(118, 41);
+            this.calibrateFromGrabbedListButton.TabIndex = 17;
+            this.calibrateFromGrabbedListButton.Text = "calibrate from list";
+            this.calibrateFromGrabbedListButton.UseVisualStyleBackColor = true;
+            this.calibrateFromGrabbedListButton.Click += new System.EventHandler(this.calibrateFromGrabbedListButton_Click);
+            // 
             // stereoCalibUseRectificationCheckBox
             // 
             this.stereoCalibUseRectificationCheckBox.AutoSize = true;
-            this.stereoCalibUseRectificationCheckBox.Location = new System.Drawing.Point(870, 262);
+            this.stereoCalibUseRectificationCheckBox.Location = new System.Drawing.Point(870, 371);
             this.stereoCalibUseRectificationCheckBox.Name = "stereoCalibUseRectificationCheckBox";
             this.stereoCalibUseRectificationCheckBox.Size = new System.Drawing.Size(100, 17);
             this.stereoCalibUseRectificationCheckBox.TabIndex = 16;
@@ -439,7 +463,7 @@
             // stereoCalibDrawLinesCheckBox
             // 
             this.stereoCalibDrawLinesCheckBox.AutoSize = true;
-            this.stereoCalibDrawLinesCheckBox.Location = new System.Drawing.Point(870, 239);
+            this.stereoCalibDrawLinesCheckBox.Location = new System.Drawing.Point(870, 348);
             this.stereoCalibDrawLinesCheckBox.Name = "stereoCalibDrawLinesCheckBox";
             this.stereoCalibDrawLinesCheckBox.Size = new System.Drawing.Size(73, 17);
             this.stereoCalibDrawLinesCheckBox.TabIndex = 15;
@@ -486,7 +510,7 @@
             // 
             // stereoCalibPrevButton
             // 
-            this.stereoCalibPrevButton.Location = new System.Drawing.Point(870, 157);
+            this.stereoCalibPrevButton.Location = new System.Drawing.Point(870, 266);
             this.stereoCalibPrevButton.Name = "stereoCalibPrevButton";
             this.stereoCalibPrevButton.Size = new System.Drawing.Size(45, 54);
             this.stereoCalibPrevButton.TabIndex = 10;
@@ -496,7 +520,7 @@
             // 
             // stereoCalibNextButton
             // 
-            this.stereoCalibNextButton.Location = new System.Drawing.Point(943, 157);
+            this.stereoCalibNextButton.Location = new System.Drawing.Point(943, 266);
             this.stereoCalibNextButton.Name = "stereoCalibNextButton";
             this.stereoCalibNextButton.Size = new System.Drawing.Size(45, 54);
             this.stereoCalibNextButton.TabIndex = 9;
@@ -507,7 +531,7 @@
             // stereoImageNumLabel
             // 
             this.stereoImageNumLabel.AutoSize = true;
-            this.stereoImageNumLabel.Location = new System.Drawing.Point(921, 178);
+            this.stereoImageNumLabel.Location = new System.Drawing.Point(921, 287);
             this.stereoImageNumLabel.Name = "stereoImageNumLabel";
             this.stereoImageNumLabel.Size = new System.Drawing.Size(16, 13);
             this.stereoImageNumLabel.TabIndex = 8;
@@ -516,7 +540,7 @@
             // stereoCalibrationStatusLabel
             // 
             this.stereoCalibrationStatusLabel.AutoSize = true;
-            this.stereoCalibrationStatusLabel.Location = new System.Drawing.Point(880, 87);
+            this.stereoCalibrationStatusLabel.Location = new System.Drawing.Point(880, 238);
             this.stereoCalibrationStatusLabel.Name = "stereoCalibrationStatusLabel";
             this.stereoCalibrationStatusLabel.Size = new System.Drawing.Size(35, 13);
             this.stereoCalibrationStatusLabel.TabIndex = 7;
@@ -524,11 +548,11 @@
             // 
             // stereoCalibrateButton
             // 
-            this.stereoCalibrateButton.Location = new System.Drawing.Point(883, 29);
+            this.stereoCalibrateButton.Location = new System.Drawing.Point(883, 138);
             this.stereoCalibrateButton.Name = "stereoCalibrateButton";
             this.stereoCalibrateButton.Size = new System.Drawing.Size(118, 41);
             this.stereoCalibrateButton.TabIndex = 6;
-            this.stereoCalibrateButton.Text = "stereoCalibrateButton";
+            this.stereoCalibrateButton.Text = "calibrate from folder";
             this.stereoCalibrateButton.UseVisualStyleBackColor = true;
             this.stereoCalibrateButton.Click += new System.EventHandler(this.stereoCalibrateButton_Click);
             // 
@@ -571,6 +595,9 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.calibListCountLabel);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.clearCalibrationListButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.grabFrameForCalibrationButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.resumeStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.changeRightCamCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.changeLeftCamCapButton);
@@ -594,6 +621,45 @@
             this.calibratedStereoCaptureTabPage.TabIndex = 4;
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
+            // 
+            // calibListCountLabel
+            // 
+            this.calibListCountLabel.AutoSize = true;
+            this.calibListCountLabel.Location = new System.Drawing.Point(300, 518);
+            this.calibListCountLabel.Name = "calibListCountLabel";
+            this.calibListCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.calibListCountLabel.TabIndex = 31;
+            this.calibListCountLabel.Text = "0";
+            // 
+            // clearCalibrationListButton
+            // 
+            this.clearCalibrationListButton.Location = new System.Drawing.Point(194, 507);
+            this.clearCalibrationListButton.Name = "clearCalibrationListButton";
+            this.clearCalibrationListButton.Size = new System.Drawing.Size(84, 35);
+            this.clearCalibrationListButton.TabIndex = 30;
+            this.clearCalibrationListButton.Text = "Clear calibration list";
+            this.clearCalibrationListButton.UseVisualStyleBackColor = true;
+            this.clearCalibrationListButton.Click += new System.EventHandler(this.clearCalibrationListButton_Click);
+            // 
+            // grabFrameForCalibrationButton
+            // 
+            this.grabFrameForCalibrationButton.Location = new System.Drawing.Point(98, 507);
+            this.grabFrameForCalibrationButton.Name = "grabFrameForCalibrationButton";
+            this.grabFrameForCalibrationButton.Size = new System.Drawing.Size(84, 35);
+            this.grabFrameForCalibrationButton.TabIndex = 29;
+            this.grabFrameForCalibrationButton.Text = "Grab for calibrate";
+            this.grabFrameForCalibrationButton.UseVisualStyleBackColor = true;
+            this.grabFrameForCalibrationButton.Click += new System.EventHandler(this.grabFrameForCalibrationButton_Click);
+            // 
+            // resumeStereoCapButton
+            // 
+            this.resumeStereoCapButton.Location = new System.Drawing.Point(289, 71);
+            this.resumeStereoCapButton.Name = "resumeStereoCapButton";
+            this.resumeStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.resumeStereoCapButton.TabIndex = 28;
+            this.resumeStereoCapButton.Text = "Resume";
+            this.resumeStereoCapButton.UseVisualStyleBackColor = true;
+            this.resumeStereoCapButton.Click += new System.EventHandler(this.resumeStereoCapButton_Click);
             // 
             // changeRightCamCapButton
             // 
@@ -742,16 +808,6 @@
             this.stereoStreamRenderTimer.Interval = 1;
             this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
             // 
-            // resumeStereoCapButton
-            // 
-            this.resumeStereoCapButton.Location = new System.Drawing.Point(289, 71);
-            this.resumeStereoCapButton.Name = "resumeStereoCapButton";
-            this.resumeStereoCapButton.Size = new System.Drawing.Size(75, 23);
-            this.resumeStereoCapButton.TabIndex = 28;
-            this.resumeStereoCapButton.Text = "Resume";
-            this.resumeStereoCapButton.UseVisualStyleBackColor = true;
-            this.resumeStereoCapButton.Click += new System.EventHandler(this.resumeStereoCapButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -855,6 +911,11 @@
         private System.Windows.Forms.Button changeLeftCamCapButton;
         private System.Windows.Forms.Timer stereoStreamRenderTimer;
         private System.Windows.Forms.Button resumeStereoCapButton;
+        private System.Windows.Forms.Button grabFrameForCalibrationButton;
+        private System.Windows.Forms.Label calibListCountLabel;
+        private System.Windows.Forms.Button clearCalibrationListButton;
+        private System.Windows.Forms.Button calibrateFromGrabbedListButton;
+        private System.Windows.Forms.TextBox stereoCalibFolderTextBox;
     }
 }
 

@@ -168,8 +168,10 @@
     </Compile>
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
+    <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationData.cs" />
     <Compile Include="Odometry\CameraCalibrator.cs" />
+    <Compile Include="Odometry\StereoCameraCalibrationGrabbedData.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
     <Compile Include="Utils\CvHelper.cs" />
     <Compile Include="Utils\Logger\ConsoleLogger.cs" />
@@ -197,7 +199,7 @@
     <Compile Include="VideoSource\StereoCamVideoStreamProvider.cs" />
     <Compile Include="VideoSource\StereoFrameSequenceElement.cs" />
     <Compile Include="VideoSource\StereoGeminateAForgeFileVideoStreamProvider.cs" />
-    <Compile Include="VideoSource\StereoGeminateVideoStreamProvider.cs" />
+    <Compile Include="VideoSource\StereoGeminateCVFileVideoStreamProvider.cs" />
     <Compile Include="VideoSource\StereoVideoStreamProvider.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

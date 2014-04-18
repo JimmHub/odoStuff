@@ -9,6 +9,15 @@ namespace EmguTest.VideoSource
 {
     public class StereoFrameSequenceElement
     {
+        public StereoFrameSequenceElement()
+        {
+        }
+
+        //TODO: implement this constructor
+        //public StereoFrameSequenceElement(StereoFrameSequenceElement elm)
+        //{
+        //}
+
         public Bitmap RawFrame { get; set; }
         public Bitmap LeftRawFrame { get; set; }
         public Bitmap RightRawFrame { get; set; }

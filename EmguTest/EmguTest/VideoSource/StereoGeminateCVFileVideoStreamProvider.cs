@@ -16,26 +16,64 @@ using Emgu.CV.Features2D;
 
 namespace EmguTest.VideoSource
 {
-    public class StereoGeminateVideoStreamProvider : StereoVideoStreamProvider
+    public class StereoGeminateCVFileVideoStreamProvider : StereoVideoStreamProvider
     {
-        public StereoGeminateVideoStreamProvider(Capture cap)
+        public StereoGeminateCVFileVideoStreamProvider(Capture cap)
         {
+            this.Init();
             this.Capture = cap;
+            this.FrameInterval = 1.0 / 30 * 1000;   
         }
 
+        public StereoGeminateCVFileVideoStreamProvider(String fileName)
+        {
+            this.Init();
+            this.Capture = new Capture(fileName);
+            this.FrameInterval = 1.0 / 30 * 1000;
+        }
+
+        public StereoGeminateCVFileVideoStreamProvider(String fileName, double frameInterval)
+        {
+            this.Init();
+            this.Capture = new Capture(fileName);
+            this.FrameInterval = frameInterval;
+        }
+
+        protected void Init()
+        {
+            this.emptyFrame = new StereoFrameSequenceElement()
+            {
+                IsLeftFrameEmpty = true,
+                IsRightFrameEmpty = true
+            };
+            this.CurrentFrame = new StereoFrameSequenceElement()
+            {
+                IsLeftFrameEmpty = true,
+                IsRightFrameEmpty = true
+            };
+        }
         public Capture Capture { get; set; }
         
         public int TotalFrames { get; set; }
-
+        public double FrameInterval { get; set; }
         public StereoFrameSequenceElement CurrentFrame { get; protected set; }
 
         protected bool IsStarted = false;
         protected bool IsPaused = false;
-
+        protected StereoFrameSequenceElement emptyFrame;
         public StereoFrameSequenceElement GetNextFrame()
         {
+            if (!this.CurrentFrame.IsNotFullFrame)
+            {
+                var passedTime = DateTime.UtcNow.Subtract(this.CurrentFrame.TimeStamp).TotalMilliseconds;
+                if (passedTime < this.FrameInterval)
+                {
+                    return this.emptyFrame;
+                }
+            }
             var rawFrame = this.Capture.QueryFrame();
             StereoFrameSequenceElement frame = this.ElementFromRawFrame(rawFrame);
+            rawFrame.Dispose();
             this.CurrentFrame = frame;
             return frame;
         }
@@ -54,12 +92,14 @@ namespace EmguTest.VideoSource
 
             StereoFrameSequenceElement res = new StereoFrameSequenceElement()
                 {
-                    RawFrame = rawFrame.ToBitmap(),
-                    LeftRawFrame = left.ToBitmap(),
-                    RightRawFrame = right.ToBitmap(),
+                    RawFrame = Utils.CvHelper.ConvertImageToBitmap(rawFrame),
+                    LeftRawFrame = Utils.CvHelper.ConvertImageToBitmap(left),
+                    RightRawFrame = Utils.CvHelper.ConvertImageToBitmap(right),
                     TimeStamp = DateTime.UtcNow
                 };
-
+            rawFrame.Dispose();
+            left.Dispose();
+            right.Dispose();
             return res;
         }
 
@@ -95,8 +135,8 @@ namespace EmguTest.VideoSource
         {
             if (
                 this.CurrentFrame != null &&
-                this.IsStarted &&
-                !this.CurrentFrame.IsNotFullFrame)
+                this.IsStarted
+                )//&& !this.CurrentFrame.IsNotFullFrame)
             {
                 return true;
             }
