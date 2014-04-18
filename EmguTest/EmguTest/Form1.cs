@@ -710,11 +710,26 @@ namespace EmguTest
             }
             else if (this.fileCapRadioButton.Checked)
             {
+                this.InitStereoVideoStreamFromFileCap();
             }
             
             if (this.StereoVideoStreamProvider != null)
             {
                 this.stereoStreamRenderTimer.Enabled = true;
+            }
+        }
+
+        private void InitStereoVideoStreamFromFileCap()
+        {
+            String fileName = this.stereoFileNameTextBox.Text;
+            if (File.Exists(fileName))
+            {
+                this.StereoVideoStreamProvider = new VideoSource.StereoGeminateAForgeFileVideoStreamProvider(fileName);
+                this.StereoVideoStreamProvider.StartStream();
+            }
+            else
+            {
+                MessageBox.Show("no such file exists: \"" + fileName + "\"");
             }
         }
 
@@ -817,8 +832,11 @@ namespace EmguTest
             if (this.StereoVideoStreamProvider.IsFunctioning())
             {
                 var frame = this.StereoVideoStreamProvider.GetNextFrame();
-                this.calibStereoCapLeftPictureBox.Image = new Bitmap(frame.LeftRawFrame);
-                this.calibStereoCapRightPictureBox.Image = new Bitmap(frame.RightRawFrame);
+                if (!frame.IsNotFullFrame)
+                {
+                    this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
+                    this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
+                }
             }
         }
 

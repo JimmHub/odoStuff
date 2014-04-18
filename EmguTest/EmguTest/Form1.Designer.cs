@@ -80,7 +80,7 @@
             this.fileCapRadioButton = new System.Windows.Forms.RadioButton();
             this.camCapRadioButton = new System.Windows.Forms.RadioButton();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.stereoFileNameTextBox = new System.Windows.Forms.TextBox();
             this.rightCaptureTextBox = new System.Windows.Forms.TextBox();
             this.leftCaptureTextBox = new System.Windows.Forms.TextBox();
             this.stereoCapProgressTrackBar = new System.Windows.Forms.TrackBar();
@@ -575,7 +575,7 @@
             this.calibratedStereoCaptureTabPage.Controls.Add(this.fileCapRadioButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.camCapRadioButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label11);
-            this.calibratedStereoCaptureTabPage.Controls.Add(this.textBox1);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoFileNameTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.rightCaptureTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.leftCaptureTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoCapProgressTrackBar);
@@ -644,12 +644,12 @@
             this.label11.TabIndex = 23;
             this.label11.Text = "stereo movie path";
             // 
-            // textBox1
+            // stereoFileNameTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(586, 29);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(339, 20);
-            this.textBox1.TabIndex = 22;
+            this.stereoFileNameTextBox.Location = new System.Drawing.Point(586, 29);
+            this.stereoFileNameTextBox.Name = "stereoFileNameTextBox";
+            this.stereoFileNameTextBox.Size = new System.Drawing.Size(339, 20);
+            this.stereoFileNameTextBox.TabIndex = 22;
             // 
             // rightCaptureTextBox
             // 
@@ -837,7 +837,7 @@
         private System.Windows.Forms.RadioButton fileCapRadioButton;
         private System.Windows.Forms.RadioButton camCapRadioButton;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox stereoFileNameTextBox;
         private System.Windows.Forms.Button changeRightCamCapButton;
         private System.Windows.Forms.Button changeLeftCamCapButton;
         private System.Windows.Forms.Timer stereoStreamRenderTimer;
