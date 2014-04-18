@@ -844,6 +844,22 @@ namespace EmguTest
         {
                
         }
+
+        private void pauseStereoCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider != null)
+            {
+                this.StereoVideoStreamProvider.PauseStream();
+            }
+        }
+
+        private void resumeStereoCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider != null)
+            {
+                this.StereoVideoStreamProvider.ResumeStream();
+            }
+        }
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())

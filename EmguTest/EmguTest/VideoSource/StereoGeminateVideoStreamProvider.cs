@@ -29,6 +29,8 @@ namespace EmguTest.VideoSource
 
         public StereoFrameSequenceElement CurrentFrame { get; protected set; }
 
+        protected bool IsStarted = false;
+        protected bool IsPaused = false;
 
         public StereoFrameSequenceElement GetNextFrame()
         {
@@ -68,23 +70,37 @@ namespace EmguTest.VideoSource
 
         public bool StartStream()
         {
+            this.IsStarted = true;
             return true;
         }
 
         public bool PauseStream()
         {
+            if (this.IsStarted)
+            {
+                this.Capture.Pause();
+                this.IsPaused = true;
+            }
             return true;
         }
 
         public bool StopStream()
         {
+            this.IsStarted = false;
             return true;
         }
 
 
         public bool IsFunctioning()
         {
-            throw new NotImplementedException();
+            if (
+                this.CurrentFrame != null &&
+                this.IsStarted &&
+                !this.CurrentFrame.IsNotFullFrame)
+            {
+                return true;
+            }
+            return false;
         }
 
 
@@ -107,6 +123,22 @@ namespace EmguTest.VideoSource
         public void ChangeRightCap(int rightCapId)
         {
             throw new NotImplementedException();
+        }
+
+
+        public bool CanRewindStream()
+        {
+            return true;
+        }
+
+        public bool ResumeStream()
+        {
+            if (this.IsStarted)
+            {
+                this.Capture.Start();
+                this.IsPaused = false;
+            }
+            return true;
         }
     }
 }

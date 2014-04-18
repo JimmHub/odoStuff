@@ -24,12 +24,14 @@ namespace EmguTest.VideoSource
 
         bool CanChangeLeftCap();
         bool CanChangeRightCap();
-        
+        bool CanRewindStream();
+
         void ChangeLeftCap(int leftCapId);
         void ChangeRightCap(int rightCapId);
         
         bool StartStream();
         bool PauseStream();
+        bool ResumeStream();
         bool StopStream();
     }
 }

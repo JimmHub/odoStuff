@@ -171,6 +171,7 @@
     <Compile Include="Odometry\StereoCameraCalibrationData.cs" />
     <Compile Include="Odometry\CameraCalibrator.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
+    <Compile Include="Utils\CvHelper.cs" />
     <Compile Include="Utils\Logger\ConsoleLogger.cs" />
     <Compile Include="Utils\Logger\EmptyLogger.cs" />
     <Compile Include="Utils\Logger\ILogger.cs" />

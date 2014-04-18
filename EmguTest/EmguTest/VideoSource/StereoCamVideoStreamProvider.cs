@@ -99,5 +99,16 @@ namespace EmguTest.VideoSource
         {
             this.RightCapture = new Capture(rightCapId);
         }
+
+
+        public bool CanRewindStream()
+        {
+            return false;
+        }
+
+        public bool ResumeStream()
+        {
+            return true;
+        }
     }
 }

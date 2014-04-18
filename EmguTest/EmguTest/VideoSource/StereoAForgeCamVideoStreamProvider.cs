@@ -89,7 +89,7 @@ namespace EmguTest.VideoSource
 
         public bool PauseStream()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool StopStream()
@@ -144,6 +144,17 @@ namespace EmguTest.VideoSource
             this.RightCapture = new AsyncVideoSource(rightCaptureDevice);
             this.RightCapture.NewFrame += NewRightFrame;
             this.RightCapture.Start();
+        }
+
+
+        public bool CanRewindStream()
+        {
+            return false;
+        }
+
+        public bool ResumeStream()
+        {
+            return true;
         }
     }
 }

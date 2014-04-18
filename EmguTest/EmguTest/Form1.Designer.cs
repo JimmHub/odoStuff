@@ -92,6 +92,7 @@
             this.calibStereoCapLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
+            this.resumeStereoCapButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -570,6 +571,7 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.resumeStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.changeRightCamCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.changeLeftCamCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.fileCapRadioButton);
@@ -682,6 +684,7 @@
             this.pauseStereoCapButton.TabIndex = 18;
             this.pauseStereoCapButton.Text = "Pause";
             this.pauseStereoCapButton.UseVisualStyleBackColor = true;
+            this.pauseStereoCapButton.Click += new System.EventHandler(this.pauseStereoCapButton_Click);
             // 
             // startStereoCapButton
             // 
@@ -738,6 +741,16 @@
             // 
             this.stereoStreamRenderTimer.Interval = 1;
             this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
+            // 
+            // resumeStereoCapButton
+            // 
+            this.resumeStereoCapButton.Location = new System.Drawing.Point(289, 71);
+            this.resumeStereoCapButton.Name = "resumeStereoCapButton";
+            this.resumeStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.resumeStereoCapButton.TabIndex = 28;
+            this.resumeStereoCapButton.Text = "Resume";
+            this.resumeStereoCapButton.UseVisualStyleBackColor = true;
+            this.resumeStereoCapButton.Click += new System.EventHandler(this.resumeStereoCapButton_Click);
             // 
             // Form1
             // 
@@ -841,6 +854,7 @@
         private System.Windows.Forms.Button changeRightCamCapButton;
         private System.Windows.Forms.Button changeLeftCamCapButton;
         private System.Windows.Forms.Timer stereoStreamRenderTimer;
+        private System.Windows.Forms.Button resumeStereoCapButton;
     }
 }
 

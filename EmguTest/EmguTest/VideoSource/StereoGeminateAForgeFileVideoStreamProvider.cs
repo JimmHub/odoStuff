@@ -39,6 +39,7 @@ namespace EmguTest.VideoSource
         protected object currentFrameLock = new object();
         protected bool isCurrentFrameGiven = true;
         protected int frameInterval;
+        protected bool IsPaused = false;
 
         protected void NewFrameCallback(object obj, NewFrameEventArgs e)
         {
@@ -166,7 +167,11 @@ namespace EmguTest.VideoSource
 
         public bool PauseStream()
         {
-            throw new NotImplementedException();
+            if (this.IsStarted)
+            {
+                this.IsPaused = true;
+            }
+            return true;
         }
 
         public bool StopStream()
@@ -174,12 +179,35 @@ namespace EmguTest.VideoSource
             try
             {
                 this.asyncVideoSource.Stop();
+                this.IsStarted = false;
+                this.IsPaused = false;
                 return true;
             }
             catch (Exception ex)
             {
                 return false;
             }
+        }
+
+
+        public bool CanRewindStream()
+        {
+            if (this.IsStarted)
+            {
+                this.asyncVideoSource.Start();
+                this.IsPaused = false;
+            }
+            return true;
+        }
+
+        public bool ResumeStream()
+        {
+            if (this.IsStarted)
+            {
+                this.asyncVideoSource.Start();
+                this.IsPaused = false;
+            }
+            return true;
         }
     }
 }
