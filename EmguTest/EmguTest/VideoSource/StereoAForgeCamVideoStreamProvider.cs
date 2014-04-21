@@ -33,10 +33,12 @@ namespace EmguTest.VideoSource
             this.RightCapture.NewFrame += NewRightFrame;
         }
 
+        override public event NewStereoFrameEventHandler NewStereoFrameEvent;
         public AsyncVideoSource LeftCapture { get; set; }
         public AsyncVideoSource RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;
         protected bool IsStarted = false;
+       
         //interface
 
         protected void Init()

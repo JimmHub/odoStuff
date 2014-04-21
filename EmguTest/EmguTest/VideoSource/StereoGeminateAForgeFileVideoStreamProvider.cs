@@ -21,8 +21,8 @@ using AForge.Video.FFMPEG;
 namespace EmguTest.VideoSource
 {
     public class StereoGeminateAForgeFileVideoStreamProvider : StereoVideoStreamProvider
-    {
-        public StereoGeminateAForgeFileVideoStreamProvider(String fileName)
+    {   
+        public StereoGeminateAForgeFileVideoStreamProvider(String fileName, int frameInterval)
         {
             VideoFileSource fileVideo = new VideoFileSource(fileName);
             this.frameInterval = fileVideo.FrameInterval = (int)(1.0 / 30 * 1000);
@@ -32,6 +32,7 @@ namespace EmguTest.VideoSource
             asyncVideoSource.NewFrame += NewFrameCallback;
         }
 
+        override public event NewStereoFrameEventHandler NewStereoFrameEvent;
         protected StereoFrameSequenceElement currentFrame;
         protected StereoFrameSequenceElement emptyFrame;
         protected AsyncVideoSource asyncVideoSource;
@@ -56,6 +57,15 @@ namespace EmguTest.VideoSource
                     }
                 }
                 this.currentFrame = this.ElementFromRawFrame(bitmap);
+                //event
+                if (NewStereoFrameEvent != null)
+                {
+                    NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+                        {
+                            NewStereoFrame = this.currentFrame
+                        });
+                }
+                ////
                 this.isCurrentFrameGiven = false;
             }
         }

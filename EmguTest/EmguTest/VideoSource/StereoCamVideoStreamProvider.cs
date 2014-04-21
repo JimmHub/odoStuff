@@ -30,6 +30,7 @@ namespace EmguTest.VideoSource
             this.RightCapture = new Capture(rightCapId);
         }
 
+        override public event NewStereoFrameEventHandler NewStereoFrameEvent;
         public Capture LeftCapture { get; set; }
         public Capture RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;

@@ -96,5 +96,9 @@ namespace EmguTest
         private EmguMain EmguMain;
 
         private List<VideoSource.StereoFrameSequenceElement> StereoCalibrationGrabbedList = new List<StereoFrameSequenceElement>();
+
+        private bool isNewStereoFrameEventSinged = false;
+        private bool isNewStereoFrameInProcess = false;
+        //private VideoSource
     }
 }

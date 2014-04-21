@@ -52,8 +52,10 @@ namespace EmguTest.VideoSource
                 IsRightFrameEmpty = true
             };
         }
+
+        override public event NewStereoFrameEventHandler NewStereoFrameEvent;
         public Capture Capture { get; set; }
-        
+       
         public int TotalFrames { get; set; }
         public double FrameInterval { get; set; }
         public StereoFrameSequenceElement CurrentFrame { get; protected set; }

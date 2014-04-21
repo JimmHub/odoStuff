@@ -627,8 +627,18 @@ namespace EmguTest
             var leftOriginalImg = new Image<Bgr, byte>(leftRawFrame);
             var rightOriginalImg = new Image<Bgr, byte>(rightRawFrame);
 
-            this.leftStereoOriginalPictureBox.Image = leftRawFrame;
-            this.rightStereoOriginalPictureBox.Image = rightRawFrame;
+            //image dispose
+            if (leftStereoOriginalPictureBox.Image != null)
+            {
+                this.leftStereoOriginalPictureBox.Image.Dispose();
+            }
+            if (rightStereoOriginalPictureBox.Image != null)
+            {
+                this.rightStereoOriginalPictureBox.Image.Dispose();
+            }
+            //
+            this.leftStereoOriginalPictureBox.Image = new Bitmap(leftRawFrame);
+            this.rightStereoOriginalPictureBox.Image = new Bitmap(rightRawFrame);
 
             var leftCalibImg = this.StereoCameraParams.LeftIntrinsicCameraParameters.Undistort(leftOriginalImg);
             var rightCalibImg = this.StereoCameraParams.RightIntrinsicCameraParameters.Undistort(rightOriginalImg);
@@ -779,8 +789,30 @@ namespace EmguTest
             
             if (this.StereoVideoStreamProvider != null)
             {
+                //event test
+                if (!this.isNewStereoFrameEventSinged)
+                {
+                    this.StereoVideoStreamProvider.NewStereoFrameEvent += StereoVideoStreamProvider_NewStereoFrameEvent;
+                }
+                ////
                 this.stereoStreamRenderTimer.Enabled = true;
             }
+        }
+
+        void StereoVideoStreamProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
+        {
+            if (this.isNewStereoFrameInProcess)
+            {
+                return;
+            }
+            this.isNewStereoFrameInProcess = true;
+            
+            if (this.StereoVideoStreamProvider.IsFunctioning())
+            {
+                this.StereoStreamFrameRender(e.NewStereoFrame);
+            }
+
+            this.isNewStereoFrameInProcess = false;
         }
 
         private void InitStereoVideoStreamFromFileCap()
@@ -788,7 +820,7 @@ namespace EmguTest
             String fileName = this.stereoFileNameTextBox.Text;
             if (File.Exists(fileName))
             {
-                this.StereoVideoStreamProvider = new VideoSource.StereoGeminateCVFileVideoStreamProvider(fileName, 1.0 / 30 * 1000);
+                this.StereoVideoStreamProvider = new VideoSource.StereoGeminateAForgeFileVideoStreamProvider(fileName, (int)(1.0 / 30 * 1000));
                 this.StereoVideoStreamProvider.StartStream();
             }
             else
@@ -893,15 +925,23 @@ namespace EmguTest
 
         private void stereoStreamRenderTimer_Tick(object sender, EventArgs e)
         {
-            if (this.StereoVideoStreamProvider.IsFunctioning())
-            {
-                var frame = this.StereoVideoStreamProvider.GetNextFrame();
+            //old timer method, now in newstereoframe event handler, uncomment to restore
+            //if (this.StereoVideoStreamProvider.IsFunctioning())
+            //{
+            //    this.StereoStreamFrameRender(this.StereoVideoStreamProvider.GetCurrentFrame());
+            //}
+            
+        }
+
+        private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
+        {
+            var frame = stereoFrame;
                 if (!frame.IsNotFullFrame)
                 {
                     this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
                     this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
                 }
-            }
+            
         }
 
         private void TestMethod()

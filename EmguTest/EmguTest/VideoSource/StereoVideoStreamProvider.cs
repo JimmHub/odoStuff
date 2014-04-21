@@ -33,5 +33,9 @@ namespace EmguTest.VideoSource
         public abstract bool PauseStream();
         public abstract bool ResumeStream();
         public abstract bool StopStream();
+
+        public abstract event NewStereoFrameEventHandler NewStereoFrameEvent;
     }
+
+    public delegate void NewStereoFrameEventHandler(object sender, NewStereoFrameEventArgs e);
 }
