@@ -34,12 +34,12 @@ namespace EmguTest.VideoSource
         public Capture RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;
         //interface
-        public StereoFrameSequenceElement GetCurrentFrame()
+        override public StereoFrameSequenceElement GetCurrentFrame()
         {
             return this.CurrentFrame;
         }
 
-        public StereoFrameSequenceElement GetNextFrame()
+        override public StereoFrameSequenceElement GetNextFrame()
         {
             var left = this.LeftCapture.QueryFrame();
             var right = this.RightCapture.QueryFrame();
@@ -52,24 +52,24 @@ namespace EmguTest.VideoSource
             return this.CurrentFrame;
         }
 
-        public bool StartStream()
+        override public bool StartStream()
         {
             throw new NotImplementedException();
         }
 
-        public bool PauseStream()
+        override public bool PauseStream()
         {
             throw new NotImplementedException();
         }
 
-        public bool StopStream()
+        override public bool StopStream()
         {
             throw new NotImplementedException();
         }
         ////
 
 
-        public bool IsFunctioning()
+        override public bool IsFunctioning()
         {
             if (LeftCapture != null && RightCapture != null)
             {
@@ -79,34 +79,34 @@ namespace EmguTest.VideoSource
         }
 
 
-        public bool CanChangeLeftCap()
+        override public bool CanChangeLeftCap()
         {
             return true;
         }
 
-        public bool CanChangeRightCap()
+        override public bool CanChangeRightCap()
         {
             return true;
         }
 
 
-        public void ChangeLeftCap(int leftCapId)
+        override public void ChangeLeftCap(int leftCapId)
         {
             this.LeftCapture = new Capture(leftCapId);
         }
 
-        public void ChangeRightCap(int rightCapId)
+        override public void ChangeRightCap(int rightCapId)
         {
             this.RightCapture = new Capture(rightCapId);
         }
 
 
-        public bool CanRewindStream()
+        override public bool CanRewindStream()
         {
             return false;
         }
 
-        public bool ResumeStream()
+        override public bool ResumeStream()
         {
             return true;
         }

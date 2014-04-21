@@ -61,7 +61,7 @@ namespace EmguTest.VideoSource
         protected bool IsStarted = false;
         protected bool IsPaused = false;
         protected StereoFrameSequenceElement emptyFrame;
-        public StereoFrameSequenceElement GetNextFrame()
+        override public StereoFrameSequenceElement GetNextFrame()
         {
             if (!this.CurrentFrame.IsNotFullFrame)
             {
@@ -103,18 +103,18 @@ namespace EmguTest.VideoSource
             return res;
         }
 
-        public StereoFrameSequenceElement GetCurrentFrame()
+        override public StereoFrameSequenceElement GetCurrentFrame()
         {
             return this.CurrentFrame;
         }
 
-        public bool StartStream()
+        override public bool StartStream()
         {
             this.IsStarted = true;
             return true;
         }
 
-        public bool PauseStream()
+        override public bool PauseStream()
         {
             if (this.IsStarted)
             {
@@ -124,14 +124,14 @@ namespace EmguTest.VideoSource
             return true;
         }
 
-        public bool StopStream()
+        override public bool StopStream()
         {
             this.IsStarted = false;
             return true;
         }
 
 
-        public bool IsFunctioning()
+        override public bool IsFunctioning()
         {
             if (
                 this.CurrentFrame != null &&
@@ -144,34 +144,34 @@ namespace EmguTest.VideoSource
         }
 
 
-        public bool CanChangeLeftCap()
+        override public bool CanChangeLeftCap()
         {
             return false;
         }
 
-        public bool CanChangeRightCap()
+        override public bool CanChangeRightCap()
         {
             return false;
         }
 
 
-        public void ChangeLeftCap(int leftCapId)
+        override public void ChangeLeftCap(int leftCapId)
         {
             throw new NotImplementedException();
         }
 
-        public void ChangeRightCap(int rightCapId)
+        override public void ChangeRightCap(int rightCapId)
         {
             throw new NotImplementedException();
         }
 
 
-        public bool CanRewindStream()
+        override public bool CanRewindStream()
         {
             return true;
         }
 
-        public bool ResumeStream()
+        override public bool ResumeStream()
         {
             if (this.IsStarted)
             {

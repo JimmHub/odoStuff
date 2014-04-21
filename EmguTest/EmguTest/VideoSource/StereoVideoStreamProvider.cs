@@ -16,22 +16,22 @@ using Emgu.CV.Features2D;
 
 namespace EmguTest.VideoSource
 {
-    public interface StereoVideoStreamProvider
+    public abstract class StereoVideoStreamProvider
     {
-        StereoFrameSequenceElement GetCurrentFrame();
-        StereoFrameSequenceElement GetNextFrame();
-        bool IsFunctioning();
+        public abstract StereoFrameSequenceElement GetCurrentFrame();
+        public abstract StereoFrameSequenceElement GetNextFrame();
+        public abstract bool IsFunctioning();
 
-        bool CanChangeLeftCap();
-        bool CanChangeRightCap();
-        bool CanRewindStream();
+        public abstract bool CanChangeLeftCap();
+        public abstract bool CanChangeRightCap();
+        public abstract bool CanRewindStream();
 
-        void ChangeLeftCap(int leftCapId);
-        void ChangeRightCap(int rightCapId);
-        
-        bool StartStream();
-        bool PauseStream();
-        bool ResumeStream();
-        bool StopStream();
+        public abstract void ChangeLeftCap(int leftCapId);
+        public abstract void ChangeRightCap(int rightCapId);
+
+        public abstract bool StartStream();
+        public abstract bool PauseStream();
+        public abstract bool ResumeStream();
+        public abstract bool StopStream();
     }
 }

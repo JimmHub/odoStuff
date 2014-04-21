@@ -49,7 +49,7 @@ namespace EmguTest.VideoSource
             
         }
 
-        public StereoFrameSequenceElement GetCurrentFrame()
+        override public StereoFrameSequenceElement GetCurrentFrame()
         {
             return this.CurrentFrame;
         }
@@ -74,12 +74,12 @@ namespace EmguTest.VideoSource
             this.CurrentFrame.IsRightFrameEmpty = false;
         }
 
-        public StereoFrameSequenceElement GetNextFrame()
+        override public StereoFrameSequenceElement GetNextFrame()
         {
             return this.CurrentFrame;
         }
 
-        public bool StartStream()
+        override public bool StartStream()
         {
             this.LeftCapture.Start();
             this.RightCapture.Start();
@@ -87,19 +87,19 @@ namespace EmguTest.VideoSource
             return true;
         }
 
-        public bool PauseStream()
+        override public bool PauseStream()
         {
             return true;
         }
 
-        public bool StopStream()
+        override public bool StopStream()
         {
             throw new NotImplementedException();
         }
         ////
 
 
-        public bool IsFunctioning()
+        override public bool IsFunctioning()
         {
             if (
                 this.LeftCapture != null &&
@@ -114,17 +114,17 @@ namespace EmguTest.VideoSource
         }
 
 
-        public bool CanChangeLeftCap()
+        override public bool CanChangeLeftCap()
         {
             return true;
         }
 
-        public bool CanChangeRightCap()
+        override public bool CanChangeRightCap()
         {
             return true;
         }
 
-        public void ChangeLeftCap(int leftCapId)
+        override public void ChangeLeftCap(int leftCapId)
         {
             this.LeftCapture.Stop();
             var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -136,7 +136,7 @@ namespace EmguTest.VideoSource
 
         }
 
-        public void ChangeRightCap(int rightCapId)
+        override public void ChangeRightCap(int rightCapId)
         {
             this.RightCapture.Stop();
             var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -147,12 +147,12 @@ namespace EmguTest.VideoSource
         }
 
 
-        public bool CanRewindStream()
+        override public bool CanRewindStream()
         {
             return false;
         }
 
-        public bool ResumeStream()
+        override public bool ResumeStream()
         {
             return true;
         }

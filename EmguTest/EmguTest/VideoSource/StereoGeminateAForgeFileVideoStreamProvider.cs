@@ -98,12 +98,12 @@ namespace EmguTest.VideoSource
             };
         }
 
-        public StereoFrameSequenceElement GetCurrentFrame()
+        override public StereoFrameSequenceElement GetCurrentFrame()
         {
             return this.currentFrame;
         }
 
-        public StereoFrameSequenceElement GetNextFrame()
+        override public StereoFrameSequenceElement GetNextFrame()
         {
             if (this.isCurrentFrameGiven)
             {
@@ -113,13 +113,13 @@ namespace EmguTest.VideoSource
             {
                 lock (currentFrameLock)
                 {
-                    return this.currentFrame;
                     this.isCurrentFrameGiven = true;
+                    return this.currentFrame;
                 }
             }
         }
 
-        public bool IsFunctioning()
+        override public bool IsFunctioning()
         {
             if (
                 this.asyncVideoSource != null &&
@@ -131,27 +131,27 @@ namespace EmguTest.VideoSource
             return false;
         }
 
-        public bool CanChangeLeftCap()
+        override public bool CanChangeLeftCap()
         {
             return false;
         }
 
-        public bool CanChangeRightCap()
+        override public bool CanChangeRightCap()
         {
             return false;
         }
 
-        public void ChangeLeftCap(int leftCapId)
+        override public void ChangeLeftCap(int leftCapId)
         {
             //nothing
         }
 
-        public void ChangeRightCap(int rightCapId)
+        override public void ChangeRightCap(int rightCapId)
         {
             //nothing
         }
 
-        public bool StartStream()
+        override public bool StartStream()
         {
             try
             {
@@ -165,7 +165,7 @@ namespace EmguTest.VideoSource
             }
         }
 
-        public bool PauseStream()
+        override public bool PauseStream()
         {
             if (this.IsStarted)
             {
@@ -174,7 +174,7 @@ namespace EmguTest.VideoSource
             return true;
         }
 
-        public bool StopStream()
+        override public bool StopStream()
         {
             try
             {
@@ -190,7 +190,7 @@ namespace EmguTest.VideoSource
         }
 
 
-        public bool CanRewindStream()
+        override public bool CanRewindStream()
         {
             if (this.IsStarted)
             {
@@ -200,7 +200,7 @@ namespace EmguTest.VideoSource
             return true;
         }
 
-        public bool ResumeStream()
+        override public bool ResumeStream()
         {
             if (this.IsStarted)
             {
