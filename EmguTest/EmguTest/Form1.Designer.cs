@@ -109,6 +109,7 @@
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.showMEMSFormButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -210,6 +211,7 @@
             // 
             // MEMSRotationTabPage
             // 
+            this.MEMSRotationTabPage.Controls.Add(this.showMEMSFormButton);
             this.MEMSRotationTabPage.Controls.Add(this.adoptiveFilterCheckBox);
             this.MEMSRotationTabPage.Controls.Add(this.label2);
             this.MEMSRotationTabPage.Controls.Add(this.accMagnetFilterTrackBar);
@@ -281,9 +283,9 @@
             // 
             // logMEMSRichTextBox
             // 
-            this.logMEMSRichTextBox.Location = new System.Drawing.Point(16, 15);
+            this.logMEMSRichTextBox.Location = new System.Drawing.Point(6, 6);
             this.logMEMSRichTextBox.Name = "logMEMSRichTextBox";
-            this.logMEMSRichTextBox.Size = new System.Drawing.Size(975, 280);
+            this.logMEMSRichTextBox.Size = new System.Drawing.Size(998, 317);
             this.logMEMSRichTextBox.TabIndex = 6;
             this.logMEMSRichTextBox.Text = "";
             // 
@@ -919,6 +921,16 @@
             this.stereoStreamRenderTimer.Interval = 1;
             this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
             // 
+            // showMEMSFormButton
+            // 
+            this.showMEMSFormButton.Location = new System.Drawing.Point(6, 463);
+            this.showMEMSFormButton.Name = "showMEMSFormButton";
+            this.showMEMSFormButton.Size = new System.Drawing.Size(168, 46);
+            this.showMEMSFormButton.TabIndex = 12;
+            this.showMEMSFormButton.Text = "show MEMS form";
+            this.showMEMSFormButton.UseVisualStyleBackColor = true;
+            this.showMEMSFormButton.Click += new System.EventHandler(this.showMEMSFormButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1038,6 +1050,7 @@
         private System.Windows.Forms.TextBox mapScaleTextBox;
         private System.Windows.Forms.TextBox mapYShiftTextBox;
         private System.Windows.Forms.TextBox mapXShiftTextBox;
+        private System.Windows.Forms.Button showMEMSFormButton;
     }
 }
 

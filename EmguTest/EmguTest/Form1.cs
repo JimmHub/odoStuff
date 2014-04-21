@@ -347,7 +347,11 @@ namespace EmguTest
 
         private bool IsMEMSRenderFormAccessible()
         {
-            if (this.memsRenderForm == null || this.memsRenderForm.IsDisposed)
+            if (this.memsRenderForm == null)
+            {
+                return false;
+            }
+            if(this.memsRenderForm.IsDisposed)
             {
                 return false;
             }
@@ -1056,6 +1060,11 @@ namespace EmguTest
 
         private void stereoCalibrationStatusLabel_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void showMEMSFormButton_Click(object sender, EventArgs e)
+        {
+            this.OpenMEMSRenderForm();
         }
         //private void CPUDetect()
         //{
