@@ -37,7 +37,6 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MEMSRotationTabPage = new System.Windows.Forms.TabPage();
@@ -191,16 +190,6 @@
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
-            // elementHost1
-            // 
-            this.elementHost1.Location = new System.Drawing.Point(6, 6);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(419, 318);
-            this.elementHost1.TabIndex = 5;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.ChildChanged += new System.EventHandler<System.Windows.Forms.Integration.ChildChangedEventArgs>(this.elementHost1_ChildChanged);
-            this.elementHost1.Child = null;
-            // 
             // memsTestOutputTimer
             // 
             this.memsTestOutputTimer.Interval = 1;
@@ -227,7 +216,6 @@
             this.MEMSRotationTabPage.Controls.Add(this.gyroCheckBox);
             this.MEMSRotationTabPage.Controls.Add(this.accMagnetCheckBox);
             this.MEMSRotationTabPage.Controls.Add(this.logMEMSRichTextBox);
-            this.MEMSRotationTabPage.Controls.Add(this.elementHost1);
             this.MEMSRotationTabPage.Location = new System.Drawing.Point(4, 22);
             this.MEMSRotationTabPage.Name = "MEMSRotationTabPage";
             this.MEMSRotationTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -293,9 +281,9 @@
             // 
             // logMEMSRichTextBox
             // 
-            this.logMEMSRichTextBox.Location = new System.Drawing.Point(467, 6);
+            this.logMEMSRichTextBox.Location = new System.Drawing.Point(16, 15);
             this.logMEMSRichTextBox.Name = "logMEMSRichTextBox";
-            this.logMEMSRichTextBox.Size = new System.Drawing.Size(548, 428);
+            this.logMEMSRichTextBox.Size = new System.Drawing.Size(975, 280);
             this.logMEMSRichTextBox.TabIndex = 6;
             this.logMEMSRichTextBox.Text = "";
             // 
@@ -978,7 +966,6 @@
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Timer timer3;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
         private System.Windows.Forms.Timer memsTestOutputTimer;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage featureDetectionTabPage;

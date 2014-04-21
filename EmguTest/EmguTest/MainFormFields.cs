@@ -56,7 +56,7 @@ namespace EmguTest
         private Odometry.StereoCameraCalibrationData StereoCalibData;
         private int StereoCalibIdx = 0;
         ////
-        public Wpf3DControl.UserControl1 Wpf3DControl;
+        
 
         //readings test
         MEMSProvider MemsProvider;
@@ -100,5 +100,8 @@ namespace EmguTest
         private bool isNewStereoFrameEventSinged = false;
         private bool isNewStereoFrameInProcess = false;
         //private VideoSource
+        //MEMS render form
+        MEMSForm memsRenderForm;
+        ////
     }
 }

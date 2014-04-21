@@ -166,6 +166,12 @@
     <Compile Include="MainFormFields.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MEMSForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MEMSForm.Designer.cs">
+      <DependentUpon>MEMSForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
@@ -205,6 +211,9 @@
     <Compile Include="VideoSource\StereoVideoStreamProvider.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MEMSForm.resx">
+      <DependentUpon>MEMSForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

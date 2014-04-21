@@ -65,29 +65,18 @@ namespace EmguTest
             this.EmguMain.Run();
         }
 
-        private void LoadWpf3dControl()
+        private void OpenMEMSRenderForm()
         {
-            // Create the ElementHost control for hosting the
-            // WPF UserControl.
-            ElementHost host = this.elementHost1;
-            //host.Dock = DockStyle.Fill;
-
-            // Create the WPF UserControl.
-            this.Wpf3DControl =
-                new Wpf3DControl.UserControl1();
-
-            // Assign the WPF UserControl to the ElementHost control's
-            // Child property.
-            host.Child = this.Wpf3DControl;
-            
-            // Add the ElementHost control to the form's
-            // collection of child controls.
-            //this.Controls.Add(host);
+            if (this.memsRenderForm == null || this.memsRenderForm.IsDisposed)
+            {
+                this.memsRenderForm = new MEMSForm();
+                this.memsRenderForm.Show();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.LoadWpf3dControl();
+            this.OpenMEMSRenderForm();
             StereoCameraCalibrator calib = new StereoCameraCalibrator();
             //uncomment for calibration
             calib.Calibrate(@"C:\CodeStuff\cvproj\resources\calibImages", new Size(9, 6));
@@ -279,7 +268,6 @@ namespace EmguTest
 
         private void RotateWpfContent()
         {
-            this.Wpf3DControl.RotateTest();
         }
 
         private void elementHost1_ChildChanged(object sender, ChildChangedEventArgs e)
@@ -346,7 +334,7 @@ namespace EmguTest
                 //this.MEMSRTBLogger.WriteLn("");
                 ////
 
-                this.Wpf3DControl.SetTransformMatrix(orientMatr3f);
+                this.RenderOrientationTransformation(orientMatr3f);
             }
 
             //points test
@@ -355,6 +343,23 @@ namespace EmguTest
             var pointC = pointA.CrossProduct(pointB);
 
             ////
+        }
+
+        private bool IsMEMSRenderFormAccessible()
+        {
+            if (this.memsRenderForm == null || this.memsRenderForm.IsDisposed)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void RenderOrientationTransformation(double[][] transformMatr3f)
+        {
+            if (this.IsMEMSRenderFormAccessible())
+            {
+                this.memsRenderForm.SetMEMSTransformationMatrix(transformMatr3f);
+            }
         }
 
         private double[] MulReadingsVect(double[][] orientMatix, ReadingsVector3f readings, bool normalize = false)
