@@ -481,7 +481,8 @@ namespace EmguTest
 
         private void monoCameraCalibrateButton_Click(object sender, EventArgs e)
         {
-            this.calibrationStatusLabel.Text = "calibrating...";
+
+            this.calibrationStatusLabel.Invoke((MethodInvoker)delegate { this.Text = "calibrating..."; });
             
             this.MonoCalibTestFiles = Directory.GetFiles(this.MonoCalibTestFolder).ToList();
             var calibData = new MonoCameraCalibrationData()
@@ -549,8 +550,10 @@ namespace EmguTest
 
         private void stereoCalibrateButton_Click(object sender, EventArgs e)
         {
-            this.stereoCalibrationStatusLabel.Text = "calibrating...";
-
+            this.StereoCalibIdx = 0;
+            this.stereoCalibrationStatusLabel.Invoke((MethodInvoker)delegate { stereoCalibrationStatusLabel.Text = "calibrating..."; });
+            //dirty hack
+            //Thread.Sleep(2000);
             var stereoCalibTestFiles = this.ParseStereoFolder(this.stereoCalibFolderTextBox.Text);
             var stereoCalibData = new StereoCameraCalibrationFilesData()
             {
@@ -562,6 +565,10 @@ namespace EmguTest
             this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
         }
 
         private List<Tuple<String, String>> ParseStereoFolder(String path)
@@ -614,14 +621,14 @@ namespace EmguTest
         {
             this.stereoImageNumLabel.Text = this.StereoCalibIdx.ToString();
 
-            var leftPath = this.StereoCalibData.GetFrameById(StereoCalibIdx).LeftRawFrame;
-            var rightPath = this.StereoCalibData.GetFrameById(StereoCalibIdx).RightRawFrame;
+            var leftRawFrame = this.StereoCalibData.GetFrameById(StereoCalibIdx).LeftRawFrame;
+            var rightRawFrame = this.StereoCalibData.GetFrameById(StereoCalibIdx).RightRawFrame;
 
-            var leftOriginalImg = new Image<Bgr, byte>(leftPath);
-            var rightOriginalImg = new Image<Bgr, byte>(rightPath);
+            var leftOriginalImg = new Image<Bgr, byte>(leftRawFrame);
+            var rightOriginalImg = new Image<Bgr, byte>(rightRawFrame);
 
-            this.leftStereoOriginalPictureBox.Image = leftOriginalImg.ToBitmap();
-            this.rightStereoOriginalPictureBox.Image = rightOriginalImg.ToBitmap();
+            this.leftStereoOriginalPictureBox.Image = leftRawFrame;
+            this.rightStereoOriginalPictureBox.Image = rightRawFrame;
 
             var leftCalibImg = this.StereoCameraParams.LeftIntrinsicCameraParameters.Undistort(leftOriginalImg);
             var rightCalibImg = this.StereoCameraParams.RightIntrinsicCameraParameters.Undistort(rightOriginalImg);
@@ -633,9 +640,20 @@ namespace EmguTest
                 //remap
                 var leftCalibRectImg = new Image<Bgr, byte>(leftOriginalImg.ToBitmap());
                 var rightCalibRectImg = new Image<Bgr, byte>(rightOriginalImg.ToBitmap());
-
-                CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX.Mul(2).Add(-500), this.StereoCameraParams.LeftMapY.Mul(2).Add(-500), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
-                CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX.Mul(2).Add(-500), this.StereoCameraParams.RightMapY.Mul(2).Add(-500), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                if (this.useMapTransformCheckBox.Checked)
+                {
+                    double mapXShift;
+                    double mapYShift;
+                    double mapScale;
+                    this.GetMapTransformParameters(out mapXShift, out mapYShift, out mapScale);
+                    CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX.Add((float)mapXShift).Mul(mapScale), this.StereoCameraParams.LeftMapY.Add((float)mapYShift).Mul(mapScale), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                    CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX.Add((float)mapXShift).Mul(mapScale), this.StereoCameraParams.RightMapY.Add((float)mapYShift).Mul(mapScale), (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                }
+                else
+                {
+                    CvInvoke.cvRemap(leftOriginalImg, leftCalibRectImg, this.StereoCameraParams.LeftMapX, this.StereoCameraParams.LeftMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                    CvInvoke.cvRemap(rightOriginalImg, rightCalibRectImg, this.StereoCameraParams.RightMapX, this.StereoCameraParams.RightMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                }
                 //leftCalibRectImg = leftCalibRectImg.Resize(0.01, INTER.CV_INTER_LINEAR);
                 //rightCalibRectImg = rightCalibRectImg.Resize(0.01, INTER.CV_INTER_LINEAR);
                 ////
@@ -646,9 +664,57 @@ namespace EmguTest
             this.leftStereoCalibPictureBox.Image = resLeftImg.ToBitmap();
             this.rightStereoCalibPictureBox.Image = resRightImg.ToBitmap();
 
-            
+            //disposition
+            resLeftImg.Dispose();
+            resRightImg.Dispose();
+            leftCalibImg.Dispose();
+            rightCalibImg.Dispose();
+            leftOriginalImg.Dispose();
+            rightOriginalImg.Dispose();
+            ////
 
             this.StereoDrawLines();
+        }
+
+        private void GetMapTransformParameters(out double xShift, out double yShift, out double scale)
+        {
+            double resXShift = 0.0;
+            double resYShift = 0.0;
+            double resScale = 1.0;
+
+            try
+            {
+                resXShift = double.Parse(this.mapXShiftTextBox.Text);
+            }
+            catch
+            {
+                resXShift = 0.0;
+                this.mapXShiftTextBox.Text = resXShift.ToString();
+            }
+
+            try
+            {
+                resYShift = double.Parse(this.mapYShiftTextBox.Text);
+            }
+            catch
+            {
+                resYShift = 0.0;
+                this.mapYShiftTextBox.Text = resYShift.ToString();
+            }
+
+            try
+            {
+                resScale = double.Parse(this.mapScaleTextBox.Text);
+            }
+            catch
+            {
+                resScale = 1.0;
+                this.mapScaleTextBox.Text = resScale.ToString();
+            }
+
+            xShift = resXShift;
+            yShift = resYShift;
+            scale = resScale;
         }
 
         private void label7_Click(object sender, EventArgs e)
@@ -883,7 +949,10 @@ namespace EmguTest
         private void calibrateFromGrabbedListButton_Click(object sender, EventArgs e)
         {
             //todo
-            this.stereoCalibrationStatusLabel.Text = "calibrating...";
+            this.StereoCalibIdx = 0;
+            this.stereoCalibrationStatusLabel.Invoke((MethodInvoker)delegate { stereoCalibrationStatusLabel.Text = "calibrating..."; });
+            //dirty hack
+            //Thread.Sleep(20);
 
             var stereoCalibData = new StereoCameraCalibrationGrabbedData()
             {
@@ -895,6 +964,53 @@ namespace EmguTest
             this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void saveGrabbedCalibrationListToButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoCalibrationGrabbedList == null || this.StereoCalibrationGrabbedList.Count == 0)
+            {
+                MessageBox.Show("calibration list is empty");
+            }
+            else
+            {
+                this.stereoCalibListSaveFolderBrowserDialog.ShowDialog();
+                var path = this.stereoCalibListSaveFolderBrowserDialog.SelectedPath;
+                var prefix = this.prefixCalibListTextBox.Text;
+                if (!String.IsNullOrEmpty(path))
+                {
+                    Utils.FramesStorageManager.SaveGrabbedStereoFramesToDisc(this.StereoCalibrationGrabbedList, path, prefix);
+                }
+            }
+        }
+
+        private void stereoCalibListSaveFileDialog_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void mapTransformApplyButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void useMapTransformCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.StereoCameraParams != null && this.StereoCalibData != null)
+            {
+                this.RenderStereoCalibTestImages();
+            }
+        }
+
+        private void stereoCalibrationStatusLabel_TextChanged(object sender, EventArgs e)
+        {
         }
         //private void CPUDetect()
         //{

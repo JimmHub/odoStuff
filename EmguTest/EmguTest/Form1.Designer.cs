@@ -59,6 +59,14 @@
             this.calibPictureBoxOriginal = new System.Windows.Forms.PictureBox();
             this.monoCameraCalibrateButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.useMapTransformCheckBox = new System.Windows.Forms.CheckBox();
+            this.mapTransformApplyButton = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.mapScaleTextBox = new System.Windows.Forms.TextBox();
+            this.mapYShiftTextBox = new System.Windows.Forms.TextBox();
+            this.mapXShiftTextBox = new System.Windows.Forms.TextBox();
             this.stereoCalibFolderTextBox = new System.Windows.Forms.TextBox();
             this.calibrateFromGrabbedListButton = new System.Windows.Forms.Button();
             this.stereoCalibUseRectificationCheckBox = new System.Windows.Forms.CheckBox();
@@ -77,6 +85,9 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
+            this.prefixCalibListTextBox = new System.Windows.Forms.TextBox();
+            this.saveGrabbedCalibrationListToButton = new System.Windows.Forms.Button();
             this.calibListCountLabel = new System.Windows.Forms.Label();
             this.clearCalibrationListButton = new System.Windows.Forms.Button();
             this.grabFrameForCalibrationButton = new System.Windows.Forms.Button();
@@ -98,6 +109,7 @@
             this.calibStereoCapLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
+            this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -318,7 +330,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(1021, 712);
             this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Mono calibration";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -407,6 +419,14 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.useMapTransformCheckBox);
+            this.tabPage2.Controls.Add(this.mapTransformApplyButton);
+            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.label15);
+            this.tabPage2.Controls.Add(this.label14);
+            this.tabPage2.Controls.Add(this.mapScaleTextBox);
+            this.tabPage2.Controls.Add(this.mapYShiftTextBox);
+            this.tabPage2.Controls.Add(this.mapXShiftTextBox);
             this.tabPage2.Controls.Add(this.stereoCalibFolderTextBox);
             this.tabPage2.Controls.Add(this.calibrateFromGrabbedListButton);
             this.tabPage2.Controls.Add(this.stereoCalibUseRectificationCheckBox);
@@ -429,8 +449,80 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1021, 712);
             this.tabPage2.TabIndex = 3;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Stereo calibration";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // useMapTransformCheckBox
+            // 
+            this.useMapTransformCheckBox.AutoSize = true;
+            this.useMapTransformCheckBox.Location = new System.Drawing.Point(868, 421);
+            this.useMapTransformCheckBox.Name = "useMapTransformCheckBox";
+            this.useMapTransformCheckBox.Size = new System.Drawing.Size(112, 17);
+            this.useMapTransformCheckBox.TabIndex = 27;
+            this.useMapTransformCheckBox.Text = "use map transform";
+            this.useMapTransformCheckBox.UseVisualStyleBackColor = true;
+            this.useMapTransformCheckBox.CheckedChanged += new System.EventHandler(this.useMapTransformCheckBox_CheckedChanged);
+            // 
+            // mapTransformApplyButton
+            // 
+            this.mapTransformApplyButton.Location = new System.Drawing.Point(892, 522);
+            this.mapTransformApplyButton.Name = "mapTransformApplyButton";
+            this.mapTransformApplyButton.Size = new System.Drawing.Size(88, 32);
+            this.mapTransformApplyButton.TabIndex = 26;
+            this.mapTransformApplyButton.Text = "apply";
+            this.mapTransformApplyButton.UseVisualStyleBackColor = true;
+            this.mapTransformApplyButton.Click += new System.EventHandler(this.mapTransformApplyButton_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(871, 500);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(35, 13);
+            this.label16.TabIndex = 25;
+            this.label16.Text = "scale:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(867, 474);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.TabIndex = 24;
+            this.label15.Text = "Y shift:";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(867, 448);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(39, 13);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "X shift:";
+            // 
+            // mapScaleTextBox
+            // 
+            this.mapScaleTextBox.Location = new System.Drawing.Point(910, 496);
+            this.mapScaleTextBox.Name = "mapScaleTextBox";
+            this.mapScaleTextBox.Size = new System.Drawing.Size(105, 20);
+            this.mapScaleTextBox.TabIndex = 21;
+            this.mapScaleTextBox.Text = "1.0";
+            // 
+            // mapYShiftTextBox
+            // 
+            this.mapYShiftTextBox.Location = new System.Drawing.Point(910, 470);
+            this.mapYShiftTextBox.Name = "mapYShiftTextBox";
+            this.mapYShiftTextBox.Size = new System.Drawing.Size(105, 20);
+            this.mapYShiftTextBox.TabIndex = 20;
+            this.mapYShiftTextBox.Text = "0";
+            // 
+            // mapXShiftTextBox
+            // 
+            this.mapXShiftTextBox.Location = new System.Drawing.Point(910, 444);
+            this.mapXShiftTextBox.Name = "mapXShiftTextBox";
+            this.mapXShiftTextBox.Size = new System.Drawing.Size(105, 20);
+            this.mapXShiftTextBox.TabIndex = 19;
+            this.mapXShiftTextBox.Text = "0";
             // 
             // stereoCalibFolderTextBox
             // 
@@ -545,6 +637,7 @@
             this.stereoCalibrationStatusLabel.Size = new System.Drawing.Size(35, 13);
             this.stereoCalibrationStatusLabel.TabIndex = 7;
             this.stereoCalibrationStatusLabel.Text = "status";
+            this.stereoCalibrationStatusLabel.TextChanged += new System.EventHandler(this.stereoCalibrationStatusLabel_TextChanged);
             // 
             // stereoCalibrateButton
             // 
@@ -595,6 +688,9 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label12);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.prefixCalibListTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.saveGrabbedCalibrationListToButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.calibListCountLabel);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.clearCalibrationListButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.grabFrameForCalibrationButton);
@@ -622,10 +718,37 @@
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(300, 579);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(35, 13);
+            this.label12.TabIndex = 35;
+            this.label12.Text = "prefix:";
+            // 
+            // prefixCalibListTextBox
+            // 
+            this.prefixCalibListTextBox.Location = new System.Drawing.Point(341, 576);
+            this.prefixCalibListTextBox.Name = "prefixCalibListTextBox";
+            this.prefixCalibListTextBox.Size = new System.Drawing.Size(87, 20);
+            this.prefixCalibListTextBox.TabIndex = 34;
+            this.prefixCalibListTextBox.Text = "stereo";
+            // 
+            // saveGrabbedCalibrationListToButton
+            // 
+            this.saveGrabbedCalibrationListToButton.Location = new System.Drawing.Point(98, 568);
+            this.saveGrabbedCalibrationListToButton.Name = "saveGrabbedCalibrationListToButton";
+            this.saveGrabbedCalibrationListToButton.Size = new System.Drawing.Size(196, 35);
+            this.saveGrabbedCalibrationListToButton.TabIndex = 33;
+            this.saveGrabbedCalibrationListToButton.Text = "Save grabbed calibration list";
+            this.saveGrabbedCalibrationListToButton.UseVisualStyleBackColor = true;
+            this.saveGrabbedCalibrationListToButton.Click += new System.EventHandler(this.saveGrabbedCalibrationListToButton_Click);
+            // 
             // calibListCountLabel
             // 
             this.calibListCountLabel.AutoSize = true;
-            this.calibListCountLabel.Location = new System.Drawing.Point(300, 518);
+            this.calibListCountLabel.Location = new System.Drawing.Point(191, 518);
             this.calibListCountLabel.Name = "calibListCountLabel";
             this.calibListCountLabel.Size = new System.Drawing.Size(13, 13);
             this.calibListCountLabel.TabIndex = 31;
@@ -633,11 +756,11 @@
             // 
             // clearCalibrationListButton
             // 
-            this.clearCalibrationListButton.Location = new System.Drawing.Point(194, 507);
+            this.clearCalibrationListButton.Location = new System.Drawing.Point(210, 507);
             this.clearCalibrationListButton.Name = "clearCalibrationListButton";
             this.clearCalibrationListButton.Size = new System.Drawing.Size(84, 35);
             this.clearCalibrationListButton.TabIndex = 30;
-            this.clearCalibrationListButton.Text = "Clear calibration list";
+            this.clearCalibrationListButton.Text = "Clear grabbed calibration list";
             this.clearCalibrationListButton.UseVisualStyleBackColor = true;
             this.clearCalibrationListButton.Click += new System.EventHandler(this.clearCalibrationListButton_Click);
             // 
@@ -916,6 +1039,18 @@
         private System.Windows.Forms.Button clearCalibrationListButton;
         private System.Windows.Forms.Button calibrateFromGrabbedListButton;
         private System.Windows.Forms.TextBox stereoCalibFolderTextBox;
+        private System.Windows.Forms.Button saveGrabbedCalibrationListToButton;
+        private System.Windows.Forms.FolderBrowserDialog stereoCalibListSaveFolderBrowserDialog;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox prefixCalibListTextBox;
+        private System.Windows.Forms.CheckBox useMapTransformCheckBox;
+        private System.Windows.Forms.Button mapTransformApplyButton;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox mapScaleTextBox;
+        private System.Windows.Forms.TextBox mapYShiftTextBox;
+        private System.Windows.Forms.TextBox mapXShiftTextBox;
     }
 }
 
