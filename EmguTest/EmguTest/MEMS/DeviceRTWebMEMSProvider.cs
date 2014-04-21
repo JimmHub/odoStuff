@@ -34,6 +34,7 @@ namespace EmguTest.MEMS
             ////
         }
 
+        override public event NewAMGFrameEventHandler NewAMGFrameEvent;
         public int? Port { get; set; }
         public bool IsConnected 
         {

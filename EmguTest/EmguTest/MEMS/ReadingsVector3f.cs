@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmguTest.MEMS
 {
-    class ReadingsVector3f : ReadingsVector
+    public class ReadingsVector3f : ReadingsVector
     {
         public ReadingsVector3f()
             : base()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmguTest.MEMS
 {
-    class MEMSReadingsSet3f
+    public class MEMSReadingsSet3f
     {
         public ReadingsVector3f AccVector3f { get; set; }
         public ReadingsVector3f MagnetVector3f { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmguTest.MEMS
 {
-    class ReadingsVector
+    public class ReadingsVector
     {
         public ReadingsVector()
         {

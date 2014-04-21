@@ -12,5 +12,8 @@ namespace EmguTest.MEMS
     {
         abstract public MEMSReadingsSet3f GetCurrentReadingsSet();
         abstract public MEMSReadingsSet3f GetNextReadingsSet();
+        abstract public event NewAMGFrameEventHandler NewAMGFrameEvent;
     }
+
+    public delegate void NewAMGFrameEventHandler(object sender, NewAMGFrameEventArgs e);
 }

@@ -172,6 +172,7 @@
     <Compile Include="MEMSForm.Designer.cs">
       <DependentUpon>MEMSForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MEMS\NewAMGFrameEventArgs.cs" />
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="MEMS\MEMSReadingsSet3f.cs" />
     <Compile Include="MEMS\ReadingsVector.cs" />
     <Compile Include="MEMS\ReadingsVector3f.cs" />
-    <Compile Include="MEMS\TestMEMSProvider.cs" />
+    <Compile Include="MEMS\ReadingsFileMEMSProvider.cs" />
     <Compile Include="MonoCameraCalibrator.cs" />
     <Compile Include="Odometry\VisualOdometer.cs" />
     <Compile Include="Program.cs" />

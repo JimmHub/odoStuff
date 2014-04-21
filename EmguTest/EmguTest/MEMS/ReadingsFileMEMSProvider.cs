@@ -9,9 +9,9 @@ using EmguTest.MEMS;
 
 namespace EmguTest.MEMS
 {
-    class TestMEMSProvider : MEMSProvider
+    class ReadingsFileMEMSProvider : MEMSProvider
     {
-        public TestMEMSProvider(String accReadingsPath, String magnetReadingsPath, String gyroReadingsPath)
+        public ReadingsFileMEMSProvider(String accReadingsPath, String magnetReadingsPath, String gyroReadingsPath)
         {
             this.AccReadingsPath = accReadingsPath;
             this.MagnetReadingsPath = magnetReadingsPath;
@@ -23,6 +23,7 @@ namespace EmguTest.MEMS
 
         }
 
+        override public event NewAMGFrameEventHandler NewAMGFrameEvent;
         public String AccReadingsPath { get; set; }
         public String MagnetReadingsPath { get; set; }
         public String GyroReadingsPath { get; set; }
