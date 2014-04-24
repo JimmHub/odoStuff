@@ -22,6 +22,13 @@ namespace EmguTest.VideoSource
         public Bitmap LeftRawFrame { get; set; }
         public Bitmap RightRawFrame { get; set; }
         public DateTime TimeStamp { get; set; }
+        public Int64 TimeStampI
+        {
+            get
+            {
+                return Utils.DateTimeHelper.DateTimeToLongMS(this.TimeStamp);
+            }
+        }
         public bool IsLeftFrameEmpty { get; set; }
         public bool IsRightFrameEmpty { get; set; }
         public bool IsNotFullFrame 

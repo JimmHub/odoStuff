@@ -47,8 +47,9 @@ namespace EmguTest.DataSource
 
         protected bool _isStarted;
         protected bool _isPaused;
-        protected Int64 _startMEMSTimeStamp;
+        protected DateTime _startMEMSTimeStamp;
         protected DateTime? _startVideoTimeStamp;
+        protected Int64 _startMEMSTimeStampIOrig;
         protected FileStream _accBinStream;
         protected FileStream _magnetBinStream;
         protected FileStream _gyroBinStream;
@@ -59,28 +60,56 @@ namespace EmguTest.DataSource
         protected Capture _videoSourceCap;
         protected bool _useMEMS;
         protected bool _useVideo;
-        protected bool _is_videoSourceCap_ImageGrabbed_inUse;
-        protected bool _is_accReadCallback_inUse;
-        protected bool _is_magnetReadCallback_inUse;
-        protected bool _is_gyroReadCallback_inUse;
+        //protected bool _is_videoSourceCap_ImageGrabbed_inUse;
+        //protected bool _is_StereoMEMSDataProviderCVCapFromFile__nextAccValEvent_inUse;
+        //protected bool _is_StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent_inUse;
+        //protected bool _is_StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent_inUse;
+        //protected bool _is_StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent_inUse;
+        protected bool _isFirstVideoFrame;
+        protected bool _isFirstMEMSSet;
+        protected object _videoFrameLock = new object();
+        protected object _MEMSSetLock = new object();
+        protected bool _newAccVal;
+        protected bool _newMagnetVal;
+        protected bool _newGyroVal;
 
+        //
+        protected delegate void NextVideoFrame(object sender, EventArgs e);
+        protected delegate void NextAccVal(object sender, EventArgs e);
+        protected delegate void NextMagnetVal(object sender, EventArgs e);
+        protected delegate void NextGyroVal(object sender, EventArgs e);
+
+        protected event NextVideoFrame _nextVideoFrameEvent;
+        protected event NextAccVal _nextAccValEvent;
+        protected event NextMagnetVal _nextMagnetValEvent;
+        protected event NextGyroVal _nextGyroValEvent;
+        //
         protected void Init()
         {
             this._isStarted = false;
             this._isPaused = false;
-            this._is_videoSourceCap_ImageGrabbed_inUse = false;
-            this._is_accReadCallback_inUse = false;
-            this._is_magnetReadCallback_inUse = false;
-            this._is_gyroReadCallback_inUse = false;
+            //this._is_videoSourceCap_ImageGrabbed_inUse = false;
+            //this._is_StereoMEMSDataProviderCVCapFromFile__nextAccValEvent_inUse = false;
+            //this._is_StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent_inUse = false;
+            //this._is_StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent_inUse = false;
+            //this._is_StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent_inUse = false;
+            this._newAccVal = false;
+            this._newMagnetVal = false;
+            this._newGyroVal = false;
 
-            this._startMEMSTimeStamp = 0;
+            this._currentMEMSSet = new MEMSReadingsSet3f();
+
             if (this._useMEMS)
             {
-                var startRes = this.GetNextAccVector3f();
-                this.GetNextGyroVector3f();
-                this.GetNextMagnetVector3f();
+                this._currentMEMSSet.AccVector3f = this.GetNextAccVector3f();
+                this._currentMEMSSet.MagnetVector3f = this.GetNextMagnetVector3f();
+                this._currentMEMSSet.GyroVector3f = this.GetNextGyroVector3f();
 
-                this._startMEMSTimeStamp = startRes.TimeStampI;
+                this._startMEMSTimeStampIOrig = this._currentMEMSSet.AccVector3f.TimeStampI;
+
+                this._nextAccValEvent += StereoMEMSDataProviderCVCapFromFile__nextAccValEvent;
+                this._nextMagnetValEvent += StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent;
+                this._nextGyroValEvent += StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent;
             }
 
             if (this._useVideo)
@@ -89,13 +118,175 @@ namespace EmguTest.DataSource
                 this._currentStereoFrame = this.ElementFromRawFrame(rawFrame);
                 rawFrame = null;
 
-                this._videoSourceCap.ImageGrabbed += _videoSourceCap_ImageGrabbed;
+                this._nextVideoFrameEvent += StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent;
+                this._isFirstVideoFrame = true;
             }
         }
 
-        protected void _videoSourceCap_ImageGrabbed(object sender, EventArgs e)
+        protected MEMSReadingsSet3f GetResultMEMSSet()
         {
-            throw new NotImplementedException();
+            var res = new MEMSReadingsSet3f()
+            {
+                AccVector3f = new ReadingsVector3f(this._currentMEMSSet.AccVector3f),
+                MagnetVector3f = new ReadingsVector3f(this._currentMEMSSet.MagnetVector3f),
+                GyroVector3f = new ReadingsVector3f(this._currentMEMSSet.GyroVector3f)
+            };
+            res.AccVector3f.TimeStampI = this.RecalcMEMSTimeStamp(res.AccVector3f.TimeStampI);
+            res.MagnetVector3f.TimeStampI = this.RecalcMEMSTimeStamp(res.MagnetVector3f.TimeStampI);
+            res.GyroVector3f.TimeStampI = this.RecalcMEMSTimeStamp(res.GyroVector3f.TimeStampI);
+            return res;
+        }
+
+        protected long RecalcMEMSTimeStamp(long timeStampI)
+        {
+            return Utils.DateTimeHelper.DateTimeToLongMS(this._startMEMSTimeStamp.AddMilliseconds(timeStampI - this._startMEMSTimeStampIOrig));
+        }
+
+        void StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent(object sender, EventArgs e)
+        {
+            var rawFrame = this._videoSourceCap.RetrieveBgrFrame();
+
+            var stereoFrame = this.ElementFromRawFrame(rawFrame);
+            rawFrame = null;
+            if (this._isFirstVideoFrame)
+            {
+                this._startVideoTimeStamp = stereoFrame.TimeStamp;
+                this._isFirstVideoFrame = false;
+
+                lock (this._videoFrameLock)
+                {
+                    this._currentStereoFrame = stereoFrame;
+                }
+            }
+            else
+            {
+                var time = this._currentStereoFrame.TimeStamp;
+                while (DateTime.UtcNow.Subtract(time).TotalMilliseconds < this._framesInterval)
+                {
+                }
+                lock (this._videoFrameLock)
+                {
+                    stereoFrame.TimeStamp = DateTime.UtcNow;
+                    this._currentStereoFrame = stereoFrame;
+                }
+            }
+            
+            this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+            {
+                NewStereoFrame = this._currentStereoFrame
+            });
+
+            //
+            while (this._isPaused && this._isStarted)
+            {
+            }
+            if (this._isStarted)
+            {
+                this._nextVideoFrameEvent(this, null);
+            }
+        }
+        void StereoMEMSDataProviderCVCapFromFile__nextAccValEvent(object sender, EventArgs e)
+        {
+            var rawVal = this.GetNextAccVector3f();
+            if (this._isFirstMEMSSet)
+            {
+                this._isFirstMEMSSet = false;
+                this._startMEMSTimeStamp = DateTime.UtcNow.AddMilliseconds(-(rawVal.TimeStampI - this._startMEMSTimeStampIOrig));
+            }
+            else
+            {
+                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.AccVector3f.TimeStampI))
+                {
+                }
+            }
+            this._currentMEMSSet.AccVector3f = rawVal;
+            this._newAccVal = true;
+            this.InvokeNewMEMSSetEvent();
+
+            //
+            while (this._isPaused && this._isStarted)
+            {
+            }
+            if (this._isStarted)
+            {
+                this._nextAccValEvent(this, null);
+            }
+        }
+
+        protected void InvokeNewMEMSSetEvent()
+        {
+            if (!this._isEagerMEMS)
+            {
+                if (!(this._newAccVal && this._newMagnetVal && this._newGyroVal))
+                {
+                    return;
+                }
+            }
+
+            this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
+            {
+                Readings = this.GetResultMEMSSet()
+            });
+
+            this._newAccVal = false;
+            this._newMagnetVal = false;
+            this._newGyroVal = false;
+        }
+
+        void StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent(object sender, EventArgs e)
+        {
+            var rawVal = this.GetNextMagnetVector3f();
+            if (this._isFirstMEMSSet)
+            {
+                this._isFirstMEMSSet = false;
+                this._startMEMSTimeStamp = DateTime.UtcNow.AddMilliseconds(-(rawVal.TimeStampI - this._startMEMSTimeStampIOrig));
+            }
+            else
+            {
+                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.MagnetVector3f.TimeStampI))
+                {
+                }
+            }
+            this._currentMEMSSet.MagnetVector3f = rawVal;
+            this._newMagnetVal = true;
+            this.InvokeNewMEMSSetEvent();
+
+            //
+            while (this._isPaused && this._isStarted)
+            {
+            }
+            if (this._isStarted)
+            {
+                this._nextMagnetValEvent(this, null);
+            }
+        }
+
+        void StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent(object sender, EventArgs e)
+        {
+            var rawVal = this.GetNextGyroVector3f();
+            if (this._isFirstMEMSSet)
+            {
+                this._isFirstMEMSSet = false;
+                this._startMEMSTimeStamp = DateTime.UtcNow.AddMilliseconds(-(rawVal.TimeStampI - this._startMEMSTimeStampIOrig));
+            }
+            else
+            {
+                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.GyroVector3f.TimeStampI))
+                {
+                }
+            }
+            this._currentMEMSSet.GyroVector3f = rawVal;
+            this._newGyroVal = true;
+            this.InvokeNewMEMSSetEvent();
+
+            //
+            while (this._isPaused && this._isStarted)
+            {
+            }
+            if (this._isStarted)
+            {
+                this._nextGyroValEvent(this, null);
+            }
         }
 
         protected StereoFrameSequenceElement ElementFromRawFrame(Image<Bgr, byte> rawFrame)
@@ -177,7 +368,10 @@ namespace EmguTest.DataSource
 
         override public MEMSReadingsSet3f GetCurrentMEMSReadingsSet3f()
         {
-            return this._currentMEMSSet;
+            lock (this._MEMSSetLock)
+            {
+                return this.GetResultMEMSSet();
+            }
         }
 
         override public StereoFrameSequenceElement GetCurrentStereoFrame()
@@ -189,17 +383,35 @@ namespace EmguTest.DataSource
 
         public override void Start()
         {
-            throw new NotImplementedException();
+            if (!this._isStarted)
+            {
+                if (this._useMEMS)
+                {
+                    this._nextAccValEvent(this, null);
+                    this._nextMagnetValEvent(this, null);
+                    this._nextGyroValEvent(this, null);
+                }
+
+                if (this._useVideo)
+                {
+                    this._nextVideoFrameEvent(this, null);
+                }
+            }
         }
 
         public override void Stop()
         {
-            throw new NotImplementedException();
+            this._isStarted = false;
         }
 
         public override void Pause()
         {
-            throw new NotImplementedException();
+            this._isPaused = true;
+        }
+
+        public override void Resume()
+        {
+            this._isPaused = false;
         }
 
         public override bool IsStarted()

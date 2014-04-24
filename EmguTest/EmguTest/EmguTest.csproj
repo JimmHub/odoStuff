@@ -183,6 +183,7 @@
     <Compile Include="Odometry\StereoCameraCalibrationGrabbedData.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
     <Compile Include="Utils\CvHelper.cs" />
+    <Compile Include="Utils\DateTimeHelper.cs" />
     <Compile Include="Utils\FramesStorageManager.cs" />
     <Compile Include="Utils\Logger\ConsoleLogger.cs" />
     <Compile Include="Utils\Logger\EmptyLogger.cs" />

@@ -19,6 +19,7 @@ namespace EmguTest.DataSource
         abstract public void Start();
         abstract public void Stop();
         abstract public void Pause();
+        abstract public void Resume();
         abstract public bool IsStarted();
         abstract public bool IsPaused();
     }

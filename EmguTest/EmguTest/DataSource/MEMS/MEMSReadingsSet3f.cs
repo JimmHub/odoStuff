@@ -12,14 +12,16 @@ namespace EmguTest.MEMS
         public ReadingsVector3f MagnetVector3f { get; set; }
         public ReadingsVector3f GyroVector3f { get; set; }
 
-        public DateTime TimeStamp { get; set; }
-        public Int64 TimeStampI 
+        public Int64 TimeStampOrigI 
         {
             get
             {
                 if (this.IsNotEmpty())
                 {
-                    return (int)(((double)this.AccVector3f.TimeStampI + this.MagnetVector3f.TimeStampI + this.GyroVector3f.TimeStampI) / 3);
+                    //old
+                    //return (int)(((double)this.AccVector3f.TimeStampI + this.MagnetVector3f.TimeStampI + this.GyroVector3f.TimeStampI) / 3);
+
+                    return Math.Max(this.AccVector3f.TimeStampI, Math.Max(this.MagnetVector3f.TimeStampI, this.GyroVector3f.TimeStampI));
                 }
                 else
                 {
@@ -53,6 +55,13 @@ namespace EmguTest.MEMS
             {
                 IsEmpty = true
             };
+        }
+
+        public MEMSReadingsSet3f(MEMSReadingsSet3f original)
+        {
+            this.AccVector3f = original.AccVector3f;
+            this.MagnetVector3f = original.MagnetVector3f;
+            this.GyroVector3f = original.GyroVector3f;
         }
     }
 }

@@ -14,8 +14,18 @@ namespace EmguTest.MEMS
             this.Values = new float[3];
         }
 
+        public ReadingsVector3f(ReadingsVector3f original)
+            : base()
+        {
+            var size  = 3;
+            this.Values = new float[size];
+            for (int i = 0; i < size; ++i)
+            {
+                this.Values[i] = original.Values[i];
+            }
+            this.TimeStampI = original.TimeStampI;
+        }
+
         public float[] Values { get; set; }
-        public Int64 TimeStampI { get; set; }
-        
     }
 }

@@ -12,7 +12,8 @@ namespace EmguTest.MEMS
         {
             this.IsEmpty = false;
         }
-        public DateTime TimeStamp { get; set; }
+        public Int64 TimeStampI { get; set; }
         public bool IsEmpty { get; set; }
+
     }
 }

@@ -285,7 +285,7 @@ namespace EmguTest
             {
                 return false;
             }
-            if (set.TimeStampI == 0)
+            if (set.TimeStampOrigI == 0)
             {
                 return false;
             }
@@ -423,7 +423,7 @@ namespace EmguTest
         {
             //nextReadings = this.MemsProvider.GetNextReadingsSet();
 
-            Console.WriteLine("timestamp: " + nextReadings.TimeStampI.ToString());
+            Console.WriteLine("timestamp: " + nextReadings.TimeStampOrigI.ToString());
             Console.WriteLine("acc: "
                 + " Xa=" + nextReadings.AccVector3f.Values[0]
                 + " Ya=" + nextReadings.AccVector3f.Values[1]
