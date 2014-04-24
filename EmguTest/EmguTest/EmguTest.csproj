@@ -151,6 +151,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSource\StereoMEMSDataProvider.cs" />
+    <Compile Include="DataSource\StereoMEMSDataProviderCVCapFromFile.cs" />
     <Compile Include="Disparity\DisparityBuilder.cs" />
     <Compile Include="EmguMain.cs" />
     <Compile Include="FeatureTracker\FeatureTracker.cs" />
@@ -172,7 +174,7 @@
     <Compile Include="MEMSForm.Designer.cs">
       <DependentUpon>MEMSForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MEMS\NewAMGFrameEventArgs.cs" />
+    <Compile Include="DataSource\MEMS\NewAMGFrameEventArgs.cs" />
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
@@ -187,29 +189,29 @@
     <Compile Include="Utils\Logger\ILogger.cs" />
     <Compile Include="Utils\Logger\RichTextBoxLogger.cs" />
     <Compile Include="Utils\Logger\StdOutLogger.cs" />
-    <Compile Include="MEMS\AccelReadingsVector.cs" />
-    <Compile Include="MEMS\DeviceRTWebMEMSProvider.cs" />
-    <Compile Include="MEMS\GyroReadingsVector.cs" />
-    <Compile Include="MEMS\MagnetReadingsVector.cs" />
-    <Compile Include="MEMS\MEMSOrientationCalculator.cs" />
-    <Compile Include="MEMS\MEMSProvider.cs" />
-    <Compile Include="MEMS\MEMSReadingsSet3f.cs" />
-    <Compile Include="MEMS\ReadingsVector.cs" />
-    <Compile Include="MEMS\ReadingsVector3f.cs" />
-    <Compile Include="MEMS\ReadingsFileMEMSProvider.cs" />
+    <Compile Include="DataSource\MEMS\AccelReadingsVector.cs" />
+    <Compile Include="DataSource\MEMS\DeviceRTWebMEMSProvider.cs" />
+    <Compile Include="DataSource\MEMS\GyroReadingsVector.cs" />
+    <Compile Include="DataSource\MEMS\MagnetReadingsVector.cs" />
+    <Compile Include="DataSource\MEMS\MEMSOrientationCalculator.cs" />
+    <Compile Include="DataSource\MEMS\MEMSProvider.cs" />
+    <Compile Include="DataSource\MEMS\MEMSReadingsSet3f.cs" />
+    <Compile Include="DataSource\MEMS\ReadingsVector.cs" />
+    <Compile Include="DataSource\MEMS\ReadingsVector3f.cs" />
+    <Compile Include="DataSource\MEMS\ReadingsFileMEMSProvider.cs" />
     <Compile Include="MonoCameraCalibrator.cs" />
     <Compile Include="Odometry\VisualOdometer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StereoCameraCalibrator.cs" />
     <Compile Include="Utils\StoppableThreadLoop.cs" />
-    <Compile Include="VideoSource\NewStereoFrameEventArgs.cs" />
-    <Compile Include="VideoSource\StereoAForgeCamVideoStreamProvider.cs" />
-    <Compile Include="VideoSource\StereoCamVideoStreamProvider.cs" />
-    <Compile Include="VideoSource\StereoFrameSequenceElement.cs" />
-    <Compile Include="VideoSource\StereoGeminateAForgeFileVideoStreamProvider.cs" />
-    <Compile Include="VideoSource\StereoGeminateCVFileVideoStreamProvider.cs" />
-    <Compile Include="VideoSource\StereoVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\NewStereoFrameEventArgs.cs" />
+    <Compile Include="DataSource\VideoSource\StereoAForgeCamVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoCamVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoFrameSequenceElement.cs" />
+    <Compile Include="DataSource\VideoSource\StereoGeminateAForgeFileVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoGeminateCVFileVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoVideoStreamProvider.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

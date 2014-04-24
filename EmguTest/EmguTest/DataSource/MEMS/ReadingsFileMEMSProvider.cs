@@ -23,7 +23,7 @@ namespace EmguTest.MEMS
 
         }
 
-        override public event NewAMGFrameEventHandler NewAMGFrameEvent;
+        override public event NewMEMSReadingsSetEventHandler NewMEMSReadingsEvent;
         public String AccReadingsPath { get; set; }
         public String MagnetReadingsPath { get; set; }
         public String GyroReadingsPath { get; set; }

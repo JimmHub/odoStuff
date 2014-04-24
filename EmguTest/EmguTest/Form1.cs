@@ -955,6 +955,8 @@ namespace EmguTest
                     {
                         Image<Gray, short> dispImg; 
                         var points = this.Get3DFeatures(this.StereoCameraParams, stereoFrame, out dispImg);
+                        var centroid = this.GetPoint3DCloudCentroid(points);
+                        Console.WriteLine("Centr: {0}, {1}, {2};", centroid.x, centroid.y, centroid.z);
                         this.calibStereoCapLeftPictureBox.Image = dispImg.ToBitmap();
                     }
 
@@ -966,6 +968,29 @@ namespace EmguTest
                 }
             }
 
+        }
+
+        private MCvPoint3D64f GetPoint3DCloudCentroid(MCvPoint3D32f[] points)
+        {
+            double resX = 0;
+            double resY = 0;
+            double resZ = 0;
+            double maxZ = 10000;
+            foreach (var p in points)
+            {
+                if (p.z != maxZ)
+                {
+                    resX += p.x;
+                    resY += p.y;
+                    resZ += p.z;
+                }
+            }
+            var count = points.Count();
+            resX /= count;
+            resY /= count;
+            resZ /= count;
+
+            return new MCvPoint3D64f(resX, resY, resZ);
         }
 
         private MCvPoint3D32f[] Get3DFeatures(StereoCameraParams stereoParams, VideoSource.StereoFrameSequenceElement stereoFrame, out Image<Gray, short> disparityImg)
