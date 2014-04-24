@@ -83,6 +83,7 @@ namespace EmguTest
         String accPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\acc1396261734695.rdn";
         String magnetPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\magnet1396261734695.rdn";
         String gyroPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\gyro1396261734695.rdn";
+        //String videoPath = @"C:\CodeStuff\cvproj\resources\str1396261734695\video1396261734695.mp4";
         //
         MEMS.MEMSOrientationCalculator OrientationCalc;
         ////
@@ -102,6 +103,7 @@ namespace EmguTest
         //private VideoSource
         //MEMS render form
         MEMSForm memsRenderForm;
+        DataSource.StereoMEMSDataProvider StereoMEMSDataProvider;
         ////
     }
 }

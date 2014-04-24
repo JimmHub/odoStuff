@@ -161,8 +161,11 @@ namespace EmguTest.DataSource
             else
             {
                 var time = this._currentStereoFrame.TimeStamp;
+                
                 while (DateTime.UtcNow.Subtract(time).TotalMilliseconds < this._framesInterval)
                 {
+                    //try to sleep
+                    Thread.Sleep((int)(this._framesInterval - DateTime.UtcNow.Subtract(time).TotalMilliseconds));
                 }
                 lock (this._videoFrameLock)
                 {
@@ -170,12 +173,14 @@ namespace EmguTest.DataSource
                     this._currentStereoFrame = stereoFrame;
                 }
             }
-            
-            this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
-            {
-                NewStereoFrame = this._currentStereoFrame
-            });
 
+            if (this.NewStereoFrameEvent != null)
+            {
+                this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+                {
+                    NewStereoFrame = this._currentStereoFrame
+                });
+            }
             //
             while (this._isPaused && this._isStarted)
             {
@@ -223,11 +228,13 @@ namespace EmguTest.DataSource
                 }
             }
 
-            this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
+            if (this.NewMEMSReadingsEvent != null)
             {
-                Readings = this.GetResultMEMSSet()
-            });
-
+                this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
+                {
+                    Readings = this.GetResultMEMSSet()
+                });
+            }
             this._newAccVal = false;
             this._newMagnetVal = false;
             this._newGyroVal = false;
@@ -342,7 +349,7 @@ namespace EmguTest.DataSource
                 {
                     byte[] buff = new byte[16];
                     stream.Read(buff, 0, 16);
-                    res.TimeStampI = Convert.ToInt64(buff.Take(4));
+                    res.TimeStampI = Convert.ToInt64(this.ReadingsBytesToUInt(buff.Take(4).ToArray()));
 
                     res.Values[0] = this.ReadingsBytesToFloat(buff.Skip(4).Take(4).ToArray());
                     res.Values[1] = this.ReadingsBytesToFloat(buff.Skip(8).Take(4).ToArray());
@@ -385,6 +392,7 @@ namespace EmguTest.DataSource
         {
             if (!this._isStarted)
             {
+                this._isStarted = true;
                 if (this._useMEMS)
                 {
                     this._nextAccValEvent(this, null);

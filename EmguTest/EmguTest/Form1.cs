@@ -126,6 +126,8 @@ namespace EmguTest
             {
                 this.FeatureTracker.Run();
             }
+
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -1145,6 +1147,33 @@ namespace EmguTest
         {
             this.OpenMEMSRenderForm();
         }
+
+        private void calibratedStereoCaptureTabPage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void testSyncDataSourceStartButton_Click(object sender, EventArgs e)
+        {
+            var path = this.syncDataSourcePathTextBox.Text;
+            if (path != null)
+            {
+                var files = Directory.GetFiles(path);
+                var videoPath = files.Where(x => x.Contains("video")).First();
+                var accPath = files.Where(x => x.Contains("acc")).First();
+                var magnetPath = files.Where(x => x.Contains("magnet")).First();
+                var gyroPath = files.Where(x => x.Contains("gyro")).First();
+                this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVCapFromFile(true, videoPath, 100000.0 / 30, false, accPath, magnetPath, gyroPath, false);
+                this.StereoMEMSDataProvider.NewStereoFrameEvent += StereoMEMSDataProvider_NewStereoFrameEvent;
+                this.StereoMEMSDataProvider.Start();
+            }
+        }
+
+        void StereoMEMSDataProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
+        {
+            this.StereoStreamFrameRender(e.NewStereoFrame);
+        }
+
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())
