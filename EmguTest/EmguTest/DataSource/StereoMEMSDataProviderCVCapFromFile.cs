@@ -144,8 +144,11 @@ namespace EmguTest.DataSource
 
         void StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent(object sender, EventArgs e)
         {
-            var rawFrame = this._videoSourceCap.RetrieveBgrFrame();
-
+            var rawFrame = this._videoSourceCap.QueryFrame();
+            if (rawFrame == null)
+            {
+                return;
+            }
             var stereoFrame = this.ElementFromRawFrame(rawFrame);
             rawFrame = null;
             if (this._isFirstVideoFrame)
@@ -164,8 +167,6 @@ namespace EmguTest.DataSource
                 
                 while (DateTime.UtcNow.Subtract(time).TotalMilliseconds < this._framesInterval)
                 {
-                    //try to sleep
-                    Thread.Sleep((int)(this._framesInterval - DateTime.UtcNow.Subtract(time).TotalMilliseconds));
                 }
                 lock (this._videoFrameLock)
                 {
@@ -176,10 +177,10 @@ namespace EmguTest.DataSource
 
             if (this.NewStereoFrameEvent != null)
             {
-                this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+                ThreadPool.QueueUserWorkItem(s => this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
                 {
                     NewStereoFrame = this._currentStereoFrame
-                });
+                }));
             }
             //
             while (this._isPaused && this._isStarted)
@@ -402,7 +403,7 @@ namespace EmguTest.DataSource
 
                 if (this._useVideo)
                 {
-                    this._nextVideoFrameEvent(this, null);
+                    ThreadPool.QueueUserWorkItem(s => this._nextVideoFrameEvent(this, null));
                 }
             }
         }

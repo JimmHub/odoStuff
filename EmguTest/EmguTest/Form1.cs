@@ -1163,7 +1163,7 @@ namespace EmguTest
                 var accPath = files.Where(x => x.Contains("acc")).First();
                 var magnetPath = files.Where(x => x.Contains("magnet")).First();
                 var gyroPath = files.Where(x => x.Contains("gyro")).First();
-                this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVCapFromFile(true, videoPath, 100000.0 / 30, false, accPath, magnetPath, gyroPath, false);
+                this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVCapFromFile(true, videoPath, 1000.0 / 30, false, accPath, magnetPath, gyroPath, false);
                 this.StereoMEMSDataProvider.NewStereoFrameEvent += StereoMEMSDataProvider_NewStereoFrameEvent;
                 this.StereoMEMSDataProvider.Start();
             }
