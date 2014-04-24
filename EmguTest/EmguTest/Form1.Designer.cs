@@ -40,6 +40,7 @@
             this.memsTestOutputTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MEMSRotationTabPage = new System.Windows.Forms.TabPage();
+            this.showMEMSFormButton = new System.Windows.Forms.Button();
             this.adoptiveFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.accMagnetFilterTrackBar = new System.Windows.Forms.TrackBar();
@@ -109,7 +110,7 @@
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.showMEMSFormButton = new System.Windows.Forms.Button();
+            this.useCalibratedStereoRenderCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -225,6 +226,16 @@
             this.MEMSRotationTabPage.TabIndex = 1;
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
+            // 
+            // showMEMSFormButton
+            // 
+            this.showMEMSFormButton.Location = new System.Drawing.Point(6, 463);
+            this.showMEMSFormButton.Name = "showMEMSFormButton";
+            this.showMEMSFormButton.Size = new System.Drawing.Size(168, 46);
+            this.showMEMSFormButton.TabIndex = 12;
+            this.showMEMSFormButton.Text = "show MEMS form";
+            this.showMEMSFormButton.UseVisualStyleBackColor = true;
+            this.showMEMSFormButton.Click += new System.EventHandler(this.showMEMSFormButton_Click);
             // 
             // adoptiveFilterCheckBox
             // 
@@ -678,6 +689,7 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.useCalibratedStereoRenderCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label12);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.prefixCalibListTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.saveGrabbedCalibrationListToButton);
@@ -921,15 +933,15 @@
             this.stereoStreamRenderTimer.Interval = 1;
             this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
             // 
-            // showMEMSFormButton
+            // useCalibratedStereoRenderCheckBox
             // 
-            this.showMEMSFormButton.Location = new System.Drawing.Point(6, 463);
-            this.showMEMSFormButton.Name = "showMEMSFormButton";
-            this.showMEMSFormButton.Size = new System.Drawing.Size(168, 46);
-            this.showMEMSFormButton.TabIndex = 12;
-            this.showMEMSFormButton.Text = "show MEMS form";
-            this.showMEMSFormButton.UseVisualStyleBackColor = true;
-            this.showMEMSFormButton.Click += new System.EventHandler(this.showMEMSFormButton_Click);
+            this.useCalibratedStereoRenderCheckBox.AutoSize = true;
+            this.useCalibratedStereoRenderCheckBox.Location = new System.Drawing.Point(331, 507);
+            this.useCalibratedStereoRenderCheckBox.Name = "useCalibratedStereoRenderCheckBox";
+            this.useCalibratedStereoRenderCheckBox.Size = new System.Drawing.Size(92, 17);
+            this.useCalibratedStereoRenderCheckBox.TabIndex = 36;
+            this.useCalibratedStereoRenderCheckBox.Text = "use calibrated";
+            this.useCalibratedStereoRenderCheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1051,6 +1063,7 @@
         private System.Windows.Forms.TextBox mapYShiftTextBox;
         private System.Windows.Forms.TextBox mapXShiftTextBox;
         private System.Windows.Forms.Button showMEMSFormButton;
+        private System.Windows.Forms.CheckBox useCalibratedStereoRenderCheckBox;
     }
 }
 

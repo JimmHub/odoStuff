@@ -630,8 +630,9 @@ namespace EmguTest
         {
             this.stereoImageNumLabel.Text = this.StereoCalibIdx.ToString();
 
-            var leftRawFrame = this.StereoCalibData.GetFrameById(StereoCalibIdx).LeftRawFrame;
-            var rightRawFrame = this.StereoCalibData.GetFrameById(StereoCalibIdx).RightRawFrame;
+            var nextStereoFrame = this.StereoCalibData.GetFrameById(StereoCalibIdx);
+            var leftRawFrame = nextStereoFrame.LeftRawFrame;
+            var rightRawFrame = nextStereoFrame.RightRawFrame;
 
             var leftOriginalImg = new Image<Bgr, byte>(leftRawFrame);
             var rightOriginalImg = new Image<Bgr, byte>(rightRawFrame);
@@ -690,6 +691,7 @@ namespace EmguTest
             rightCalibImg.Dispose();
             leftOriginalImg.Dispose();
             rightOriginalImg.Dispose();
+            nextStereoFrame = null;
             ////
 
             this.StereoDrawLines();
@@ -945,12 +947,64 @@ namespace EmguTest
         private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
         {
             var frame = stereoFrame;
-                if (!frame.IsNotFullFrame)
+            if (!frame.IsNotFullFrame)
+            {
+                if (this.useCalibratedStereoRenderCheckBox.Checked)
+                {
+                    if (this.StereoCameraParams != null)
+                    {
+                        Image<Gray, short> dispImg; 
+                        var points = this.Get3DFeatures(this.StereoCameraParams, stereoFrame, out dispImg);
+                        this.calibStereoCapLeftPictureBox.Image = dispImg.ToBitmap();
+                    }
+
+                }
+                else
                 {
                     this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
                     this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
                 }
-            
+            }
+
+        }
+
+        private MCvPoint3D32f[] Get3DFeatures(StereoCameraParams stereoParams, VideoSource.StereoFrameSequenceElement stereoFrame, out Image<Gray, short> disparityImg)
+        {
+            using (var gpuSBM = new Emgu.CV.GPU.GpuStereoBM(128, 19))
+            using (StereoSGBM stereoSolver = new StereoSGBM(
+                            minDisparity: 0,
+                            numDisparities: 32,
+                            blockSize: 0,
+                            p1: 0,
+                            p2: 0,
+                            disp12MaxDiff: 0,
+                            preFilterCap: 0,
+                            uniquenessRatio: 0,
+                            speckleRange: 0,
+                            speckleWindowSize: 0,
+                            mode: StereoSGBM.Mode.HH
+                            ))
+            using (var leftImg = new Image<Gray, byte>(stereoFrame.LeftRawFrame))
+            using (var rightImg = new Image<Gray, byte>(stereoFrame.RightRawFrame))
+            using (var dispImg = new Image<Gray, short>(leftImg.Size))
+            using (var gpuLeftImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(leftImg))
+            using (var gpuRightImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(rightImg))
+            using (var gpuDispImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(leftImg.Size))
+            {
+                var dispMap = new Image<Gray, short>(leftImg.Size);
+                //CPU
+                //stereoSolver.FindStereoCorrespondence(leftImg, rightImg, dispImg);
+                //dispMap = dispImg.Convert<Gray, short>();
+                //
+                //GPU
+                gpuSBM.FindStereoCorrespondence(gpuLeftImg, gpuRightImg, gpuDispImg, null);
+                dispMap = gpuDispImg.ToImage().Convert<Gray, short>();
+                //
+
+                var points = PointCollection.ReprojectImageTo3D(dispMap, stereoParams.Q);
+                disparityImg = dispMap;
+                return points;
+            }
         }
 
         private void TestMethod()
