@@ -1346,6 +1346,30 @@ namespace EmguTest
             }
         }
 
+        private void testSyncLiveDataButton_Click(object sender, EventArgs e)
+        {
+            int leftCapId = 0;
+            int rightCapId = 1;
+            if(!Int32.TryParse(this.leftCaptureTextBox.Text, out leftCapId))
+            {
+                leftCapId = 0;
+            }
+            if(!Int32.TryParse(this.rightCaptureTextBox.Text, out rightCapId))
+            {
+                rightCapId = 1;
+            }
+            this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVUSBCapWebMEMS(
+                useVideo: true,
+                leftCapId: leftCapId,
+                rightCapId: rightCapId,
+                useMEMS: false,
+                port: 0,
+                isMEMSEager: false
+                );
+            this.StereoMEMSDataProvider.NewStereoFrameEvent += StereoMEMSDataProvider_NewStereoFrameEvent;
+            this.StereoMEMSDataProvider.Start();
+        }
+
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())

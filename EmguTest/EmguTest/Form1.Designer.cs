@@ -133,6 +133,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.Min_Disparities = new System.Windows.Forms.TrackBar();
+            this.testSyncLiveDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -718,6 +719,7 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.testSyncLiveDataButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.panel1);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.uncalibDepthMapCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.testSyncDataSourceStartButton);
@@ -1211,6 +1213,16 @@
             this.Min_Disparities.TabIndex = 0;
             this.Min_Disparities.TickFrequency = 16;
             // 
+            // testSyncLiveDataButton
+            // 
+            this.testSyncLiveDataButton.Location = new System.Drawing.Point(908, 568);
+            this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
+            this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
+            this.testSyncLiveDataButton.TabIndex = 41;
+            this.testSyncLiveDataButton.Text = "testSyndLiveData";
+            this.testSyncLiveDataButton.UseVisualStyleBackColor = true;
+            this.testSyncLiveDataButton.Click += new System.EventHandler(this.testSyncLiveDataButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1362,6 +1374,7 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TrackBar Min_Disparities;
+        private System.Windows.Forms.Button testSyncLiveDataButton;
     }
 }
 
