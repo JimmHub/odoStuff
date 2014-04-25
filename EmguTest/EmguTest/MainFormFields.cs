@@ -104,6 +104,8 @@ namespace EmguTest
         //MEMS render form
         MEMSForm memsRenderForm;
         DataSource.StereoMEMSDataProvider StereoMEMSDataProvider;
+        MEMSReadingsSet3f stereoMEMSSet;
+        int memsTimeStampStopCount = 0;
         ////
     }
 }

@@ -294,15 +294,8 @@ namespace EmguTest
             return true;
         }
 
-        
-
-        private void memsTestOutputTimer_Tick(object sender, EventArgs e)
+        private void ProcessMEMSReadings(MEMSReadingsSet3f nextReadings)
         {
-            (this.MemsProvider as DeviceRTWebMEMSProvider).IsEagerNextReadings = false;
-            var nextReadings = this.MemsProvider.GetNextReadingsSet();
-            //
-            //
-            //this.RotateWpfContent();
             if (this.IsActualReadingsSet(nextReadings))
             {
                 double gyroCoeff = 0.5;
@@ -338,6 +331,17 @@ namespace EmguTest
 
                 this.RenderOrientationTransformation(orientMatr3f);
             }
+        }
+
+        private void memsTestOutputTimer_Tick(object sender, EventArgs e)
+        {
+            (this.MemsProvider as DeviceRTWebMEMSProvider).IsEagerNextReadings = false;
+            var nextReadings = this.MemsProvider.GetNextReadingsSet();
+            //
+            //
+            //this.RotateWpfContent();
+
+            this.ProcessMEMSReadings(nextReadings);
 
             //points test
             MCvPoint3D32f pointA = new MCvPoint3D32f(0, 1, 0);
@@ -1163,15 +1167,36 @@ namespace EmguTest
                 var accPath = files.Where(x => x.Contains("acc")).First();
                 var magnetPath = files.Where(x => x.Contains("magnet")).First();
                 var gyroPath = files.Where(x => x.Contains("gyro")).First();
-                this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVCapFromFile(true, videoPath, 1000.0 / 30, false, accPath, magnetPath, gyroPath, false);
+                this.StereoMEMSDataProvider = new DataSource.StereoMEMSDataProviderCVCapFromFile(true, videoPath, 1000.0 / 30 * 2, true, accPath, magnetPath, gyroPath, false);
                 this.StereoMEMSDataProvider.NewStereoFrameEvent += StereoMEMSDataProvider_NewStereoFrameEvent;
+                this.StereoMEMSDataProvider.NewMEMSReadingsEvent += StereoMEMSDataProvider_NewMEMSReadingsEvent;
                 this.StereoMEMSDataProvider.Start();
+                this.stereoMEMSRenderTimer.Enabled = true;
             }
+        }
+
+        void StereoMEMSDataProvider_NewMEMSReadingsEvent(object sender, NewAMGFrameEventArgs e)
+        {
+            //this.accMagnetFilterTrackBar.Invoke((MethodInvoker)delegate { this.ProcessMEMSReadings(e.Readings); }); 
+            this.stereoMEMSSet = e.Readings;
+            
         }
 
         void StereoMEMSDataProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
         {
             this.StereoStreamFrameRender(e.NewStereoFrame);
+        }
+
+        private void stereoMEMSRenderTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.stereoMEMSSet != null)
+            {
+                if (this.StereoMEMSDataProvider != null && !this.StereoMEMSDataProvider.IsStarted())
+                {
+                    this.stereoMEMSRenderTimer.Enabled = false;
+                }
+                this.ProcessMEMSReadings(this.stereoMEMSSet); 
+            }
         }
 
         //private void CPUDetect()

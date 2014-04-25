@@ -15,7 +15,6 @@ namespace EmguTest.MEMS
         }
 
         public ReadingsVector3f(ReadingsVector3f original)
-            : base()
         {
             var size  = 3;
             this.Values = new float[size];

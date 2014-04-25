@@ -85,6 +85,9 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.testSyncDataSourceStartButton = new System.Windows.Forms.Button();
+            this.syncDataSourcePathTextBox = new System.Windows.Forms.TextBox();
+            this.useCalibratedStereoRenderCheckBox = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.prefixCalibListTextBox = new System.Windows.Forms.TextBox();
             this.saveGrabbedCalibrationListToButton = new System.Windows.Forms.Button();
@@ -110,9 +113,7 @@
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.useCalibratedStereoRenderCheckBox = new System.Windows.Forms.CheckBox();
-            this.syncDataSourcePathTextBox = new System.Windows.Forms.TextBox();
-            this.testSyncDataSourceStartButton = new System.Windows.Forms.Button();
+            this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -725,6 +726,33 @@
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
             // 
+            // testSyncDataSourceStartButton
+            // 
+            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(806, 579);
+            this.testSyncDataSourceStartButton.Name = "testSyncDataSourceStartButton";
+            this.testSyncDataSourceStartButton.Size = new System.Drawing.Size(75, 23);
+            this.testSyncDataSourceStartButton.TabIndex = 38;
+            this.testSyncDataSourceStartButton.Text = "testSyncDataSource";
+            this.testSyncDataSourceStartButton.UseVisualStyleBackColor = true;
+            this.testSyncDataSourceStartButton.Click += new System.EventHandler(this.testSyncDataSourceStartButton_Click);
+            // 
+            // syncDataSourcePathTextBox
+            // 
+            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(555, 576);
+            this.syncDataSourcePathTextBox.Name = "syncDataSourcePathTextBox";
+            this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(212, 20);
+            this.syncDataSourcePathTextBox.TabIndex = 37;
+            // 
+            // useCalibratedStereoRenderCheckBox
+            // 
+            this.useCalibratedStereoRenderCheckBox.AutoSize = true;
+            this.useCalibratedStereoRenderCheckBox.Location = new System.Drawing.Point(331, 507);
+            this.useCalibratedStereoRenderCheckBox.Name = "useCalibratedStereoRenderCheckBox";
+            this.useCalibratedStereoRenderCheckBox.Size = new System.Drawing.Size(92, 17);
+            this.useCalibratedStereoRenderCheckBox.TabIndex = 36;
+            this.useCalibratedStereoRenderCheckBox.Text = "use calibrated";
+            this.useCalibratedStereoRenderCheckBox.UseVisualStyleBackColor = true;
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -938,32 +966,10 @@
             this.stereoStreamRenderTimer.Interval = 1;
             this.stereoStreamRenderTimer.Tick += new System.EventHandler(this.stereoStreamRenderTimer_Tick);
             // 
-            // useCalibratedStereoRenderCheckBox
+            // stereoMEMSRenderTimer
             // 
-            this.useCalibratedStereoRenderCheckBox.AutoSize = true;
-            this.useCalibratedStereoRenderCheckBox.Location = new System.Drawing.Point(331, 507);
-            this.useCalibratedStereoRenderCheckBox.Name = "useCalibratedStereoRenderCheckBox";
-            this.useCalibratedStereoRenderCheckBox.Size = new System.Drawing.Size(92, 17);
-            this.useCalibratedStereoRenderCheckBox.TabIndex = 36;
-            this.useCalibratedStereoRenderCheckBox.Text = "use calibrated";
-            this.useCalibratedStereoRenderCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // syncDataSourcePathTextBox
-            // 
-            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(555, 576);
-            this.syncDataSourcePathTextBox.Name = "syncDataSourcePathTextBox";
-            this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(212, 20);
-            this.syncDataSourcePathTextBox.TabIndex = 37;
-            // 
-            // testSyncDataSourceStartButton
-            // 
-            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(806, 579);
-            this.testSyncDataSourceStartButton.Name = "testSyncDataSourceStartButton";
-            this.testSyncDataSourceStartButton.Size = new System.Drawing.Size(75, 23);
-            this.testSyncDataSourceStartButton.TabIndex = 38;
-            this.testSyncDataSourceStartButton.Text = "testSyncDataSource";
-            this.testSyncDataSourceStartButton.UseVisualStyleBackColor = true;
-            this.testSyncDataSourceStartButton.Click += new System.EventHandler(this.testSyncDataSourceStartButton_Click);
+            this.stereoMEMSRenderTimer.Interval = 1;
+            this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
             // 
             // Form1
             // 
@@ -1088,6 +1094,7 @@
         private System.Windows.Forms.CheckBox useCalibratedStereoRenderCheckBox;
         private System.Windows.Forms.Button testSyncDataSourceStartButton;
         private System.Windows.Forms.TextBox syncDataSourcePathTextBox;
+        private System.Windows.Forms.Timer stereoMEMSRenderTimer;
     }
 }
 

@@ -69,10 +69,13 @@ namespace EmguTest.DataSource
         protected bool _isFirstMEMSSet;
         protected object _videoFrameLock = new object();
         protected object _MEMSSetLock = new object();
-        protected bool _newAccVal;
-        protected bool _newMagnetVal;
-        protected bool _newGyroVal;
-
+        protected bool _isNewAccVal;
+        protected bool _isNewMagnetVal;
+        protected bool _isNewGyroVal;
+        protected bool _isVideoStreamExpired;
+        protected bool _isAccStreamExpired;
+        protected bool _isMagnetStreamExpired;
+        protected bool _isGyroStreamExpired;
         //
         protected delegate void NextVideoFrame(object sender, EventArgs e);
         protected delegate void NextAccVal(object sender, EventArgs e);
@@ -93,9 +96,13 @@ namespace EmguTest.DataSource
             //this._is_StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent_inUse = false;
             //this._is_StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent_inUse = false;
             //this._is_StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent_inUse = false;
-            this._newAccVal = false;
-            this._newMagnetVal = false;
-            this._newGyroVal = false;
+            this._isNewAccVal = false;
+            this._isNewMagnetVal = false;
+            this._isNewGyroVal = false;
+            _isVideoStreamExpired = false;
+            _isAccStreamExpired = false;
+            _isMagnetStreamExpired = false;
+            _isGyroStreamExpired = false;
 
             this._currentMEMSSet = new MEMSReadingsSet3f();
 
@@ -139,7 +146,16 @@ namespace EmguTest.DataSource
 
         protected long RecalcMEMSTimeStamp(long timeStampI)
         {
+            //return Utils.DateTimeHelper.DateTimeToLongMS(DateTime.UtcNow);
             return Utils.DateTimeHelper.DateTimeToLongMS(this._startMEMSTimeStamp.AddMilliseconds(timeStampI - this._startMEMSTimeStampIOrig));
+        }
+
+        protected void CheckIfAllStreamsStopped()
+        {
+            if (this._isVideoStreamExpired && this._isAccStreamExpired && this._isMagnetStreamExpired && this._isGyroStreamExpired)
+            {
+                this.Stop();
+            }
         }
 
         void StereoMEMSDataProviderCVCapFromFile__nextVideoFrameEvent(object sender, EventArgs e)
@@ -147,6 +163,8 @@ namespace EmguTest.DataSource
             var rawFrame = this._videoSourceCap.QueryFrame();
             if (rawFrame == null)
             {
+                this._isVideoStreamExpired = true;
+                this.CheckIfAllStreamsStopped();
                 return;
             }
             var stereoFrame = this.ElementFromRawFrame(rawFrame);
@@ -164,9 +182,10 @@ namespace EmguTest.DataSource
             else
             {
                 var time = this._currentStereoFrame.TimeStamp;
-                
-                while (DateTime.UtcNow.Subtract(time).TotalMilliseconds < this._framesInterval)
+                double diffDT;
+                while ((diffDT = (DateTime.UtcNow.Subtract(time).TotalMilliseconds)) < this._framesInterval)
                 {
+                    Thread.Sleep((int)(this._framesInterval - diffDT));
                 }
                 lock (this._videoFrameLock)
                 {
@@ -188,12 +207,18 @@ namespace EmguTest.DataSource
             }
             if (this._isStarted)
             {
-                this._nextVideoFrameEvent(this, null);
+                ThreadPool.QueueUserWorkItem(s => this._nextVideoFrameEvent(this, null));
             }
         }
         void StereoMEMSDataProviderCVCapFromFile__nextAccValEvent(object sender, EventArgs e)
         {
             var rawVal = this.GetNextAccVector3f();
+            if (rawVal.IsEmpty)
+            {
+                this._isAccStreamExpired = true;
+                this.CheckIfAllStreamsStopped();
+                return;
+            }
             if (this._isFirstMEMSSet)
             {
                 this._isFirstMEMSSet = false;
@@ -201,12 +226,21 @@ namespace EmguTest.DataSource
             }
             else
             {
-                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.AccVector3f.TimeStampI))
+                //while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._startMEMSTimeStampIOrig))
+                //{
+                //}
+                double diffDT;
+                long diffDI;
+                while ((diffDT = (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds)) < (diffDI = (rawVal.TimeStampI - this._startMEMSTimeStampIOrig)))
                 {
+                    Thread.Sleep((int)(diffDI - diffDT));
                 }
             }
-            this._currentMEMSSet.AccVector3f = rawVal;
-            this._newAccVal = true;
+            lock (this._MEMSSetLock)
+            {
+                this._currentMEMSSet.AccVector3f = rawVal;
+                this._isNewAccVal = true;
+            }
             this.InvokeNewMEMSSetEvent();
 
             //
@@ -215,7 +249,7 @@ namespace EmguTest.DataSource
             }
             if (this._isStarted)
             {
-                this._nextAccValEvent(this, null);
+                ThreadPool.QueueUserWorkItem(s => this._nextAccValEvent(this, null));
             }
         }
 
@@ -223,7 +257,7 @@ namespace EmguTest.DataSource
         {
             if (!this._isEagerMEMS)
             {
-                if (!(this._newAccVal && this._newMagnetVal && this._newGyroVal))
+                if (!(this._isNewAccVal && this._isNewMagnetVal && this._isNewGyroVal))
                 {
                     return;
                 }
@@ -231,19 +265,25 @@ namespace EmguTest.DataSource
 
             if (this.NewMEMSReadingsEvent != null)
             {
-                this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
+                ThreadPool.QueueUserWorkItem(s => this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
                 {
                     Readings = this.GetResultMEMSSet()
-                });
+                }));
             }
-            this._newAccVal = false;
-            this._newMagnetVal = false;
-            this._newGyroVal = false;
+            this._isNewAccVal = false;
+            this._isNewMagnetVal = false;
+            this._isNewGyroVal = false;
         }
 
         void StereoMEMSDataProviderCVCapFromFile__nextMagnetValEvent(object sender, EventArgs e)
         {
             var rawVal = this.GetNextMagnetVector3f();
+            if (rawVal.IsEmpty)
+            {
+                this._isMagnetStreamExpired = true;
+                this.CheckIfAllStreamsStopped();
+                return;
+            }
             if (this._isFirstMEMSSet)
             {
                 this._isFirstMEMSSet = false;
@@ -251,12 +291,21 @@ namespace EmguTest.DataSource
             }
             else
             {
-                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.MagnetVector3f.TimeStampI))
+                //while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._startMEMSTimeStampIOrig))
+                //{
+                //}
+                double diffDT;
+                long diffDI;
+                while ((diffDT = (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds)) < (diffDI = (rawVal.TimeStampI - this._startMEMSTimeStampIOrig)))
                 {
+                    Thread.Sleep((int)(diffDI - diffDT));
                 }
             }
-            this._currentMEMSSet.MagnetVector3f = rawVal;
-            this._newMagnetVal = true;
+            lock (this._MEMSSetLock)
+            {
+                this._currentMEMSSet.MagnetVector3f = rawVal;
+                this._isNewMagnetVal = true;
+            }
             this.InvokeNewMEMSSetEvent();
 
             //
@@ -265,13 +314,19 @@ namespace EmguTest.DataSource
             }
             if (this._isStarted)
             {
-                this._nextMagnetValEvent(this, null);
+                ThreadPool.QueueUserWorkItem(s => this._nextMagnetValEvent(this, null));
             }
         }
 
         void StereoMEMSDataProviderCVCapFromFile__nextGyroValEvent(object sender, EventArgs e)
         {
             var rawVal = this.GetNextGyroVector3f();
+            if (rawVal.IsEmpty)
+            {
+                this._isGyroStreamExpired = true;
+                this.CheckIfAllStreamsStopped();
+                return;
+            }
             if (this._isFirstMEMSSet)
             {
                 this._isFirstMEMSSet = false;
@@ -279,12 +334,18 @@ namespace EmguTest.DataSource
             }
             else
             {
-                while (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds < (rawVal.TimeStampI - this._currentMEMSSet.GyroVector3f.TimeStampI))
+                double diffDT;
+                long diffDI;
+                while ((diffDT = (DateTime.UtcNow.Subtract(this._startMEMSTimeStamp).TotalMilliseconds)) < (diffDI = (rawVal.TimeStampI - this._startMEMSTimeStampIOrig)))
                 {
+                    Thread.Sleep((int)(diffDI - diffDT));
                 }
             }
-            this._currentMEMSSet.GyroVector3f = rawVal;
-            this._newGyroVal = true;
+            lock (this._MEMSSetLock)
+            {
+                this._currentMEMSSet.GyroVector3f = rawVal;
+                this._isNewGyroVal = true;
+            }
             this.InvokeNewMEMSSetEvent();
 
             //
@@ -293,7 +354,7 @@ namespace EmguTest.DataSource
             }
             if (this._isStarted)
             {
-                this._nextGyroValEvent(this, null);
+                ThreadPool.QueueUserWorkItem(s => this._nextGyroValEvent(this, null));
             }
         }
 
@@ -391,14 +452,20 @@ namespace EmguTest.DataSource
 
         public override void Start()
         {
+            _isVideoStreamExpired = false;
+            _isAccStreamExpired = false;
+            _isMagnetStreamExpired = false;
+            _isGyroStreamExpired = false;
+
             if (!this._isStarted)
             {
                 this._isStarted = true;
                 if (this._useMEMS)
                 {
-                    this._nextAccValEvent(this, null);
-                    this._nextMagnetValEvent(this, null);
-                    this._nextGyroValEvent(this, null);
+                    this._isFirstMEMSSet = true;
+                    ThreadPool.QueueUserWorkItem(s => this._nextAccValEvent(this, null));
+                    ThreadPool.QueueUserWorkItem(s => this._nextMagnetValEvent(this, null));
+                    ThreadPool.QueueUserWorkItem(s => this._nextGyroValEvent(this, null));
                 }
 
                 if (this._useVideo)
