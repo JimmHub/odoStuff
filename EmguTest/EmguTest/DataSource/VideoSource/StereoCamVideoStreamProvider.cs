@@ -34,6 +34,8 @@ namespace EmguTest.VideoSource
         public Capture LeftCapture { get; set; }
         public Capture RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;
+        protected Thread _mainThread;
+        protected bool _isStarted;
         //interface
         override public StereoFrameSequenceElement GetCurrentFrame()
         {
@@ -46,16 +48,36 @@ namespace EmguTest.VideoSource
             var right = this.RightCapture.QueryFrame();
             this.CurrentFrame = new StereoFrameSequenceElement()
             {
-                LeftRawFrame = left.ToBitmap(),
-                RightRawFrame = right.ToBitmap(),
+                LeftRawFrame = new Bitmap(left.ToBitmap()),
+                RightRawFrame = new Bitmap(right.ToBitmap()),
                 TimeStamp = DateTime.UtcNow
             };
+            left.Dispose();
+            right.Dispose();
             return this.CurrentFrame;
         }
 
         override public bool StartStream()
         {
-            throw new NotImplementedException();
+            this._mainThread = new Thread(this.MainThreadRoutine);
+            this._mainThread.Start();
+            this._isStarted = true;
+            return true;
+        }
+
+        protected void MainThreadRoutine()
+        {
+            while (this._isStarted)
+            {
+                var nextFrame = this.GetNextFrame();
+                if (this.NewStereoFrameEvent != null)
+                {
+                    this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+                        {
+                            NewStereoFrame = nextFrame
+                        });
+                }
+            }
         }
 
         override public bool PauseStream()

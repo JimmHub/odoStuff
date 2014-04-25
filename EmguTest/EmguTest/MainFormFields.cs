@@ -106,6 +106,8 @@ namespace EmguTest
         DataSource.StereoMEMSDataProvider StereoMEMSDataProvider;
         MEMSReadingsSet3f stereoMEMSSet;
         int memsTimeStampStopCount = 0;
+        VideoForm videoForm;
+        bool fullDP = false;
         ////
     }
 }

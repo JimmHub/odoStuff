@@ -74,9 +74,19 @@ namespace EmguTest
             }
         }
 
+        private void OpenVideoForm()
+        {
+            if (this.videoForm == null || this.videoForm.IsDisposed)
+            {
+                this.videoForm = new VideoForm();
+                this.videoForm.Show();
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             this.OpenMEMSRenderForm();
+            this.OpenVideoForm();
             StereoCameraCalibrator calib = new StereoCameraCalibrator();
             //uncomment for calibration
             calib.Calibrate(@"C:\CodeStuff\cvproj\resources\calibImages", new Size(9, 6));
@@ -867,7 +877,7 @@ namespace EmguTest
             {
                 MessageBox.Show("Error while creating rightCap from cap number:\n" + ex.Message);
             }
-            this.StereoVideoStreamProvider = new VideoSource.StereoAForgeCamVideoStreamProvider(
+            this.StereoVideoStreamProvider = new VideoSource.StereoCamVideoStreamProvider(
                 leftCapId: leftCapId,
                 rightCapId: rightCapId);
 
@@ -963,17 +973,42 @@ namespace EmguTest
                         var points = this.Get3DFeatures(this.StereoCameraParams, stereoFrame, out dispImg);
                         var centroid = this.GetPoint3DCloudCentroid(points);
                         Console.WriteLine("Centr: {0}, {1}, {2};", centroid.x, centroid.y, centroid.z);
-                        this.calibStereoCapLeftPictureBox.Image = dispImg.ToBitmap();
+                        this.videoForm.RenderStereoFrame(dispImg.ToBitmap(), null);
                     }
 
                 }
                 else
                 {
-                    this.calibStereoCapLeftPictureBox.Image = frame.LeftRawFrame;
-                    this.calibStereoCapRightPictureBox.Image = frame.RightRawFrame;
+                    if (this.uncalibDepthMapCheckBox.Checked)
+                    {
+                        var dispMap = this.GetDispMap(stereoFrame);
+                        this.videoForm.RenderDisparityMap(dispMap);
+                        dispMap.Dispose();
+                    }
+                    this.videoForm.RenderStereoFrame(frame.LeftRawFrame, frame.RightRawFrame);
+                    frame.Dispose();
                 }
             }
 
+        }
+
+        private int GetSliderValue(TrackBar Control)
+        {
+            if (Control.InvokeRequired)
+            {
+                try
+                {
+                    return (int)Control.Invoke(new Func<int>(() => GetSliderValue(Control)));
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return Control.Value;
+            }
         }
 
         private MCvPoint3D64f GetPoint3DCloudCentroid(MCvPoint3D32f[] points)
@@ -997,6 +1032,54 @@ namespace EmguTest
             resZ /= count;
 
             return new MCvPoint3D64f(resX, resY, resZ);
+        }
+
+        private Image<Gray, short> GetDispMap(VideoSource.StereoFrameSequenceElement stereoFrame)
+        {
+            int numDisparities = GetSliderValue(Num_Disparities);
+            int minDispatities = GetSliderValue(Min_Disparities);
+            int SAD = GetSliderValue(SAD_Window);
+            int P1 = 8 * 1 * SAD * SAD;//GetSliderValue(P1_Slider);
+            int P2 = 32 * 1 * SAD * SAD;//GetSliderValue(P2_Slider);
+            int disp12MaxDiff = GetSliderValue(Disp12MaxDiff);
+            int PreFilterCap = GetSliderValue(pre_filter_cap);
+            int UniquenessRatio = GetSliderValue(uniquenessRatio);
+            int SpeckleWindow = GetSliderValue(Speckle_Window);
+            int SpeckleRange = GetSliderValue(specklerange);
+
+            using (var gpuSBM = new Emgu.CV.GPU.GpuStereoBM(numDisparities, SAD))
+            using (StereoSGBM stereoSolver = new StereoSGBM(
+                            minDisparity: minDispatities,
+                            numDisparities: numDisparities,
+                            blockSize: SAD,
+                            p1: P1,
+                            p2: P2,
+                            disp12MaxDiff: disp12MaxDiff,
+                            preFilterCap: PreFilterCap,
+                            uniquenessRatio: UniquenessRatio,
+                            speckleRange: SpeckleRange,
+                            speckleWindowSize: SpeckleWindow,
+                            mode: StereoSGBM.Mode.SGBM
+                            ))
+            using (var leftImg = new Image<Gray, byte>(stereoFrame.LeftRawFrame))
+            using (var rightImg = new Image<Gray, byte>(stereoFrame.RightRawFrame))
+            using (var dispImg = new Image<Gray, short>(leftImg.Size))
+            using (var gpuLeftImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(leftImg))
+            using (var gpuRightImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(rightImg))
+            using (var gpuDispImg = new Emgu.CV.GPU.GpuImage<Gray, byte>(leftImg.Size))
+            {
+                var dispMap = new Image<Gray, short>(leftImg.Size);
+                //CPU
+                //stereoSolver.FindStereoCorrespondence(leftImg, rightImg, dispImg);
+                //dispMap = dispImg.Convert<Gray, short>();
+                //
+                //GPU
+                gpuSBM.FindStereoCorrespondence(gpuLeftImg, gpuRightImg, gpuDispImg, null);
+                dispMap = gpuDispImg.ToImage().Convert<Gray, short>();
+                //
+
+                return dispMap;
+            }
         }
 
         private MCvPoint3D32f[] Get3DFeatures(StereoCameraParams stereoParams, VideoSource.StereoFrameSequenceElement stereoFrame, out Image<Gray, short> disparityImg)
@@ -1196,6 +1279,70 @@ namespace EmguTest
                     this.stereoMEMSRenderTimer.Enabled = false;
                 }
                 this.ProcessMEMSReadings(this.stereoMEMSSet); 
+            }
+        }
+
+        private void Num_Disparities_Scroll(object sender, EventArgs e)
+        {
+
+            if (Num_Disparities.Value % 16 != 0)
+            {
+                //value must be divisable by 16
+                if (Num_Disparities.Value >= 152) Num_Disparities.Value = 160;
+                else if (Num_Disparities.Value >= 136) Num_Disparities.Value = 144;
+                else if (Num_Disparities.Value >= 120) Num_Disparities.Value = 128;
+                else if (Num_Disparities.Value >= 104) Num_Disparities.Value = 112;
+                else if (Num_Disparities.Value >= 88) Num_Disparities.Value = 96;
+                else if (Num_Disparities.Value >= 72) Num_Disparities.Value = 80;
+                else if (Num_Disparities.Value >= 56) Num_Disparities.Value = 64;
+                else if (Num_Disparities.Value >= 40) Num_Disparities.Value = 48;
+                else if (Num_Disparities.Value >= 24) Num_Disparities.Value = 32;
+                else Num_Disparities.Value = 16;
+            }
+        }
+
+        private void SAD_Window_Scroll(object sender, EventArgs e)
+        {
+            /*The matched block size. Must be an odd number >=1 . Normally, it should be somewhere in 3..11 range*/
+            //This ensures only odd numbers are allowed from slider value
+            if (SAD_Window.Value % 2 == 0)
+            {
+                if (SAD_Window.Value == SAD_Window.Maximum) SAD_Window.Value = SAD_Window.Maximum - 2;
+                else SAD_Window.Value++;
+            }
+        }
+
+        private void specklerange_Scroll(object sender, EventArgs e)
+        {
+            if (specklerange.Value % 16 != 0)
+            {
+                //value must be divisable by 16
+                //TODO: we can do this in a loop
+                if (specklerange.Value >= 152) specklerange.Value = 160;
+                else if (specklerange.Value >= 136) specklerange.Value = 144;
+                else if (specklerange.Value >= 120) specklerange.Value = 128;
+                else if (specklerange.Value >= 104) specklerange.Value = 112;
+                else if (specklerange.Value >= 88) specklerange.Value = 96;
+                else if (specklerange.Value >= 72) specklerange.Value = 80;
+                else if (specklerange.Value >= 56) specklerange.Value = 64;
+                else if (specklerange.Value >= 40) specklerange.Value = 48;
+                else if (specklerange.Value >= 24) specklerange.Value = 32;
+                else if (specklerange.Value >= 8) specklerange.Value = 16;
+                else specklerange.Value = 0;
+            }
+        }
+
+        private void fullDP_State_Click(object sender, EventArgs e)
+        {
+            if (fullDP_State.Text == "True")
+            {
+                fullDP = false;
+                fullDP_State.Text = "False";
+            }
+            else
+            {
+                fullDP = true;
+                fullDP_State.Text = "True";
             }
         }
 

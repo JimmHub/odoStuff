@@ -108,12 +108,31 @@
             this.startStereoCapButton = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.calibStereoCapRightPictureBox = new System.Windows.Forms.PictureBox();
-            this.calibStereoCapLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stereoCapTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
+            this.uncalibDepthMapCheckBox = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.fullDP_State = new System.Windows.Forms.Button();
+            this.specklerange = new System.Windows.Forms.TrackBar();
+            this.label17 = new System.Windows.Forms.Label();
+            this.uniquenessRatio = new System.Windows.Forms.TrackBar();
+            this.label18 = new System.Windows.Forms.Label();
+            this.pre_filter_cap = new System.Windows.Forms.TrackBar();
+            this.label19 = new System.Windows.Forms.Label();
+            this.Speckle_Window = new System.Windows.Forms.TrackBar();
+            this.label20 = new System.Windows.Forms.Label();
+            this.SAD_Window = new System.Windows.Forms.TrackBar();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.Disp12MaxDiff = new System.Windows.Forms.TrackBar();
+            this.Num_Disparities = new System.Windows.Forms.TrackBar();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.Min_Disparities = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -130,8 +149,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).BeginInit();
             this.calibratedStereoCaptureTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapRightPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapLeftPictureBox)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.specklerange)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uniquenessRatio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pre_filter_cap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Speckle_Window)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAD_Window)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Disp12MaxDiff)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Disparities)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Min_Disparities)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -692,6 +718,8 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.panel1);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.uncalibDepthMapCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.testSyncDataSourceStartButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.syncDataSourcePathTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.useCalibratedStereoRenderCheckBox);
@@ -715,8 +743,6 @@
             this.calibratedStereoCaptureTabPage.Controls.Add(this.startStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label9);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label10);
-            this.calibratedStereoCaptureTabPage.Controls.Add(this.calibStereoCapRightPictureBox);
-            this.calibratedStereoCaptureTabPage.Controls.Add(this.calibStereoCapLeftPictureBox);
             this.calibratedStereoCaptureTabPage.Location = new System.Drawing.Point(4, 22);
             this.calibratedStereoCaptureTabPage.Name = "calibratedStereoCaptureTabPage";
             this.calibratedStereoCaptureTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -938,24 +964,6 @@
             this.label10.TabIndex = 15;
             this.label10.Text = "left";
             // 
-            // calibStereoCapRightPictureBox
-            // 
-            this.calibStereoCapRightPictureBox.Location = new System.Drawing.Point(525, 201);
-            this.calibStereoCapRightPictureBox.Name = "calibStereoCapRightPictureBox";
-            this.calibStereoCapRightPictureBox.Size = new System.Drawing.Size(400, 300);
-            this.calibStereoCapRightPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.calibStereoCapRightPictureBox.TabIndex = 14;
-            this.calibStereoCapRightPictureBox.TabStop = false;
-            // 
-            // calibStereoCapLeftPictureBox
-            // 
-            this.calibStereoCapLeftPictureBox.Location = new System.Drawing.Point(98, 201);
-            this.calibStereoCapLeftPictureBox.Name = "calibStereoCapLeftPictureBox";
-            this.calibStereoCapLeftPictureBox.Size = new System.Drawing.Size(400, 300);
-            this.calibStereoCapLeftPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.calibStereoCapLeftPictureBox.TabIndex = 13;
-            this.calibStereoCapLeftPictureBox.TabStop = false;
-            // 
             // stereoCapTimer
             // 
             this.stereoCapTimer.Interval = 1;
@@ -970,6 +978,238 @@
             // 
             this.stereoMEMSRenderTimer.Interval = 1;
             this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
+            // 
+            // uncalibDepthMapCheckBox
+            // 
+            this.uncalibDepthMapCheckBox.AutoSize = true;
+            this.uncalibDepthMapCheckBox.Location = new System.Drawing.Point(488, 507);
+            this.uncalibDepthMapCheckBox.Name = "uncalibDepthMapCheckBox";
+            this.uncalibDepthMapCheckBox.Size = new System.Drawing.Size(141, 17);
+            this.uncalibDepthMapCheckBox.TabIndex = 39;
+            this.uncalibDepthMapCheckBox.Text = "show uncalib depth map";
+            this.uncalibDepthMapCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.fullDP_State);
+            this.panel1.Controls.Add(this.specklerange);
+            this.panel1.Controls.Add(this.label17);
+            this.panel1.Controls.Add(this.uniquenessRatio);
+            this.panel1.Controls.Add(this.label18);
+            this.panel1.Controls.Add(this.pre_filter_cap);
+            this.panel1.Controls.Add(this.label19);
+            this.panel1.Controls.Add(this.Speckle_Window);
+            this.panel1.Controls.Add(this.label20);
+            this.panel1.Controls.Add(this.SAD_Window);
+            this.panel1.Controls.Add(this.label21);
+            this.panel1.Controls.Add(this.label22);
+            this.panel1.Controls.Add(this.Disp12MaxDiff);
+            this.panel1.Controls.Add(this.Num_Disparities);
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Controls.Add(this.label24);
+            this.panel1.Controls.Add(this.label25);
+            this.panel1.Controls.Add(this.Min_Disparities);
+            this.panel1.Location = new System.Drawing.Point(98, 197);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(885, 304);
+            this.panel1.TabIndex = 40;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(499, 259);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(58, 16);
+            this.label13.TabIndex = 21;
+            this.label13.Text = "FullDP:";
+            // 
+            // fullDP_State
+            // 
+            this.fullDP_State.Location = new System.Drawing.Point(563, 252);
+            this.fullDP_State.Name = "fullDP_State";
+            this.fullDP_State.Size = new System.Drawing.Size(313, 30);
+            this.fullDP_State.TabIndex = 20;
+            this.fullDP_State.Text = "False";
+            this.fullDP_State.UseVisualStyleBackColor = true;
+            this.fullDP_State.Click += new System.EventHandler(this.fullDP_State_Click);
+            // 
+            // specklerange
+            // 
+            this.specklerange.Location = new System.Drawing.Point(563, 208);
+            this.specklerange.Maximum = 160;
+            this.specklerange.Name = "specklerange";
+            this.specklerange.Size = new System.Drawing.Size(313, 45);
+            this.specklerange.TabIndex = 19;
+            this.specklerange.TickFrequency = 16;
+            this.specklerange.Scroll += new System.EventHandler(this.specklerange_Scroll);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(438, 208);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(119, 16);
+            this.label17.TabIndex = 18;
+            this.label17.Text = "Speckle Range:";
+            // 
+            // uniquenessRatio
+            // 
+            this.uniquenessRatio.Location = new System.Drawing.Point(563, 109);
+            this.uniquenessRatio.Maximum = 30;
+            this.uniquenessRatio.Name = "uniquenessRatio";
+            this.uniquenessRatio.Size = new System.Drawing.Size(313, 45);
+            this.uniquenessRatio.TabIndex = 17;
+            this.uniquenessRatio.TickFrequency = 2;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(470, 109);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(94, 16);
+            this.label18.TabIndex = 16;
+            this.label18.Text = "Uniqueness:";
+            // 
+            // pre_filter_cap
+            // 
+            this.pre_filter_cap.Location = new System.Drawing.Point(563, 58);
+            this.pre_filter_cap.Maximum = 1000;
+            this.pre_filter_cap.Name = "pre_filter_cap";
+            this.pre_filter_cap.Size = new System.Drawing.Size(313, 45);
+            this.pre_filter_cap.TabIndex = 15;
+            this.pre_filter_cap.TickFrequency = 100;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(482, 58);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(75, 16);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "Pre Filter:";
+            // 
+            // Speckle_Window
+            // 
+            this.Speckle_Window.Location = new System.Drawing.Point(563, 157);
+            this.Speckle_Window.Maximum = 64;
+            this.Speckle_Window.Name = "Speckle_Window";
+            this.Speckle_Window.Size = new System.Drawing.Size(313, 45);
+            this.Speckle_Window.TabIndex = 13;
+            this.Speckle_Window.TickFrequency = 8;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(437, 157);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(127, 16);
+            this.label20.TabIndex = 12;
+            this.label20.Text = "Speckle Window:";
+            // 
+            // SAD_Window
+            // 
+            this.SAD_Window.Location = new System.Drawing.Point(120, 163);
+            this.SAD_Window.Maximum = 19;
+            this.SAD_Window.Minimum = 1;
+            this.SAD_Window.Name = "SAD_Window";
+            this.SAD_Window.Size = new System.Drawing.Size(313, 45);
+            this.SAD_Window.SmallChange = 2;
+            this.SAD_Window.TabIndex = 11;
+            this.SAD_Window.TickFrequency = 2;
+            this.SAD_Window.Value = 1;
+            this.SAD_Window.Scroll += new System.EventHandler(this.SAD_Window_Scroll);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(13, 163);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(101, 16);
+            this.label21.TabIndex = 10;
+            this.label21.Text = "SAD Window:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(43, 214);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(71, 16);
+            this.label22.TabIndex = 9;
+            this.label22.Text = "Max Diff :";
+            // 
+            // Disp12MaxDiff
+            // 
+            this.Disp12MaxDiff.Location = new System.Drawing.Point(120, 214);
+            this.Disp12MaxDiff.Maximum = 100;
+            this.Disp12MaxDiff.Minimum = -1;
+            this.Disp12MaxDiff.Name = "Disp12MaxDiff";
+            this.Disp12MaxDiff.Size = new System.Drawing.Size(313, 45);
+            this.Disp12MaxDiff.TabIndex = 8;
+            this.Disp12MaxDiff.TickFrequency = 10;
+            this.Disp12MaxDiff.Value = -1;
+            // 
+            // Num_Disparities
+            // 
+            this.Num_Disparities.Location = new System.Drawing.Point(120, 61);
+            this.Num_Disparities.Maximum = 160;
+            this.Num_Disparities.Minimum = 16;
+            this.Num_Disparities.Name = "Num_Disparities";
+            this.Num_Disparities.Size = new System.Drawing.Size(313, 45);
+            this.Num_Disparities.TabIndex = 7;
+            this.Num_Disparities.TickFrequency = 16;
+            this.Num_Disparities.Value = 64;
+            this.Num_Disparities.Scroll += new System.EventHandler(this.Num_Disparities_Scroll);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(27, 61);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(87, 16);
+            this.label23.TabIndex = 4;
+            this.label23.Text = "Disparities:";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(3, 112);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(115, 16);
+            this.label24.TabIndex = 2;
+            this.label24.Text = "Min Disparities:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(180, 15);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(109, 24);
+            this.label25.TabIndex = 1;
+            this.label25.Text = "Calibration";
+            // 
+            // Min_Disparities
+            // 
+            this.Min_Disparities.Location = new System.Drawing.Point(120, 112);
+            this.Min_Disparities.Maximum = 159;
+            this.Min_Disparities.Name = "Min_Disparities";
+            this.Min_Disparities.Size = new System.Drawing.Size(313, 45);
+            this.Min_Disparities.TabIndex = 0;
+            this.Min_Disparities.TickFrequency = 16;
             // 
             // Form1
             // 
@@ -1002,8 +1242,16 @@
             this.calibratedStereoCaptureTabPage.ResumeLayout(false);
             this.calibratedStereoCaptureTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapRightPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.calibStereoCapLeftPictureBox)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.specklerange)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.uniquenessRatio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pre_filter_cap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Speckle_Window)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SAD_Window)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Disp12MaxDiff)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Disparities)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Min_Disparities)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1061,8 +1309,6 @@
         private System.Windows.Forms.Button startStereoCapButton;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.PictureBox calibStereoCapRightPictureBox;
-        private System.Windows.Forms.PictureBox calibStereoCapLeftPictureBox;
         private System.Windows.Forms.TextBox rightCaptureTextBox;
         private System.Windows.Forms.TextBox leftCaptureTextBox;
         private System.Windows.Forms.RadioButton fileCapRadioButton;
@@ -1095,6 +1341,27 @@
         private System.Windows.Forms.Button testSyncDataSourceStartButton;
         private System.Windows.Forms.TextBox syncDataSourcePathTextBox;
         private System.Windows.Forms.Timer stereoMEMSRenderTimer;
+        private System.Windows.Forms.CheckBox uncalibDepthMapCheckBox;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button fullDP_State;
+        private System.Windows.Forms.TrackBar specklerange;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TrackBar uniquenessRatio;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TrackBar pre_filter_cap;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TrackBar Speckle_Window;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TrackBar SAD_Window;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TrackBar Disp12MaxDiff;
+        private System.Windows.Forms.TrackBar Num_Disparities;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TrackBar Min_Disparities;
     }
 }
 

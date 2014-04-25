@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace EmguTest.VideoSource
 {
-    public class StereoFrameSequenceElement
+    public class StereoFrameSequenceElement : IDisposable
     {
         public StereoFrameSequenceElement()
         {
@@ -36,6 +36,36 @@ namespace EmguTest.VideoSource
             get
             {
                 return this.IsLeftFrameEmpty || this.IsRightFrameEmpty;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (this.RawFrame != null)
+            {
+                try
+                {
+                    this.RawFrame.Dispose();
+                }
+                catch { }
+            }
+
+            if (this.LeftRawFrame != null)
+            {
+                try
+                {
+                    this.LeftRawFrame.Dispose();
+                }
+                catch { }
+            }
+
+            if (this.RightRawFrame != null)
+            {
+                try
+                {
+                    this.RightRawFrame.Dispose();
+                }
+                catch { }
             }
         }
     }
