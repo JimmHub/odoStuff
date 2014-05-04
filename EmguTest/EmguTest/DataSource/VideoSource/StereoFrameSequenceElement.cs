@@ -13,6 +13,16 @@ namespace EmguTest.VideoSource
         {
         }
 
+
+        public StereoFrameSequenceElement(StereoFrameSequenceElement original)
+        {
+            this.RawFrame = original.RawFrame == null ? null : new Bitmap(original.RawFrame);
+            this.LeftRawFrame = original.LeftRawFrame == null ? null : new Bitmap(original.LeftRawFrame) ;
+            this.RightRawFrame = original.RightRawFrame == null ? null : new Bitmap(original.RightRawFrame);
+            this.TimeStamp = original.TimeStamp;
+            this.IsLeftFrameEmpty = original.IsLeftFrameEmpty;
+            this.IsRightFrameEmpty = original.IsRightFrameEmpty;
+        }
         //TODO: implement this constructor
         //public StereoFrameSequenceElement(StereoFrameSequenceElement elm)
         //{

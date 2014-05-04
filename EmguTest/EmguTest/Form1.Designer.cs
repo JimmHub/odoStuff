@@ -85,6 +85,28 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.testSyncLiveDataButton = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.fullDP_State = new System.Windows.Forms.Button();
+            this.specklerange = new System.Windows.Forms.TrackBar();
+            this.label17 = new System.Windows.Forms.Label();
+            this.uniquenessRatio = new System.Windows.Forms.TrackBar();
+            this.label18 = new System.Windows.Forms.Label();
+            this.pre_filter_cap = new System.Windows.Forms.TrackBar();
+            this.label19 = new System.Windows.Forms.Label();
+            this.Speckle_Window = new System.Windows.Forms.TrackBar();
+            this.label20 = new System.Windows.Forms.Label();
+            this.SAD_Window = new System.Windows.Forms.TrackBar();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.Disp12MaxDiff = new System.Windows.Forms.TrackBar();
+            this.Num_Disparities = new System.Windows.Forms.TrackBar();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.Min_Disparities = new System.Windows.Forms.TrackBar();
+            this.showDepthMapCheckBox = new System.Windows.Forms.CheckBox();
             this.testSyncDataSourceStartButton = new System.Windows.Forms.Button();
             this.syncDataSourcePathTextBox = new System.Windows.Forms.TextBox();
             this.useCalibratedStereoRenderCheckBox = new System.Windows.Forms.CheckBox();
@@ -112,28 +134,10 @@
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
-            this.uncalibDepthMapCheckBox = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label13 = new System.Windows.Forms.Label();
-            this.fullDP_State = new System.Windows.Forms.Button();
-            this.specklerange = new System.Windows.Forms.TrackBar();
-            this.label17 = new System.Windows.Forms.Label();
-            this.uniquenessRatio = new System.Windows.Forms.TrackBar();
-            this.label18 = new System.Windows.Forms.Label();
-            this.pre_filter_cap = new System.Windows.Forms.TrackBar();
-            this.label19 = new System.Windows.Forms.Label();
-            this.Speckle_Window = new System.Windows.Forms.TrackBar();
-            this.label20 = new System.Windows.Forms.Label();
-            this.SAD_Window = new System.Windows.Forms.TrackBar();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.Disp12MaxDiff = new System.Windows.Forms.TrackBar();
-            this.Num_Disparities = new System.Windows.Forms.TrackBar();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.Min_Disparities = new System.Windows.Forms.TrackBar();
-            this.testSyncLiveDataButton = new System.Windows.Forms.Button();
+            this.renderGrayCheckBox = new System.Windows.Forms.CheckBox();
+            this.renderFraturesCheckBox = new System.Windows.Forms.CheckBox();
+            this.useGPUCheckBox = new System.Windows.Forms.CheckBox();
+            this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -149,7 +153,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.rightStereoOriginalPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).BeginInit();
             this.calibratedStereoCaptureTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specklerange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.uniquenessRatio)).BeginInit();
@@ -159,6 +162,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Disp12MaxDiff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Num_Disparities)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Min_Disparities)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -719,9 +723,12 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.useGPUCheckBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.renderFraturesCheckBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.renderGrayCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.testSyncLiveDataButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.panel1);
-            this.calibratedStereoCaptureTabPage.Controls.Add(this.uncalibDepthMapCheckBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.showDepthMapCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.testSyncDataSourceStartButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.syncDataSourcePathTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.useCalibratedStereoRenderCheckBox);
@@ -753,6 +760,249 @@
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
+            // 
+            // testSyncLiveDataButton
+            // 
+            this.testSyncLiveDataButton.Location = new System.Drawing.Point(908, 568);
+            this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
+            this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
+            this.testSyncLiveDataButton.TabIndex = 41;
+            this.testSyncLiveDataButton.Text = "testSyndLiveData";
+            this.testSyncLiveDataButton.UseVisualStyleBackColor = true;
+            this.testSyncLiveDataButton.Click += new System.EventHandler(this.testSyncLiveDataButton_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.fullDP_State);
+            this.panel1.Controls.Add(this.specklerange);
+            this.panel1.Controls.Add(this.label17);
+            this.panel1.Controls.Add(this.uniquenessRatio);
+            this.panel1.Controls.Add(this.label18);
+            this.panel1.Controls.Add(this.pre_filter_cap);
+            this.panel1.Controls.Add(this.label19);
+            this.panel1.Controls.Add(this.Speckle_Window);
+            this.panel1.Controls.Add(this.label20);
+            this.panel1.Controls.Add(this.SAD_Window);
+            this.panel1.Controls.Add(this.label21);
+            this.panel1.Controls.Add(this.label22);
+            this.panel1.Controls.Add(this.Disp12MaxDiff);
+            this.panel1.Controls.Add(this.Num_Disparities);
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Controls.Add(this.label24);
+            this.panel1.Controls.Add(this.label25);
+            this.panel1.Controls.Add(this.Min_Disparities);
+            this.panel1.Location = new System.Drawing.Point(98, 197);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(885, 304);
+            this.panel1.TabIndex = 40;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(499, 259);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(58, 16);
+            this.label13.TabIndex = 21;
+            this.label13.Text = "FullDP:";
+            // 
+            // fullDP_State
+            // 
+            this.fullDP_State.Location = new System.Drawing.Point(563, 252);
+            this.fullDP_State.Name = "fullDP_State";
+            this.fullDP_State.Size = new System.Drawing.Size(313, 30);
+            this.fullDP_State.TabIndex = 20;
+            this.fullDP_State.Text = "False";
+            this.fullDP_State.UseVisualStyleBackColor = true;
+            this.fullDP_State.Click += new System.EventHandler(this.fullDP_State_Click);
+            // 
+            // specklerange
+            // 
+            this.specklerange.Location = new System.Drawing.Point(563, 208);
+            this.specklerange.Maximum = 160;
+            this.specklerange.Name = "specklerange";
+            this.specklerange.Size = new System.Drawing.Size(313, 45);
+            this.specklerange.TabIndex = 19;
+            this.specklerange.TickFrequency = 16;
+            this.specklerange.Scroll += new System.EventHandler(this.specklerange_Scroll);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(438, 208);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(119, 16);
+            this.label17.TabIndex = 18;
+            this.label17.Text = "Speckle Range:";
+            // 
+            // uniquenessRatio
+            // 
+            this.uniquenessRatio.Location = new System.Drawing.Point(563, 109);
+            this.uniquenessRatio.Maximum = 30;
+            this.uniquenessRatio.Name = "uniquenessRatio";
+            this.uniquenessRatio.Size = new System.Drawing.Size(313, 45);
+            this.uniquenessRatio.TabIndex = 17;
+            this.uniquenessRatio.TickFrequency = 2;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(470, 109);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(94, 16);
+            this.label18.TabIndex = 16;
+            this.label18.Text = "Uniqueness:";
+            // 
+            // pre_filter_cap
+            // 
+            this.pre_filter_cap.Location = new System.Drawing.Point(563, 58);
+            this.pre_filter_cap.Maximum = 1000;
+            this.pre_filter_cap.Name = "pre_filter_cap";
+            this.pre_filter_cap.Size = new System.Drawing.Size(313, 45);
+            this.pre_filter_cap.TabIndex = 15;
+            this.pre_filter_cap.TickFrequency = 100;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(482, 58);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(75, 16);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "Pre Filter:";
+            // 
+            // Speckle_Window
+            // 
+            this.Speckle_Window.Location = new System.Drawing.Point(563, 157);
+            this.Speckle_Window.Maximum = 64;
+            this.Speckle_Window.Name = "Speckle_Window";
+            this.Speckle_Window.Size = new System.Drawing.Size(313, 45);
+            this.Speckle_Window.TabIndex = 13;
+            this.Speckle_Window.TickFrequency = 8;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(437, 157);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(127, 16);
+            this.label20.TabIndex = 12;
+            this.label20.Text = "Speckle Window:";
+            // 
+            // SAD_Window
+            // 
+            this.SAD_Window.Location = new System.Drawing.Point(120, 163);
+            this.SAD_Window.Maximum = 19;
+            this.SAD_Window.Minimum = 1;
+            this.SAD_Window.Name = "SAD_Window";
+            this.SAD_Window.Size = new System.Drawing.Size(313, 45);
+            this.SAD_Window.SmallChange = 2;
+            this.SAD_Window.TabIndex = 11;
+            this.SAD_Window.TickFrequency = 2;
+            this.SAD_Window.Value = 3;
+            this.SAD_Window.Scroll += new System.EventHandler(this.SAD_Window_Scroll);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(13, 163);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(101, 16);
+            this.label21.TabIndex = 10;
+            this.label21.Text = "SAD Window:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(43, 214);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(71, 16);
+            this.label22.TabIndex = 9;
+            this.label22.Text = "Max Diff :";
+            // 
+            // Disp12MaxDiff
+            // 
+            this.Disp12MaxDiff.Location = new System.Drawing.Point(120, 214);
+            this.Disp12MaxDiff.Maximum = 100;
+            this.Disp12MaxDiff.Minimum = -1;
+            this.Disp12MaxDiff.Name = "Disp12MaxDiff";
+            this.Disp12MaxDiff.Size = new System.Drawing.Size(313, 45);
+            this.Disp12MaxDiff.TabIndex = 8;
+            this.Disp12MaxDiff.TickFrequency = 10;
+            this.Disp12MaxDiff.Value = -1;
+            // 
+            // Num_Disparities
+            // 
+            this.Num_Disparities.Location = new System.Drawing.Point(120, 61);
+            this.Num_Disparities.Maximum = 160;
+            this.Num_Disparities.Minimum = 16;
+            this.Num_Disparities.Name = "Num_Disparities";
+            this.Num_Disparities.Size = new System.Drawing.Size(313, 45);
+            this.Num_Disparities.TabIndex = 7;
+            this.Num_Disparities.TickFrequency = 16;
+            this.Num_Disparities.Value = 64;
+            this.Num_Disparities.Scroll += new System.EventHandler(this.Num_Disparities_Scroll);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(27, 61);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(87, 16);
+            this.label23.TabIndex = 4;
+            this.label23.Text = "Disparities:";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(3, 112);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(115, 16);
+            this.label24.TabIndex = 2;
+            this.label24.Text = "Min Disparities:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(180, 15);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(109, 24);
+            this.label25.TabIndex = 1;
+            this.label25.Text = "Calibration";
+            // 
+            // Min_Disparities
+            // 
+            this.Min_Disparities.Location = new System.Drawing.Point(120, 112);
+            this.Min_Disparities.Maximum = 159;
+            this.Min_Disparities.Name = "Min_Disparities";
+            this.Min_Disparities.Size = new System.Drawing.Size(313, 45);
+            this.Min_Disparities.TabIndex = 0;
+            this.Min_Disparities.TickFrequency = 16;
+            // 
+            // showDepthMapCheckBox
+            // 
+            this.showDepthMapCheckBox.AutoSize = true;
+            this.showDepthMapCheckBox.Location = new System.Drawing.Point(488, 507);
+            this.showDepthMapCheckBox.Name = "showDepthMapCheckBox";
+            this.showDepthMapCheckBox.Size = new System.Drawing.Size(104, 17);
+            this.showDepthMapCheckBox.TabIndex = 39;
+            this.showDepthMapCheckBox.Text = "show depth map";
+            this.showDepthMapCheckBox.UseVisualStyleBackColor = true;
+            this.showDepthMapCheckBox.CheckedChanged += new System.EventHandler(this.uncalibDepthMapCheckBox_CheckedChanged);
             // 
             // testSyncDataSourceStartButton
             // 
@@ -981,247 +1231,41 @@
             this.stereoMEMSRenderTimer.Interval = 1;
             this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
             // 
-            // uncalibDepthMapCheckBox
+            // renderGrayCheckBox
             // 
-            this.uncalibDepthMapCheckBox.AutoSize = true;
-            this.uncalibDepthMapCheckBox.Location = new System.Drawing.Point(488, 507);
-            this.uncalibDepthMapCheckBox.Name = "uncalibDepthMapCheckBox";
-            this.uncalibDepthMapCheckBox.Size = new System.Drawing.Size(141, 17);
-            this.uncalibDepthMapCheckBox.TabIndex = 39;
-            this.uncalibDepthMapCheckBox.Text = "show uncalib depth map";
-            this.uncalibDepthMapCheckBox.UseVisualStyleBackColor = true;
+            this.renderGrayCheckBox.AutoSize = true;
+            this.renderGrayCheckBox.Location = new System.Drawing.Point(331, 530);
+            this.renderGrayCheckBox.Name = "renderGrayCheckBox";
+            this.renderGrayCheckBox.Size = new System.Drawing.Size(87, 17);
+            this.renderGrayCheckBox.TabIndex = 42;
+            this.renderGrayCheckBox.Text = "renderInGray";
+            this.renderGrayCheckBox.UseVisualStyleBackColor = true;
+            this.renderGrayCheckBox.CheckedChanged += new System.EventHandler(this.renderGrayCheckBox_CheckedChanged);
             // 
-            // panel1
+            // renderFraturesCheckBox
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.label13);
-            this.panel1.Controls.Add(this.fullDP_State);
-            this.panel1.Controls.Add(this.specklerange);
-            this.panel1.Controls.Add(this.label17);
-            this.panel1.Controls.Add(this.uniquenessRatio);
-            this.panel1.Controls.Add(this.label18);
-            this.panel1.Controls.Add(this.pre_filter_cap);
-            this.panel1.Controls.Add(this.label19);
-            this.panel1.Controls.Add(this.Speckle_Window);
-            this.panel1.Controls.Add(this.label20);
-            this.panel1.Controls.Add(this.SAD_Window);
-            this.panel1.Controls.Add(this.label21);
-            this.panel1.Controls.Add(this.label22);
-            this.panel1.Controls.Add(this.Disp12MaxDiff);
-            this.panel1.Controls.Add(this.Num_Disparities);
-            this.panel1.Controls.Add(this.label23);
-            this.panel1.Controls.Add(this.label24);
-            this.panel1.Controls.Add(this.label25);
-            this.panel1.Controls.Add(this.Min_Disparities);
-            this.panel1.Location = new System.Drawing.Point(98, 197);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(885, 304);
-            this.panel1.TabIndex = 40;
+            this.renderFraturesCheckBox.AutoSize = true;
+            this.renderFraturesCheckBox.Location = new System.Drawing.Point(331, 553);
+            this.renderFraturesCheckBox.Name = "renderFraturesCheckBox";
+            this.renderFraturesCheckBox.Size = new System.Drawing.Size(97, 17);
+            this.renderFraturesCheckBox.TabIndex = 43;
+            this.renderFraturesCheckBox.Text = "render features";
+            this.renderFraturesCheckBox.UseVisualStyleBackColor = true;
             // 
-            // label13
+            // useGPUCheckBox
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(499, 259);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(58, 16);
-            this.label13.TabIndex = 21;
-            this.label13.Text = "FullDP:";
+            this.useGPUCheckBox.AutoSize = true;
+            this.useGPUCheckBox.Location = new System.Drawing.Point(600, 507);
+            this.useGPUCheckBox.Name = "useGPUCheckBox";
+            this.useGPUCheckBox.Size = new System.Drawing.Size(69, 17);
+            this.useGPUCheckBox.TabIndex = 44;
+            this.useGPUCheckBox.Text = "use GPU";
+            this.useGPUCheckBox.UseVisualStyleBackColor = true;
             // 
-            // fullDP_State
+            // testDifRotationTimer
             // 
-            this.fullDP_State.Location = new System.Drawing.Point(563, 252);
-            this.fullDP_State.Name = "fullDP_State";
-            this.fullDP_State.Size = new System.Drawing.Size(313, 30);
-            this.fullDP_State.TabIndex = 20;
-            this.fullDP_State.Text = "False";
-            this.fullDP_State.UseVisualStyleBackColor = true;
-            this.fullDP_State.Click += new System.EventHandler(this.fullDP_State_Click);
-            // 
-            // specklerange
-            // 
-            this.specklerange.Location = new System.Drawing.Point(563, 208);
-            this.specklerange.Maximum = 160;
-            this.specklerange.Name = "specklerange";
-            this.specklerange.Size = new System.Drawing.Size(313, 45);
-            this.specklerange.TabIndex = 19;
-            this.specklerange.TickFrequency = 16;
-            this.specklerange.Scroll += new System.EventHandler(this.specklerange_Scroll);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(438, 208);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(119, 16);
-            this.label17.TabIndex = 18;
-            this.label17.Text = "Speckle Range:";
-            // 
-            // uniquenessRatio
-            // 
-            this.uniquenessRatio.Location = new System.Drawing.Point(563, 109);
-            this.uniquenessRatio.Maximum = 30;
-            this.uniquenessRatio.Name = "uniquenessRatio";
-            this.uniquenessRatio.Size = new System.Drawing.Size(313, 45);
-            this.uniquenessRatio.TabIndex = 17;
-            this.uniquenessRatio.TickFrequency = 2;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(470, 109);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(94, 16);
-            this.label18.TabIndex = 16;
-            this.label18.Text = "Uniqueness:";
-            // 
-            // pre_filter_cap
-            // 
-            this.pre_filter_cap.Location = new System.Drawing.Point(563, 58);
-            this.pre_filter_cap.Maximum = 1000;
-            this.pre_filter_cap.Name = "pre_filter_cap";
-            this.pre_filter_cap.Size = new System.Drawing.Size(313, 45);
-            this.pre_filter_cap.TabIndex = 15;
-            this.pre_filter_cap.TickFrequency = 100;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(482, 58);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(75, 16);
-            this.label19.TabIndex = 14;
-            this.label19.Text = "Pre Filter:";
-            // 
-            // Speckle_Window
-            // 
-            this.Speckle_Window.Location = new System.Drawing.Point(563, 157);
-            this.Speckle_Window.Maximum = 64;
-            this.Speckle_Window.Name = "Speckle_Window";
-            this.Speckle_Window.Size = new System.Drawing.Size(313, 45);
-            this.Speckle_Window.TabIndex = 13;
-            this.Speckle_Window.TickFrequency = 8;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(437, 157);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(127, 16);
-            this.label20.TabIndex = 12;
-            this.label20.Text = "Speckle Window:";
-            // 
-            // SAD_Window
-            // 
-            this.SAD_Window.Location = new System.Drawing.Point(120, 163);
-            this.SAD_Window.Maximum = 19;
-            this.SAD_Window.Minimum = 1;
-            this.SAD_Window.Name = "SAD_Window";
-            this.SAD_Window.Size = new System.Drawing.Size(313, 45);
-            this.SAD_Window.SmallChange = 2;
-            this.SAD_Window.TabIndex = 11;
-            this.SAD_Window.TickFrequency = 2;
-            this.SAD_Window.Value = 1;
-            this.SAD_Window.Scroll += new System.EventHandler(this.SAD_Window_Scroll);
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(13, 163);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(101, 16);
-            this.label21.TabIndex = 10;
-            this.label21.Text = "SAD Window:";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(43, 214);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(71, 16);
-            this.label22.TabIndex = 9;
-            this.label22.Text = "Max Diff :";
-            // 
-            // Disp12MaxDiff
-            // 
-            this.Disp12MaxDiff.Location = new System.Drawing.Point(120, 214);
-            this.Disp12MaxDiff.Maximum = 100;
-            this.Disp12MaxDiff.Minimum = -1;
-            this.Disp12MaxDiff.Name = "Disp12MaxDiff";
-            this.Disp12MaxDiff.Size = new System.Drawing.Size(313, 45);
-            this.Disp12MaxDiff.TabIndex = 8;
-            this.Disp12MaxDiff.TickFrequency = 10;
-            this.Disp12MaxDiff.Value = -1;
-            // 
-            // Num_Disparities
-            // 
-            this.Num_Disparities.Location = new System.Drawing.Point(120, 61);
-            this.Num_Disparities.Maximum = 160;
-            this.Num_Disparities.Minimum = 16;
-            this.Num_Disparities.Name = "Num_Disparities";
-            this.Num_Disparities.Size = new System.Drawing.Size(313, 45);
-            this.Num_Disparities.TabIndex = 7;
-            this.Num_Disparities.TickFrequency = 16;
-            this.Num_Disparities.Value = 64;
-            this.Num_Disparities.Scroll += new System.EventHandler(this.Num_Disparities_Scroll);
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(27, 61);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(87, 16);
-            this.label23.TabIndex = 4;
-            this.label23.Text = "Disparities:";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(3, 112);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(115, 16);
-            this.label24.TabIndex = 2;
-            this.label24.Text = "Min Disparities:";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(180, 15);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(109, 24);
-            this.label25.TabIndex = 1;
-            this.label25.Text = "Calibration";
-            // 
-            // Min_Disparities
-            // 
-            this.Min_Disparities.Location = new System.Drawing.Point(120, 112);
-            this.Min_Disparities.Maximum = 159;
-            this.Min_Disparities.Name = "Min_Disparities";
-            this.Min_Disparities.Size = new System.Drawing.Size(313, 45);
-            this.Min_Disparities.TabIndex = 0;
-            this.Min_Disparities.TickFrequency = 16;
-            // 
-            // testSyncLiveDataButton
-            // 
-            this.testSyncLiveDataButton.Location = new System.Drawing.Point(908, 568);
-            this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
-            this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
-            this.testSyncLiveDataButton.TabIndex = 41;
-            this.testSyncLiveDataButton.Text = "testSyndLiveData";
-            this.testSyncLiveDataButton.UseVisualStyleBackColor = true;
-            this.testSyncLiveDataButton.Click += new System.EventHandler(this.testSyncLiveDataButton_Click);
+            this.testDifRotationTimer.Enabled = true;
+            this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
             // Form1
             // 
@@ -1253,7 +1297,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.leftStereoOriginalPictureBox)).EndInit();
             this.calibratedStereoCaptureTabPage.ResumeLayout(false);
             this.calibratedStereoCaptureTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specklerange)).EndInit();
@@ -1264,6 +1307,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Disp12MaxDiff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Num_Disparities)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Min_Disparities)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stereoCapProgressTrackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1353,7 +1397,7 @@
         private System.Windows.Forms.Button testSyncDataSourceStartButton;
         private System.Windows.Forms.TextBox syncDataSourcePathTextBox;
         private System.Windows.Forms.Timer stereoMEMSRenderTimer;
-        private System.Windows.Forms.CheckBox uncalibDepthMapCheckBox;
+        private System.Windows.Forms.CheckBox showDepthMapCheckBox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button fullDP_State;
@@ -1375,6 +1419,10 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TrackBar Min_Disparities;
         private System.Windows.Forms.Button testSyncLiveDataButton;
+        private System.Windows.Forms.CheckBox renderGrayCheckBox;
+        private System.Windows.Forms.CheckBox renderFraturesCheckBox;
+        private System.Windows.Forms.CheckBox useGPUCheckBox;
+        private System.Windows.Forms.Timer testDifRotationTimer;
     }
 }
 

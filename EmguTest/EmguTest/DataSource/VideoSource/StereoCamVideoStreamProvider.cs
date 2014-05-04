@@ -36,25 +36,37 @@ namespace EmguTest.VideoSource
         protected StereoFrameSequenceElement CurrentFrame;
         protected Thread _mainThread;
         protected bool _isStarted;
+        protected object _currentFrameLock = new object();
         //interface
         override public StereoFrameSequenceElement GetCurrentFrame()
         {
-            return this.CurrentFrame;
+            lock (_currentFrameLock)
+            {
+                return new StereoFrameSequenceElement()
+                {
+                    LeftRawFrame = Image.FromHbitmap(this.CurrentFrame.LeftRawFrame.GetHbitmap()),
+                    RightRawFrame = Image.FromHbitmap(this.CurrentFrame.RightRawFrame.GetHbitmap()),
+                    TimeStamp = this.CurrentFrame.TimeStamp
+                };
+            }
         }
 
         override public StereoFrameSequenceElement GetNextFrame()
         {
-            var left = this.LeftCapture.QueryFrame();
-            var right = this.RightCapture.QueryFrame();
-            this.CurrentFrame = new StereoFrameSequenceElement()
+            lock (_currentFrameLock)
             {
-                LeftRawFrame = new Bitmap(left.ToBitmap()),
-                RightRawFrame = new Bitmap(right.ToBitmap()),
-                TimeStamp = DateTime.UtcNow
-            };
-            left.Dispose();
-            right.Dispose();
-            return this.CurrentFrame;
+                var left = this.LeftCapture.QueryFrame();
+                var right = this.RightCapture.QueryFrame();
+                this.CurrentFrame = new StereoFrameSequenceElement()
+                {
+                    LeftRawFrame = new Bitmap(left.ToBitmap()),//.Clone(),
+                    RightRawFrame = new Bitmap(right.ToBitmap()),
+                    TimeStamp = DateTime.UtcNow
+                };
+                //left.Dispose();
+                //right.Dispose();
+                return this.CurrentFrame;
+            }
         }
 
         override public bool StartStream()

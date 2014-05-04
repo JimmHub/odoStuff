@@ -57,6 +57,7 @@ namespace EmguTest
                 this.CamRight = null;
             }
             ////
+            this.opticFlowProcessor = new OpticFlowProcessor();
         }
 
         private void RunEmgu()
@@ -306,6 +307,12 @@ namespace EmguTest
 
         private void ProcessMEMSReadings(MEMSReadingsSet3f nextReadings)
         {
+            if (this.isOrientCalcInUse)
+            {
+                return;
+            }
+            this.isOrientCalcInUse = true;
+
             if (this.IsActualReadingsSet(nextReadings))
             {
                 double gyroCoeff = 0.5;
@@ -325,7 +332,11 @@ namespace EmguTest
                     accMagnetFilterCoeff: accMagnetCoeff,
                     gyroFilterCoeff: gyroCoeff);
 
-                var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
+                lock (this.memsOrientationMatrLock)
+                {
+                    this.memsRotMatr = orientMatr3f;
+                }
+                //var res = this.MulReadingsVect(orientMatr3f, nextReadings.AccVector3f, true);
 
                 //log readings check
                 //this.MEMSRTBLogger.WriteLn("readings check");
@@ -339,8 +350,9 @@ namespace EmguTest
                 //this.MEMSRTBLogger.WriteLn("");
                 ////
 
-                this.RenderOrientationTransformation(orientMatr3f);
             }
+
+            this.isOrientCalcInUse = false;
         }
 
         private void memsTestOutputTimer_Tick(object sender, EventArgs e)
@@ -803,6 +815,7 @@ namespace EmguTest
             }
         }
 
+        //video provider init
         private void startStereoCapButton_Click(object sender, EventArgs e)
         {
             if (this.camCapRadioButton.Checked)
@@ -960,36 +973,67 @@ namespace EmguTest
             
         }
 
+        //RENDER STEREO FRAME TO VIDEO FORM
         private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
         {
-            var frame = stereoFrame;
-            if (!frame.IsNotFullFrame)
+            if (!stereoFrame.IsNotFullFrame)
             {
+                var leftImg = new Image<Bgr, byte>(stereoFrame.LeftRawFrame);
+                var rightImg = new Image<Bgr, byte>(stereoFrame.RightRawFrame);
+                Bitmap stuff1Bmp = null;
+
                 if (this.useCalibratedStereoRenderCheckBox.Checked)
                 {
                     if (this.StereoCameraParams != null)
                     {
-                        Image<Gray, short> dispImg; 
-                        var points = this.Get3DFeatures(this.StereoCameraParams, stereoFrame, out dispImg);
-                        var centroid = this.GetPoint3DCloudCentroid(points);
-                        Console.WriteLine("Centr: {0}, {1}, {2};", centroid.x, centroid.y, centroid.z);
-                        this.videoForm.RenderStereoFrame(dispImg.ToBitmap(), null);
+                        var tmpLeft = this.StereoCameraParams.LeftIntrinsicCameraParameters.Undistort(leftImg);
+                        var tmpRight = this.StereoCameraParams.RightIntrinsicCameraParameters.Undistort(rightImg);
+
+                        CvInvoke.cvRemap(tmpLeft, leftImg, this.StereoCameraParams.LeftMapX, this.StereoCameraParams.LeftMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+                        CvInvoke.cvRemap(tmpRight, rightImg, this.StereoCameraParams.RightMapX, this.StereoCameraParams.RightMapY, (int)INTER.CV_INTER_LINEAR | (int)WARP.CV_WARP_FILL_OUTLIERS, new MCvScalar(0));
+
+                        //Image<Gray, short> dispImg; 
+                        //var points = this.Get3DFeatures(this.StereoCameraParams, stereoFrame, out dispImg);
+                        //var centroid = this.GetPoint3DCloudCentroid(points);
+                        //Console.WriteLine("Centr: {0}, {1}, {2};", centroid.x, centroid.y, centroid.z);
+                        //this.videoForm.RenderStereoFrame(dispImg.ToBitmap(), null);
                     }
 
+                }
+
+                var leftGrayImg = leftImg.Convert<Gray, byte>();
+                var rightGrayImg = rightImg.Convert<Gray, byte>();
+
+                Bitmap leftFrameRender;
+                Bitmap rightFrameRender;
+
+                if (this.renderGrayCheckBox.Checked)
+                {
+                    leftFrameRender = leftGrayImg.ToBitmap();
+                    rightFrameRender = rightGrayImg.ToBitmap();
                 }
                 else
                 {
-                    if (this.uncalibDepthMapCheckBox.Checked)
-                    {
-                        var dispMap = this.GetDispMap(stereoFrame);
-                        this.videoForm.RenderDisparityMap(dispMap);
-                        dispMap.Dispose();
-                    }
-                    this.videoForm.RenderStereoFrame(frame.LeftRawFrame, frame.RightRawFrame);
-                    frame.Dispose();
+                    leftFrameRender = leftImg.ToBitmap();
+                    rightFrameRender = rightImg.ToBitmap();
                 }
-            }
 
+                if (this.showDepthMapCheckBox.Checked)
+                {
+                    //var features = this.opticFlowProcessor.GetFeaturesToTrack(
+                    //    stereoFrame: frame,
+                    //    useGpu: true);
+                    stuff1Bmp = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked).ToBitmap();
+                    
+                }
+                //general lr render
+                this.videoForm.RenderStereoFrame(leftFrameRender, rightFrameRender);
+                if (stuff1Bmp != null)
+                {
+                    this.videoForm.RenderToStuffPictureBox1(stuff1Bmp);
+                }
+                stereoFrame.Dispose();
+            }
         }
 
         private int GetSliderValue(TrackBar Control)
@@ -1148,7 +1192,13 @@ namespace EmguTest
 
         private void grabFrameForCalibrationButton_Click(object sender, EventArgs e)
         {
-            this.StereoCalibrationGrabbedList.Add(this.StereoVideoStreamProvider.GetCurrentFrame());
+            var frame = this.StereoVideoStreamProvider.GetCurrentFrame();
+            this.StereoCalibrationGrabbedList.Add(new VideoSource.StereoFrameSequenceElement()
+            {
+                LeftRawFrame = (Bitmap)frame.LeftRawFrame.Clone(),
+                RightRawFrame = (Bitmap)frame.RightRawFrame.Clone(),
+                TimeStamp = frame.TimeStamp
+            });
             this.RenderStereoCalibGrabbedListCount();
         }
 
@@ -1261,8 +1311,9 @@ namespace EmguTest
         void StereoMEMSDataProvider_NewMEMSReadingsEvent(object sender, NewAMGFrameEventArgs e)
         {
             //this.accMagnetFilterTrackBar.Invoke((MethodInvoker)delegate { this.ProcessMEMSReadings(e.Readings); }); 
-            this.stereoMEMSSet = e.Readings;
             
+            this.stereoMEMSSet = e.Readings;
+            this.ProcessMEMSReadings(this.stereoMEMSSet);  
         }
 
         void StereoMEMSDataProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
@@ -1272,13 +1323,26 @@ namespace EmguTest
 
         private void stereoMEMSRenderTimer_Tick(object sender, EventArgs e)
         {
-            if (this.stereoMEMSSet != null)
+            //if (this.stereoMEMSSet != null)
+            //{
+                //if (this.StereoMEMSDataProvider != null && !this.StereoMEMSDataProvider.IsStarted())
+                //{
+                //    this.stereoMEMSRenderTimer.Enabled = false;
+                //}
+                this.RenderMEMSOrientation(); 
+            //}
+        }
+
+        private void RenderMEMSOrientation()
+        {
+            double[][] orient = null;
+            lock (memsOrientationMatrLock)
             {
-                if (this.StereoMEMSDataProvider != null && !this.StereoMEMSDataProvider.IsStarted())
-                {
-                    this.stereoMEMSRenderTimer.Enabled = false;
-                }
-                this.ProcessMEMSReadings(this.stereoMEMSSet); 
+                orient = Utils.CvHelper.CopyMatrix(memsRotMatr);
+            }
+            if (orient != null)
+            {
+                this.RenderOrientationTransformation(orient);
             }
         }
 
@@ -1370,6 +1434,41 @@ namespace EmguTest
             this.StereoMEMSDataProvider.Start();
         }
 
+        private void renderGrayCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void uncalibDepthMapCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UpdateCurPrevMEMSOrient()
+        {
+            lock (this.memsOrientationMatrLock)
+            {
+                if (this.currentMEMSRotMatr == null)
+                {
+                    this.currentMEMSRotMatr = Utils.CvHelper.CopyMatrix(this.memsRotMatr);
+                    return;
+                }
+                this.prevMEMSRotMatr = currentMEMSRotMatr;
+                this.currentMEMSRotMatr = Utils.CvHelper.CopyMatrix(this.memsRotMatr);
+            }
+        }
+
+        private void testDifRotationTimer_Tick(object sender, EventArgs e)
+        {
+            this.UpdateCurPrevMEMSOrient();
+            if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null)
+            {
+                var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
+                this.RenderOrientationTransformation(rotMatr);
+            }
+        }
+
+        
         //private void CPUDetect()
         //{
         //    using (Image<Bgr, byte> nextFrame = cap.QueryFrame())

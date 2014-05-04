@@ -59,9 +59,9 @@ namespace EmguTest.MEMS
 
         public MEMSReadingsSet3f(MEMSReadingsSet3f original)
         {
-            this.AccVector3f = original.AccVector3f;
-            this.MagnetVector3f = original.MagnetVector3f;
-            this.GyroVector3f = original.GyroVector3f;
+            this.AccVector3f = new ReadingsVector3f(original.AccVector3f);
+            this.MagnetVector3f = new ReadingsVector3f(original.MagnetVector3f);
+            this.GyroVector3f = new ReadingsVector3f(original.GyroVector3f);
         }
     }
 }

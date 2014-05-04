@@ -38,11 +38,16 @@ namespace EmguTest.VideoSource
         public AsyncVideoSource RightCapture { get; set; }
         protected StereoFrameSequenceElement CurrentFrame;
         protected bool IsStarted = false;
-       
+        protected object _currentFrameLock = new object();
+        protected bool _isLeftNew;
+        protected bool _isRightNew;
         //interface
 
         protected void Init()
         {
+            this._isLeftNew = false;
+            this._isRightNew = false;
+
             this.CurrentFrame = new StereoFrameSequenceElement()
             {
                 IsLeftFrameEmpty = true,
@@ -56,24 +61,54 @@ namespace EmguTest.VideoSource
             return this.CurrentFrame;
         }
 
+        protected void TryFireNewStereoFrameEvent()
+        {
+            if (this._isRightNew && this._isLeftNew)
+            {
+                if (!this.CurrentFrame.IsNotFullFrame)
+                {
+                    if (this.NewStereoFrameEvent != null)
+                    {
+                        lock (this._currentFrameLock)
+                        {
+                            this.NewStereoFrameEvent(this, new NewStereoFrameEventArgs()
+                            {
+                                NewStereoFrame = new StereoFrameSequenceElement(this.CurrentFrame)
+                            });
+                            this._isLeftNew = false;
+                            this._isRightNew = false;
+                        }
+                    }
+                }
+            }
+        }
+
         private void NewLeftFrame(object obj, NewFrameEventArgs e)
         {
             Image temp = this.CurrentFrame.LeftRawFrame;
             Bitmap bitmap = e.Frame;
-            this.CurrentFrame.LeftRawFrame = new Bitmap(bitmap);
-            
-            this.CurrentFrame.TimeStamp = DateTime.UtcNow;
-            this.CurrentFrame.IsLeftFrameEmpty = false;
+            lock (this._currentFrameLock)
+            {
+                this.CurrentFrame.LeftRawFrame = new Bitmap(bitmap);
+                this.CurrentFrame.TimeStamp = DateTime.UtcNow;
+                this.CurrentFrame.IsLeftFrameEmpty = false;
+                this._isLeftNew = true;
+            }
+            this.TryFireNewStereoFrameEvent();
         }
 
         private void NewRightFrame(object obj, NewFrameEventArgs e)
         {
             Image temp = this.CurrentFrame.RightRawFrame;
             Bitmap bitmap = e.Frame;
-            this.CurrentFrame.RightRawFrame = new Bitmap(bitmap);
-            
-            this.CurrentFrame.TimeStamp = DateTime.UtcNow;
-            this.CurrentFrame.IsRightFrameEmpty = false;
+            lock (_currentFrameLock)
+            {
+                this.CurrentFrame.RightRawFrame = new Bitmap(bitmap);
+                this.CurrentFrame.TimeStamp = DateTime.UtcNow;
+                this.CurrentFrame.IsRightFrameEmpty = false;
+                this._isRightNew = true;
+            }
+            this.TryFireNewStereoFrameEvent();
         }
 
         override public StereoFrameSequenceElement GetNextFrame()

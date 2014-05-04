@@ -178,6 +178,7 @@
     <Compile Include="DataSource\MEMS\NewAMGFrameEventArgs.cs" />
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
+    <Compile Include="Odometry\OpticFlowProcessor.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationData.cs" />
     <Compile Include="Odometry\CameraCalibrator.cs" />

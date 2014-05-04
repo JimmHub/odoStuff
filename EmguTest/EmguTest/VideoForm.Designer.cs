@@ -30,10 +30,10 @@
         {
             this.capRightPictureBox = new System.Windows.Forms.PictureBox();
             this.capLeftPictureBox = new System.Windows.Forms.PictureBox();
-            this.depthMapPictureBox = new System.Windows.Forms.PictureBox();
+            this.stuffPictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.capRightPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.capLeftPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.depthMapPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // capRightPictureBox
@@ -54,21 +54,21 @@
             this.capLeftPictureBox.TabIndex = 15;
             this.capLeftPictureBox.TabStop = false;
             // 
-            // depthMapPictureBox
+            // stuffPictureBox1
             // 
-            this.depthMapPictureBox.Location = new System.Drawing.Point(12, 354);
-            this.depthMapPictureBox.Name = "depthMapPictureBox";
-            this.depthMapPictureBox.Size = new System.Drawing.Size(400, 300);
-            this.depthMapPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.depthMapPictureBox.TabIndex = 17;
-            this.depthMapPictureBox.TabStop = false;
+            this.stuffPictureBox1.Location = new System.Drawing.Point(12, 354);
+            this.stuffPictureBox1.Name = "stuffPictureBox1";
+            this.stuffPictureBox1.Size = new System.Drawing.Size(400, 300);
+            this.stuffPictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.stuffPictureBox1.TabIndex = 17;
+            this.stuffPictureBox1.TabStop = false;
             // 
             // VideoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 686);
-            this.Controls.Add(this.depthMapPictureBox);
+            this.Controls.Add(this.stuffPictureBox1);
             this.Controls.Add(this.capRightPictureBox);
             this.Controls.Add(this.capLeftPictureBox);
             this.Name = "VideoForm";
@@ -76,7 +76,7 @@
             this.Load += new System.EventHandler(this.VideoForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.capRightPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.capLeftPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.depthMapPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -85,6 +85,6 @@
 
         private System.Windows.Forms.PictureBox capRightPictureBox;
         private System.Windows.Forms.PictureBox capLeftPictureBox;
-        private System.Windows.Forms.PictureBox depthMapPictureBox;
+        private System.Windows.Forms.PictureBox stuffPictureBox1;
     }
 }

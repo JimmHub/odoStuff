@@ -109,5 +109,14 @@ namespace EmguTest
         VideoForm videoForm;
         bool fullDP = false;
         ////
+
+        OpticFlowProcessor opticFlowProcessor;
+
+        double[][] prevMEMSRotMatr;
+        double[][] currentMEMSRotMatr;
+        double[][] memsRotMatr;
+
+        object memsOrientationMatrLock = new object();
+        bool isOrientCalcInUse = false;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 using Emgu.CV;
 using Emgu.Util;
@@ -378,6 +379,20 @@ namespace EmguTest.MEMS
             var norm = this.GetPointNorm(point);
             var res = new MCvPoint3D64f(point.x / norm, point.y / norm, point.z / norm);
             return res;
+        }
+
+        public double[][] GetRotationMatrixBetweenTwoStates(double[][] state1, double[][] state2)
+        {
+            var size = new Size(state1.Length, state1.Length);
+            var state1M = Utils.CvHelper.ArrayToMatrix(state1, size);
+            var state2M = Utils.CvHelper.ArrayToMatrix(state2, size);
+
+            var state1MInv = new Matrix<double>(state1M.Size); 
+            CvInvoke.cvInvert(state1M, state1MInv, SOLVE_METHOD.CV_LU);
+
+            var res = state1MInv.Mul(state2M);
+
+            return Utils.CvHelper.MatrixToArray(res);
         }
     }
 }

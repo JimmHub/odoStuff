@@ -22,9 +22,14 @@ namespace EmguTest
             InitializeComponent();
         }
 
+        public void RenderToStuffPictureBox1(Bitmap bmp)
+        {
+            this.stuffPictureBox1.Image = new Bitmap(bmp);
+        }
+
         public void RenderDisparityMap(Image<Gray, short> dispMap)
         {
-            this.depthMapPictureBox.Image = new Bitmap(dispMap.ToBitmap());
+            this.stuffPictureBox1.Image = new Bitmap(dispMap.ToBitmap());
         }
 
         private void VideoForm_Load(object sender, EventArgs e)
@@ -45,6 +50,11 @@ namespace EmguTest
 
             this.capLeftPictureBox.Image = new Bitmap(leftFrame);
             this.capRightPictureBox.Image = new Bitmap(rightFrame);
+        }
+
+        private void depthMapPictureBox_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
