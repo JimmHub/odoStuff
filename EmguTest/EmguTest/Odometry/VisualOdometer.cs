@@ -14,17 +14,132 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.GPU;
 using Emgu.CV.Features2D;
 
+using EmguTest.DataSource;
+using EmguTest.MEMS;
 namespace EmguTest.Odometry
 {
     class VisualOdometer
     {
-        public VisualOdometer(
-            VideoSource.StereoGeminateCVFileVideoStreamProvider videoProvider
-            )
+        public static MCvPoint3D64f? GetTranslation(double[][] rotMatrArray, OpticFlowFrameContainer prevFrame, OpticFlowFrameContainer currFrame, StereoCameraParams cameraParams)
         {
-            this.VideoProvider = videoProvider;
+
+            int MaxFeaturesCount = 40;
+            double QualityLevel = 0.01;
+            double MinDistance = 1;
+            int BlockSize = 10;
+            Size WinSize = new Size(80, 80);
+            int PyrLevel = 4;
+            MCvTermCriteria PyrLkTerm = new MCvTermCriteria(100, 0.001);
+
+            if (
+                rotMatrArray == null ||
+                prevFrame == null ||
+                currFrame == null ||
+                cameraParams == null)
+            {
+                return null;
+            }
+
+            var leftPrevGrayImg = new Image<Gray, byte>(prevFrame.StereoFrame.LeftRawFrame);
+            var leftCurrGrayImg = new Image<Gray, byte>(currFrame.StereoFrame.LeftRawFrame);
+            var prevFeatures = leftPrevGrayImg.GoodFeaturesToTrack(MaxFeaturesCount, QualityLevel, MinDistance, BlockSize)[0];
+            var currFeatures = new PointF[prevFeatures.Count()];
+
+            var status = new Byte[prevFeatures.Count()];
+            var error = new float[prevFeatures.Count()];
+
+            OpticalFlow.PyrLK(
+                leftPrevGrayImg,
+                leftCurrGrayImg,
+                prevFeatures,
+                WinSize,
+                PyrLevel,
+                PyrLkTerm,
+                out currFeatures,
+                out status,
+                out error);
+
+            var depthSize = prevFrame.DepthMapImg.Size;
+            var reprojPrevDepthMap = new Image<Gray, short>(prevFrame.DepthMapImg.Size);
+            var reprojCurrDepthMap = new Image<Gray, short>(currFrame.DepthMapImg.Size);
+
+            for (int i = 0; i < depthSize.Height; ++i)
+            {
+                for (int j = 0; j < depthSize.Width; ++j)
+                {
+                    reprojPrevDepthMap.Data[i, j, 0] = 0;
+                    //reprojPrevDepthMap.Data[i, j, 1] = 0;
+                    //reprojPrevDepthMap.Data[i, j, 2] = 0;
+
+                    reprojCurrDepthMap.Data[i, j, 0] = 0;
+                    //reprojCurrDepthMap.Data[i, j, 1] = 0;
+                    //reprojCurrDepthMap.Data[i, j, 2] = 0;
+                }
+            }
+
+            for (int i = 0; i < prevFeatures.Count(); ++i)
+            {
+                if (status[i] == 1)
+                {
+                    int xp = (int)prevFeatures[i].X;
+                    int yp = (int)prevFeatures[i].Y;
+                    if (yp < reprojPrevDepthMap.Height && yp >=0 && xp < reprojPrevDepthMap.Width && xp >= 0)
+                    {
+                        reprojPrevDepthMap.Data[yp, xp, 0] = prevFrame.DepthMapImg.Data[yp, xp, 0];
+                    }
+                    //reprojPrevDepthMap.Data[yp, xp, 1] = prevFrame.DepthMapImg.Data[yp, xp, 1];
+                    //reprojPrevDepthMap.Data[yp, xp, 2] = prevFrame.DepthMapImg.Data[yp, xp, 2];
+
+                    int xc = (int)currFeatures[i].X;
+                    int yc = (int)currFeatures[i].Y;
+                    if (yc < reprojCurrDepthMap.Height && yc >=0 && xc < reprojCurrDepthMap.Width && xc >= 0)
+                    {
+                        reprojCurrDepthMap.Data[yc, xc, 0] = currFrame.DepthMapImg.Data[yc, xc, 0];
+                    }
+                    //reprojCurrDepthMap.Data[yc, xc, 1] = currFrame.DepthMapImg.Data[yc, xc, 1];
+                    //reprojCurrDepthMap.Data[yc, xc, 2] = currFrame.DepthMapImg.Data[yc, xc, 2];
+                }
+            }
+
+            var prevPoints = PointCollection.ReprojectImageTo3D(reprojPrevDepthMap, cameraParams.Q);
+            var currPoints = PointCollection.ReprojectImageTo3D(reprojCurrDepthMap, cameraParams.Q);
+
+            var maxZ = prevPoints.Max(x => x.z);
+            var actPrevPoints = prevPoints.Where(x => x.z != maxZ).ToArray();
+            var actCurrPoints = currPoints.Where(x => x.z != maxZ).ToArray();
+
+            var prevCentroid = GetCentroid(actPrevPoints);
+            var currCentroid = GetCentroid(actCurrPoints);
+
+            var rotMatrix = Utils.CvHelper.ArrayToMatrix(rotMatrArray, new Size(3, 3));
+            var rotPrevCentr = MEMSOrientationCalculator.MatrixToMCvPoint3D64f(MEMSOrientationCalculator.MCvPoint3D64fToMatrix(prevCentroid).Mul(rotMatrix));
+            var X = currCentroid.x - rotPrevCentr.x;
+            var Y = currCentroid.y - rotPrevCentr.y;
+            var Z = currCentroid.z - rotPrevCentr.z;
+
+            return new MCvPoint3D64f(X, Y, Z);
         }
 
-        public VideoSource.StereoGeminateCVFileVideoStreamProvider VideoProvider;
+        protected static MCvPoint3D64f GetCentroid(MCvPoint3D32f[] points)
+        {
+            int count = points.Length;
+            double X = 0;
+            double Y = 0;
+            double Z = 0;
+
+            foreach (var p in points)
+            {
+                X += p.x;
+                Y += p.y;
+                Z += p.z;
+            }
+
+            X /= count;
+            Y /= count;
+            Z /= count;
+
+            return new MCvPoint3D64f(X, Y, Z);
+        }
     }
+    
 }

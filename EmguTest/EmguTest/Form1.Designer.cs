@@ -85,6 +85,9 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.useGPUCheckBox = new System.Windows.Forms.CheckBox();
+            this.renderFraturesCheckBox = new System.Windows.Forms.CheckBox();
+            this.renderGrayCheckBox = new System.Windows.Forms.CheckBox();
             this.testSyncLiveDataButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label13 = new System.Windows.Forms.Label();
@@ -134,9 +137,6 @@
             this.stereoStreamRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
-            this.renderGrayCheckBox = new System.Windows.Forms.CheckBox();
-            this.renderFraturesCheckBox = new System.Windows.Forms.CheckBox();
-            this.useGPUCheckBox = new System.Windows.Forms.CheckBox();
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -761,6 +761,41 @@
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
             // 
+            // useGPUCheckBox
+            // 
+            this.useGPUCheckBox.AutoSize = true;
+            this.useGPUCheckBox.Checked = true;
+            this.useGPUCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useGPUCheckBox.Location = new System.Drawing.Point(600, 507);
+            this.useGPUCheckBox.Name = "useGPUCheckBox";
+            this.useGPUCheckBox.Size = new System.Drawing.Size(69, 17);
+            this.useGPUCheckBox.TabIndex = 44;
+            this.useGPUCheckBox.Text = "use GPU";
+            this.useGPUCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // renderFraturesCheckBox
+            // 
+            this.renderFraturesCheckBox.AutoSize = true;
+            this.renderFraturesCheckBox.Location = new System.Drawing.Point(331, 553);
+            this.renderFraturesCheckBox.Name = "renderFraturesCheckBox";
+            this.renderFraturesCheckBox.Size = new System.Drawing.Size(97, 17);
+            this.renderFraturesCheckBox.TabIndex = 43;
+            this.renderFraturesCheckBox.Text = "render features";
+            this.renderFraturesCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // renderGrayCheckBox
+            // 
+            this.renderGrayCheckBox.AutoSize = true;
+            this.renderGrayCheckBox.Checked = true;
+            this.renderGrayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.renderGrayCheckBox.Location = new System.Drawing.Point(331, 530);
+            this.renderGrayCheckBox.Name = "renderGrayCheckBox";
+            this.renderGrayCheckBox.Size = new System.Drawing.Size(87, 17);
+            this.renderGrayCheckBox.TabIndex = 42;
+            this.renderGrayCheckBox.Text = "renderInGray";
+            this.renderGrayCheckBox.UseVisualStyleBackColor = true;
+            this.renderGrayCheckBox.CheckedChanged += new System.EventHandler(this.renderGrayCheckBox_CheckedChanged);
+            // 
             // testSyncLiveDataButton
             // 
             this.testSyncLiveDataButton.Location = new System.Drawing.Point(908, 568);
@@ -996,6 +1031,8 @@
             // showDepthMapCheckBox
             // 
             this.showDepthMapCheckBox.AutoSize = true;
+            this.showDepthMapCheckBox.Checked = true;
+            this.showDepthMapCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showDepthMapCheckBox.Location = new System.Drawing.Point(488, 507);
             this.showDepthMapCheckBox.Name = "showDepthMapCheckBox";
             this.showDepthMapCheckBox.Size = new System.Drawing.Size(104, 17);
@@ -1120,22 +1157,22 @@
             // fileCapRadioButton
             // 
             this.fileCapRadioButton.AutoSize = true;
-            this.fileCapRadioButton.Checked = true;
             this.fileCapRadioButton.Location = new System.Drawing.Point(586, 78);
             this.fileCapRadioButton.Name = "fileCapRadioButton";
             this.fileCapRadioButton.Size = new System.Drawing.Size(116, 17);
             this.fileCapRadioButton.TabIndex = 25;
-            this.fileCapRadioButton.TabStop = true;
             this.fileCapRadioButton.Text = "fileCapRadioButton";
             this.fileCapRadioButton.UseVisualStyleBackColor = true;
             // 
             // camCapRadioButton
             // 
             this.camCapRadioButton.AutoSize = true;
+            this.camCapRadioButton.Checked = true;
             this.camCapRadioButton.Location = new System.Drawing.Point(586, 55);
             this.camCapRadioButton.Name = "camCapRadioButton";
             this.camCapRadioButton.Size = new System.Drawing.Size(123, 17);
             this.camCapRadioButton.TabIndex = 24;
+            this.camCapRadioButton.TabStop = true;
             this.camCapRadioButton.Text = "camCapRadioButton";
             this.camCapRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -1161,7 +1198,7 @@
             this.rightCaptureTextBox.Name = "rightCaptureTextBox";
             this.rightCaptureTextBox.Size = new System.Drawing.Size(100, 20);
             this.rightCaptureTextBox.TabIndex = 21;
-            this.rightCaptureTextBox.Text = "1";
+            this.rightCaptureTextBox.Text = "3";
             // 
             // leftCaptureTextBox
             // 
@@ -1169,7 +1206,7 @@
             this.leftCaptureTextBox.Name = "leftCaptureTextBox";
             this.leftCaptureTextBox.Size = new System.Drawing.Size(100, 20);
             this.leftCaptureTextBox.TabIndex = 20;
-            this.leftCaptureTextBox.Text = "0";
+            this.leftCaptureTextBox.Text = "1";
             // 
             // stereoCapProgressTrackBar
             // 
@@ -1228,43 +1265,12 @@
             // 
             // stereoMEMSRenderTimer
             // 
+            this.stereoMEMSRenderTimer.Enabled = true;
             this.stereoMEMSRenderTimer.Interval = 1;
             this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
             // 
-            // renderGrayCheckBox
-            // 
-            this.renderGrayCheckBox.AutoSize = true;
-            this.renderGrayCheckBox.Location = new System.Drawing.Point(331, 530);
-            this.renderGrayCheckBox.Name = "renderGrayCheckBox";
-            this.renderGrayCheckBox.Size = new System.Drawing.Size(87, 17);
-            this.renderGrayCheckBox.TabIndex = 42;
-            this.renderGrayCheckBox.Text = "renderInGray";
-            this.renderGrayCheckBox.UseVisualStyleBackColor = true;
-            this.renderGrayCheckBox.CheckedChanged += new System.EventHandler(this.renderGrayCheckBox_CheckedChanged);
-            // 
-            // renderFraturesCheckBox
-            // 
-            this.renderFraturesCheckBox.AutoSize = true;
-            this.renderFraturesCheckBox.Location = new System.Drawing.Point(331, 553);
-            this.renderFraturesCheckBox.Name = "renderFraturesCheckBox";
-            this.renderFraturesCheckBox.Size = new System.Drawing.Size(97, 17);
-            this.renderFraturesCheckBox.TabIndex = 43;
-            this.renderFraturesCheckBox.Text = "render features";
-            this.renderFraturesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // useGPUCheckBox
-            // 
-            this.useGPUCheckBox.AutoSize = true;
-            this.useGPUCheckBox.Location = new System.Drawing.Point(600, 507);
-            this.useGPUCheckBox.Name = "useGPUCheckBox";
-            this.useGPUCheckBox.Size = new System.Drawing.Size(69, 17);
-            this.useGPUCheckBox.TabIndex = 44;
-            this.useGPUCheckBox.Text = "use GPU";
-            this.useGPUCheckBox.UseVisualStyleBackColor = true;
-            // 
             // testDifRotationTimer
             // 
-            this.testDifRotationTimer.Enabled = true;
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
             // Form1

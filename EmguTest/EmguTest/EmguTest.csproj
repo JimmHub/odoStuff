@@ -151,6 +151,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSource\OpticFlowFrameContainer.cs" />
     <Compile Include="DataSource\StereoMEMSDataProvider.cs" />
     <Compile Include="DataSource\StereoMEMSDataProviderCVCapFromFile.cs" />
     <Compile Include="DataSource\StereoMEMSDataProviderCVUSBCapWebMEMS.cs" />

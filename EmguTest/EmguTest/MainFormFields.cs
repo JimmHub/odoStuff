@@ -19,6 +19,7 @@ using Emgu.CV.CvEnum;
 using EmguTest.MEMS;
 using EmguTest.Odometry;
 using EmguTest.VideoSource;
+using EmguTest.DataSource;
 
 namespace EmguTest
 {
@@ -118,5 +119,9 @@ namespace EmguTest
 
         object memsOrientationMatrLock = new object();
         bool isOrientCalcInUse = false;
+
+        OpticFlowFrameContainer prevStereoDepthFrame;
+        OpticFlowFrameContainer currStereoDepthFrame;
+        
     }
 }

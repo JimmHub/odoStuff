@@ -203,7 +203,7 @@ namespace EmguTest.MEMS
             return res;
         }
 
-        public Matrix<double> MCvPoint3D64fToMatrix(MCvPoint3D64f point)
+        public static Matrix<double> MCvPoint3D64fToMatrix(MCvPoint3D64f point)
         {
             return new Matrix<double>(new double[,] 
             {
@@ -211,7 +211,7 @@ namespace EmguTest.MEMS
             });
         }
 
-        public MCvPoint3D64f MatrixToMCvPoint3D64f(Matrix<double> m)
+        public static MCvPoint3D64f MatrixToMCvPoint3D64f(Matrix<double> m)
         {
             if (m.Height == 3)
             {
@@ -283,7 +283,7 @@ namespace EmguTest.MEMS
 
             accMagnetCoeff = initAccMagnet;
 
-            Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + accMagnetCoeff.ToString());
+            //Console.WriteLine("gyroCoeff: " + gyroCoeff.ToString() + " ; magnetCoeff: " + accMagnetCoeff.ToString());
         }
 
         public Matrix<double> GetGyroRotationMatrix(ReadingsVector3f gyroVect, double gyroSpeedMul)

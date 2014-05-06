@@ -450,7 +450,9 @@ namespace EmguTest
         private void ReadingsTestOuptut(MEMSReadingsSet3f nextReadings)
         {
             //nextReadings = this.MemsProvider.GetNextReadingsSet();
-
+            //MEMS READINGS to enable - comment
+            return;
+            //
             Console.WriteLine("timestamp: " + nextReadings.TimeStampOrigI.ToString());
             Console.WriteLine("acc: "
                 + " Xa=" + nextReadings.AccVector3f.Values[0]
@@ -976,6 +978,7 @@ namespace EmguTest
         //RENDER STEREO FRAME TO VIDEO FORM
         private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
         {
+            this.UpdateCurPrevMEMSOrient();
             if (!stereoFrame.IsNotFullFrame)
             {
                 var leftImg = new Image<Bgr, byte>(stereoFrame.LeftRawFrame);
@@ -1023,9 +1026,36 @@ namespace EmguTest
                     //var features = this.opticFlowProcessor.GetFeaturesToTrack(
                     //    stereoFrame: frame,
                     //    useGpu: true);
-                    stuff1Bmp = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked).ToBitmap();
+                    var depthMap = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked);
+                    stuff1Bmp = depthMap.ToBitmap();
                     
+                    //update frame
+                    this.prevStereoDepthFrame = this.currStereoDepthFrame;
+                    this.currStereoDepthFrame = new DataSource.OpticFlowFrameContainer()
+                    {
+                        DepthMapImg = depthMap,
+                        StereoFrame = new VideoSource.StereoFrameSequenceElement(stereoFrame)
+                    };
+                    ////
                 }
+
+                //try to use odometry
+                if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null && this.StereoCameraParams != null)
+                {
+                    var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
+                    var tDiff = VisualOdometer.GetTranslation(
+                        rotMatrArray: rotMatr,
+                        prevFrame: this.prevStereoDepthFrame,
+                        currFrame: this.currStereoDepthFrame,
+                        cameraParams: this.StereoCameraParams
+                        );
+                    if (tDiff != null)
+                    {
+                        Console.WriteLine("TRANSLATION: X={0}; Y={1}; Z={2}", tDiff.Value.x, tDiff.Value.y, tDiff.Value.z);
+                    }
+                }
+                ////
+
                 //general lr render
                 this.videoForm.RenderStereoFrame(leftFrameRender, rightFrameRender);
                 if (stuff1Bmp != null)
