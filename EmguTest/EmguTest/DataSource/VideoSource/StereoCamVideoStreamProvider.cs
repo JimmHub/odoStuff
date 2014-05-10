@@ -27,7 +27,12 @@ namespace EmguTest.VideoSource
         public StereoCamVideoStreamProvider(int leftCapId, int rightCapId)
         {
             this.LeftCapture = new Capture(leftCapId);
+            this.LeftCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 1280);
+            this.LeftCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT, 720);
+            
             this.RightCapture = new Capture(rightCapId);
+            this.RightCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 1280);
+            this.RightCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT, 720);
         }
 
         override public event NewStereoFrameEventHandler NewStereoFrameEvent;
@@ -40,14 +45,26 @@ namespace EmguTest.VideoSource
         //interface
         override public StereoFrameSequenceElement GetCurrentFrame()
         {
-            lock (_currentFrameLock)
+            //TODO: ditry hack
+            try
+            {
+                lock (_currentFrameLock)
+                {
+                    return new StereoFrameSequenceElement()
+                    {
+                        LeftRawFrame = Image.FromHbitmap(this.CurrentFrame.LeftRawFrame.GetHbitmap()),
+                        RightRawFrame = Image.FromHbitmap(this.CurrentFrame.RightRawFrame.GetHbitmap()),
+                        TimeStamp = this.CurrentFrame.TimeStamp
+                    };
+                }
+            }
+            catch 
             {
                 return new StereoFrameSequenceElement()
-                {
-                    LeftRawFrame = Image.FromHbitmap(this.CurrentFrame.LeftRawFrame.GetHbitmap()),
-                    RightRawFrame = Image.FromHbitmap(this.CurrentFrame.RightRawFrame.GetHbitmap()),
-                    TimeStamp = this.CurrentFrame.TimeStamp
-                };
+                    {
+                         IsLeftFrameEmpty = true,
+                         IsRightFrameEmpty = true
+                    };
             }
         }
 

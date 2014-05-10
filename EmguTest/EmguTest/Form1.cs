@@ -1245,7 +1245,16 @@ namespace EmguTest
 
         private void grabFrameForCalibrationButton_Click(object sender, EventArgs e)
         {
+            while (this.isNewStereoFrameInProcess)
+            {
+            }
+            this.isNewStereoFrameInProcess = true;
+            
             var frame = this.StereoVideoStreamProvider.GetCurrentFrame();
+            if (frame.IsNotFullFrame)
+            {
+                return;
+            }
             this.StereoCalibrationGrabbedList.Add(new VideoSource.StereoFrameSequenceElement()
             {
                 LeftRawFrame = (Bitmap)frame.LeftRawFrame.Clone(),
@@ -1253,6 +1262,7 @@ namespace EmguTest
                 TimeStamp = frame.TimeStamp
             });
             this.RenderStereoCalibGrabbedListCount();
+            this.isNewStereoFrameInProcess = false;
         }
 
         private void clearCalibrationListButton_Click(object sender, EventArgs e)
@@ -1522,6 +1532,11 @@ namespace EmguTest
         }
 
         private void MEMSRotationTabPage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void camCapRadioButton_CheckedChanged(object sender, EventArgs e)
         {
 
         }

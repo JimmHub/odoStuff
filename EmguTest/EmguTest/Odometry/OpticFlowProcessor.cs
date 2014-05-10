@@ -139,12 +139,22 @@ namespace EmguTest.Odometry
 
         public Image<Gray, short> GetDispMapCPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg)
         {
-            using (StereoSGBM sgbm = new StereoSGBM(0, 128, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.HH))
-            using (var leftProcessImg = leftImg.Copy())
-            using (var rightProcessImg = rightImg.Copy())
+            using (StereoSGBM sgbm = new StereoSGBM(0, 128, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM))
+            //using (var leftProcessImg = leftImg.Copy())
+            //using (var rightProcessImg = rightImg.Copy())
             {
+                var leftProcessImg = leftImg;
+                var rightProcessImg = rightImg;
                 var dispMap = new Image<Gray, short>(leftProcessImg.Size);
-                sgbm.FindStereoCorrespondence(leftProcessImg, rightProcessImg, dispMap);
+                //TODO: dirty hack
+                try
+                {
+                    sgbm.FindStereoCorrespondence(leftProcessImg, rightProcessImg, dispMap);
+                }
+                catch
+                {
+
+                }
                 return dispMap;
             }
         }

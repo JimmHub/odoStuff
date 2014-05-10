@@ -1176,6 +1176,7 @@
             this.camCapRadioButton.TabStop = true;
             this.camCapRadioButton.Text = "camCapRadioButton";
             this.camCapRadioButton.UseVisualStyleBackColor = true;
+            this.camCapRadioButton.CheckedChanged += new System.EventHandler(this.camCapRadioButton_CheckedChanged);
             // 
             // label11
             // 
@@ -1199,7 +1200,7 @@
             this.rightCaptureTextBox.Name = "rightCaptureTextBox";
             this.rightCaptureTextBox.Size = new System.Drawing.Size(100, 20);
             this.rightCaptureTextBox.TabIndex = 21;
-            this.rightCaptureTextBox.Text = "3";
+            this.rightCaptureTextBox.Text = "4";
             // 
             // leftCaptureTextBox
             // 
