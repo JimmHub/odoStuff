@@ -260,6 +260,7 @@
             this.MEMSRotationTabPage.TabIndex = 1;
             this.MEMSRotationTabPage.Text = "MEMSOrientation";
             this.MEMSRotationTabPage.UseVisualStyleBackColor = true;
+            this.MEMSRotationTabPage.Click += new System.EventHandler(this.MEMSRotationTabPage_Click);
             // 
             // showMEMSFormButton
             // 

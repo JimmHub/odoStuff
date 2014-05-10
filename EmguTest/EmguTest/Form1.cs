@@ -138,7 +138,7 @@ namespace EmguTest
                 this.FeatureTracker.Run();
             }
 
-            
+            this.position3d = new MCvPoint3D64f(0, 0, 0);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -975,6 +975,21 @@ namespace EmguTest
             
         }
 
+        private void RenderTranslatoin(MCvPoint3D64f position)
+        {
+            double xScale = 4;
+            double yScale = 4;
+            Bitmap bmp = new Bitmap(1000, 1000);
+            double xOffset = bmp.Width / 2;
+            double yOffset = bmp.Height / 2;
+            var g = Graphics.FromImage(bmp);
+            g.Clear(Color.White);
+
+            g.DrawRectangle(Pens.Red, new Rectangle(new Point((int)(position.x / xScale + xOffset), (int)(position.y / yScale + yOffset)), new Size(2, 2)));
+
+            this.videoForm.RenderToStuffPictureBox2(bmp);
+        }
+
         //RENDER STEREO FRAME TO VIDEO FORM
         private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
         {
@@ -1051,6 +1066,14 @@ namespace EmguTest
                         );
                     if (tDiff != null)
                     {
+                        if (!(double.IsNaN(tDiff.Value.x) || double.IsNaN(tDiff.Value.y) || double.IsNaN(tDiff.Value.z)))
+                        {
+                            this.position3d.x += tDiff.Value.x;
+                            this.position3d.y += tDiff.Value.y;
+                            this.position3d.z += tDiff.Value.z;
+
+                            this.RenderTranslatoin(this.position3d);
+                        }
                         Console.WriteLine("TRANSLATION: X={0}; Y={1}; Z={2}", tDiff.Value.x, tDiff.Value.y, tDiff.Value.z);
                     }
                 }
@@ -1496,6 +1519,11 @@ namespace EmguTest
                 var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
                 this.RenderOrientationTransformation(rotMatr);
             }
+        }
+
+        private void MEMSRotationTabPage_Click(object sender, EventArgs e)
+        {
+
         }
 
         

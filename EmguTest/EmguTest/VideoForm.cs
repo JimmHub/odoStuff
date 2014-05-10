@@ -27,6 +27,11 @@ namespace EmguTest
             this.stuffPictureBox1.Image = new Bitmap(bmp);
         }
 
+        public void RenderToStuffPictureBox2(Bitmap bmp)
+        {
+            this.stuffPictureBox2.Image = new Bitmap(bmp);
+        }
+
         public void RenderDisparityMap(Image<Gray, short> dispMap)
         {
             this.stuffPictureBox1.Image = new Bitmap(dispMap.ToBitmap());

@@ -31,9 +31,11 @@
             this.capRightPictureBox = new System.Windows.Forms.PictureBox();
             this.capLeftPictureBox = new System.Windows.Forms.PictureBox();
             this.stuffPictureBox1 = new System.Windows.Forms.PictureBox();
+            this.stuffPictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.capRightPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.capLeftPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // capRightPictureBox
@@ -63,11 +65,21 @@
             this.stuffPictureBox1.TabIndex = 17;
             this.stuffPictureBox1.TabStop = false;
             // 
+            // stuffPictureBox2
+            // 
+            this.stuffPictureBox2.Location = new System.Drawing.Point(438, 354);
+            this.stuffPictureBox2.Name = "stuffPictureBox2";
+            this.stuffPictureBox2.Size = new System.Drawing.Size(400, 300);
+            this.stuffPictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.stuffPictureBox2.TabIndex = 18;
+            this.stuffPictureBox2.TabStop = false;
+            // 
             // VideoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 686);
+            this.Controls.Add(this.stuffPictureBox2);
             this.Controls.Add(this.stuffPictureBox1);
             this.Controls.Add(this.capRightPictureBox);
             this.Controls.Add(this.capLeftPictureBox);
@@ -77,6 +89,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.capRightPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.capLeftPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stuffPictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -86,5 +99,6 @@
         private System.Windows.Forms.PictureBox capRightPictureBox;
         private System.Windows.Forms.PictureBox capLeftPictureBox;
         private System.Windows.Forms.PictureBox stuffPictureBox1;
+        private System.Windows.Forms.PictureBox stuffPictureBox2;
     }
 }
