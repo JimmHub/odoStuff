@@ -1118,6 +1118,12 @@ namespace EmguTest
         {
             int numDisparities = GetSliderValue(Num_Disparities);
             int SAD = GetSliderValue(SAD_Window);
+            //no so a hack  
+            if (SAD == 1)
+            {
+                SAD = 3;
+            }
+            //
             return new GpuStereoBMDispMapFounderParameters()
             {
                 NumberOfDisparities = numDisparities,
@@ -1130,6 +1136,7 @@ namespace EmguTest
             int numDisparities = GetSliderValue(Num_Disparities);
             int minDispatities = GetSliderValue(Min_Disparities);
             int SAD = GetSliderValue(SAD_Window);
+            //TODO: understand this
             int P1 = 8 * 1 * SAD * SAD;//GetSliderValue(P1_Slider);
             int P2 = 32 * 1 * SAD * SAD;//GetSliderValue(P2_Slider);
             int disp12MaxDiff = GetSliderValue(Disp12MaxDiff);

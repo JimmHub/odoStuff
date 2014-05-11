@@ -23,8 +23,6 @@ namespace EmguTest.VideoSource
         {
             this._leftImgPath = leftImgPath;
             this._rightImgPath = rightImgPath;
-            this._leftBmp = new Bitmap(this._leftImgPath);
-            this._rightBmp = new Bitmap(this._rightImgPath);
             this._timerPeriod = timerPeriod;
 
             this._Init();
@@ -130,6 +128,8 @@ namespace EmguTest.VideoSource
         {
             if (!this._isTimerActive)
             {
+                this._leftBmp = new Bitmap(this._leftImgPath);
+                this._rightBmp = new Bitmap(this._rightImgPath);
                 this._isTimerActive = true;
                 this._RestartTimer();
             }
@@ -152,6 +152,8 @@ namespace EmguTest.VideoSource
             {
                 this._isTimerActive = false;
                 this._StopTimer();
+                this._leftBmp.Dispose();
+                this._rightBmp.Dispose();
             }
             return true;
         }
