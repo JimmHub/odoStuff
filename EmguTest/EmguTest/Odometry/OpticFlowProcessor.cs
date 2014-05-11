@@ -127,11 +127,13 @@ namespace EmguTest.Odometry
 
         public  Image<Gray, short> GetDispMapGPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, DispMapFounderParameters parameters)
         {
-            var algoParams = (GpuStereoBMDispMapFounderParameters)parameters;
+            var ap = (GpuStereoBMDispMapFounderParameters)parameters;
 
             using(var leftGpuImg = new GpuImage<Gray, byte>(leftImg))
             using(var rightGpuImg = new GpuImage<Gray, byte>(rightImg))
-            using (GpuStereoBM sbm = new GpuStereoBM(256, 19))
+            using (GpuStereoBM sbm = new GpuStereoBM(
+                numberOfDisparities: ap.NumberOfDisparities, 
+                blockSize: ap.BlockSize))
             {
                 var dispMap = new GpuImage<Gray, byte>(leftGpuImg.Size);
                 sbm.FindStereoCorrespondence(leftGpuImg, rightGpuImg, dispMap, null);
@@ -141,9 +143,20 @@ namespace EmguTest.Odometry
 
         public Image<Gray, short> GetDispMapCPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, DispMapFounderParameters parameters)
         {
-            var algoParams = (StereoSGBMDispMapFounderParameters)parameters;
+            var ap = (StereoSGBMDispMapFounderParameters)parameters;
 
-            using (StereoSGBM sgbm = new StereoSGBM(0, 128, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM))
+            using (StereoSGBM sgbm = new StereoSGBM(
+                minDisparity: ap.MinDisparity,
+                numDisparities: ap.NumDisparities,
+                blockSize: ap.BlockSize,
+                p1: ap.P1,
+                p2: ap.P2,
+                disp12MaxDiff: ap.Disp12MaxDiff,
+                preFilterCap: ap.PreFilterCap,
+                uniquenessRatio: ap.UniquenessRatio,
+                speckleWindowSize: ap.SpeckleWindowSize,
+                speckleRange: ap.SpeckleRange,
+                mode: ap.Mode))
             //using (var leftProcessImg = leftImg.Copy())
             //using (var rightProcessImg = rightImg.Copy())
             {

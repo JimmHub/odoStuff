@@ -140,6 +140,7 @@
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
             this.stereoPictureRadioButton = new System.Windows.Forms.RadioButton();
             this.stereoImgPathTextBox = new System.Windows.Forms.TextBox();
+            this.stopStereoCapButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -726,6 +727,7 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.stopStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoImgPathTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoPictureRadioButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.useGPUCheckBox);
@@ -771,7 +773,7 @@
             this.useGPUCheckBox.AutoSize = true;
             this.useGPUCheckBox.Checked = true;
             this.useGPUCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useGPUCheckBox.Location = new System.Drawing.Point(600, 507);
+            this.useGPUCheckBox.Location = new System.Drawing.Point(508, 515);
             this.useGPUCheckBox.Name = "useGPUCheckBox";
             this.useGPUCheckBox.Size = new System.Drawing.Size(69, 17);
             this.useGPUCheckBox.TabIndex = 44;
@@ -781,7 +783,7 @@
             // renderFraturesCheckBox
             // 
             this.renderFraturesCheckBox.AutoSize = true;
-            this.renderFraturesCheckBox.Location = new System.Drawing.Point(331, 553);
+            this.renderFraturesCheckBox.Location = new System.Drawing.Point(239, 561);
             this.renderFraturesCheckBox.Name = "renderFraturesCheckBox";
             this.renderFraturesCheckBox.Size = new System.Drawing.Size(97, 17);
             this.renderFraturesCheckBox.TabIndex = 43;
@@ -793,7 +795,7 @@
             this.renderGrayCheckBox.AutoSize = true;
             this.renderGrayCheckBox.Checked = true;
             this.renderGrayCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.renderGrayCheckBox.Location = new System.Drawing.Point(331, 530);
+            this.renderGrayCheckBox.Location = new System.Drawing.Point(239, 538);
             this.renderGrayCheckBox.Name = "renderGrayCheckBox";
             this.renderGrayCheckBox.Size = new System.Drawing.Size(87, 17);
             this.renderGrayCheckBox.TabIndex = 42;
@@ -803,7 +805,7 @@
             // 
             // testSyncLiveDataButton
             // 
-            this.testSyncLiveDataButton.Location = new System.Drawing.Point(908, 568);
+            this.testSyncLiveDataButton.Location = new System.Drawing.Point(816, 576);
             this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
             this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncLiveDataButton.TabIndex = 41;
@@ -836,7 +838,7 @@
             this.panel1.Controls.Add(this.label24);
             this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.Min_Disparities);
-            this.panel1.Location = new System.Drawing.Point(98, 197);
+            this.panel1.Location = new System.Drawing.Point(6, 205);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(885, 304);
             this.panel1.TabIndex = 40;
@@ -1038,7 +1040,7 @@
             this.showDepthMapCheckBox.AutoSize = true;
             this.showDepthMapCheckBox.Checked = true;
             this.showDepthMapCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showDepthMapCheckBox.Location = new System.Drawing.Point(488, 507);
+            this.showDepthMapCheckBox.Location = new System.Drawing.Point(396, 515);
             this.showDepthMapCheckBox.Name = "showDepthMapCheckBox";
             this.showDepthMapCheckBox.Size = new System.Drawing.Size(104, 17);
             this.showDepthMapCheckBox.TabIndex = 39;
@@ -1048,7 +1050,7 @@
             // 
             // testSyncDataSourceStartButton
             // 
-            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(806, 579);
+            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(714, 587);
             this.testSyncDataSourceStartButton.Name = "testSyncDataSourceStartButton";
             this.testSyncDataSourceStartButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncDataSourceStartButton.TabIndex = 38;
@@ -1058,7 +1060,7 @@
             // 
             // syncDataSourcePathTextBox
             // 
-            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(555, 576);
+            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(463, 584);
             this.syncDataSourcePathTextBox.Name = "syncDataSourcePathTextBox";
             this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(212, 20);
             this.syncDataSourcePathTextBox.TabIndex = 37;
@@ -1066,7 +1068,7 @@
             // useCalibratedStereoRenderCheckBox
             // 
             this.useCalibratedStereoRenderCheckBox.AutoSize = true;
-            this.useCalibratedStereoRenderCheckBox.Location = new System.Drawing.Point(331, 507);
+            this.useCalibratedStereoRenderCheckBox.Location = new System.Drawing.Point(239, 515);
             this.useCalibratedStereoRenderCheckBox.Name = "useCalibratedStereoRenderCheckBox";
             this.useCalibratedStereoRenderCheckBox.Size = new System.Drawing.Size(92, 17);
             this.useCalibratedStereoRenderCheckBox.TabIndex = 36;
@@ -1076,7 +1078,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(300, 579);
+            this.label12.Location = new System.Drawing.Point(208, 587);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(35, 13);
             this.label12.TabIndex = 35;
@@ -1084,7 +1086,7 @@
             // 
             // prefixCalibListTextBox
             // 
-            this.prefixCalibListTextBox.Location = new System.Drawing.Point(341, 576);
+            this.prefixCalibListTextBox.Location = new System.Drawing.Point(249, 584);
             this.prefixCalibListTextBox.Name = "prefixCalibListTextBox";
             this.prefixCalibListTextBox.Size = new System.Drawing.Size(87, 20);
             this.prefixCalibListTextBox.TabIndex = 34;
@@ -1092,7 +1094,7 @@
             // 
             // saveGrabbedCalibrationListToButton
             // 
-            this.saveGrabbedCalibrationListToButton.Location = new System.Drawing.Point(98, 568);
+            this.saveGrabbedCalibrationListToButton.Location = new System.Drawing.Point(6, 576);
             this.saveGrabbedCalibrationListToButton.Name = "saveGrabbedCalibrationListToButton";
             this.saveGrabbedCalibrationListToButton.Size = new System.Drawing.Size(196, 35);
             this.saveGrabbedCalibrationListToButton.TabIndex = 33;
@@ -1103,7 +1105,7 @@
             // calibListCountLabel
             // 
             this.calibListCountLabel.AutoSize = true;
-            this.calibListCountLabel.Location = new System.Drawing.Point(191, 518);
+            this.calibListCountLabel.Location = new System.Drawing.Point(99, 526);
             this.calibListCountLabel.Name = "calibListCountLabel";
             this.calibListCountLabel.Size = new System.Drawing.Size(13, 13);
             this.calibListCountLabel.TabIndex = 31;
@@ -1111,7 +1113,7 @@
             // 
             // clearCalibrationListButton
             // 
-            this.clearCalibrationListButton.Location = new System.Drawing.Point(210, 507);
+            this.clearCalibrationListButton.Location = new System.Drawing.Point(118, 515);
             this.clearCalibrationListButton.Name = "clearCalibrationListButton";
             this.clearCalibrationListButton.Size = new System.Drawing.Size(84, 35);
             this.clearCalibrationListButton.TabIndex = 30;
@@ -1121,7 +1123,7 @@
             // 
             // grabFrameForCalibrationButton
             // 
-            this.grabFrameForCalibrationButton.Location = new System.Drawing.Point(98, 507);
+            this.grabFrameForCalibrationButton.Location = new System.Drawing.Point(6, 515);
             this.grabFrameForCalibrationButton.Name = "grabFrameForCalibrationButton";
             this.grabFrameForCalibrationButton.Size = new System.Drawing.Size(84, 35);
             this.grabFrameForCalibrationButton.TabIndex = 29;
@@ -1131,7 +1133,7 @@
             // 
             // resumeStereoCapButton
             // 
-            this.resumeStereoCapButton.Location = new System.Drawing.Point(289, 71);
+            this.resumeStereoCapButton.Location = new System.Drawing.Point(194, 72);
             this.resumeStereoCapButton.Name = "resumeStereoCapButton";
             this.resumeStereoCapButton.Size = new System.Drawing.Size(75, 23);
             this.resumeStereoCapButton.TabIndex = 28;
@@ -1141,7 +1143,7 @@
             // 
             // changeRightCamCapButton
             // 
-            this.changeRightCamCapButton.Location = new System.Drawing.Point(661, 166);
+            this.changeRightCamCapButton.Location = new System.Drawing.Point(569, 174);
             this.changeRightCamCapButton.Name = "changeRightCamCapButton";
             this.changeRightCamCapButton.Size = new System.Drawing.Size(75, 23);
             this.changeRightCamCapButton.TabIndex = 27;
@@ -1151,7 +1153,7 @@
             // 
             // changeLeftCamCapButton
             // 
-            this.changeLeftCamCapButton.Location = new System.Drawing.Point(228, 167);
+            this.changeLeftCamCapButton.Location = new System.Drawing.Point(136, 175);
             this.changeLeftCamCapButton.Name = "changeLeftCamCapButton";
             this.changeLeftCamCapButton.Size = new System.Drawing.Size(75, 23);
             this.changeLeftCamCapButton.TabIndex = 26;
@@ -1200,7 +1202,7 @@
             // 
             // rightCaptureTextBox
             // 
-            this.rightCaptureTextBox.Location = new System.Drawing.Point(555, 169);
+            this.rightCaptureTextBox.Location = new System.Drawing.Point(463, 177);
             this.rightCaptureTextBox.Name = "rightCaptureTextBox";
             this.rightCaptureTextBox.Size = new System.Drawing.Size(100, 20);
             this.rightCaptureTextBox.TabIndex = 21;
@@ -1208,7 +1210,7 @@
             // 
             // leftCaptureTextBox
             // 
-            this.leftCaptureTextBox.Location = new System.Drawing.Point(122, 169);
+            this.leftCaptureTextBox.Location = new System.Drawing.Point(30, 177);
             this.leftCaptureTextBox.Name = "leftCaptureTextBox";
             this.leftCaptureTextBox.Size = new System.Drawing.Size(100, 20);
             this.leftCaptureTextBox.TabIndex = 20;
@@ -1216,14 +1218,14 @@
             // 
             // stereoCapProgressTrackBar
             // 
-            this.stereoCapProgressTrackBar.Location = new System.Drawing.Point(98, 113);
+            this.stereoCapProgressTrackBar.Location = new System.Drawing.Point(6, 121);
             this.stereoCapProgressTrackBar.Name = "stereoCapProgressTrackBar";
             this.stereoCapProgressTrackBar.Size = new System.Drawing.Size(827, 45);
             this.stereoCapProgressTrackBar.TabIndex = 19;
             // 
             // pauseStereoCapButton
             // 
-            this.pauseStereoCapButton.Location = new System.Drawing.Point(194, 71);
+            this.pauseStereoCapButton.Location = new System.Drawing.Point(99, 72);
             this.pauseStereoCapButton.Name = "pauseStereoCapButton";
             this.pauseStereoCapButton.Size = new System.Drawing.Size(75, 23);
             this.pauseStereoCapButton.TabIndex = 18;
@@ -1233,7 +1235,7 @@
             // 
             // startStereoCapButton
             // 
-            this.startStereoCapButton.Location = new System.Drawing.Point(98, 71);
+            this.startStereoCapButton.Location = new System.Drawing.Point(3, 72);
             this.startStereoCapButton.Name = "startStereoCapButton";
             this.startStereoCapButton.Size = new System.Drawing.Size(75, 23);
             this.startStereoCapButton.TabIndex = 17;
@@ -1244,7 +1246,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(522, 169);
+            this.label9.Location = new System.Drawing.Point(430, 177);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(27, 13);
             this.label9.TabIndex = 16;
@@ -1253,7 +1255,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(95, 169);
+            this.label10.Location = new System.Drawing.Point(3, 177);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(21, 13);
             this.label10.TabIndex = 15;
@@ -1296,6 +1298,16 @@
             this.stereoImgPathTextBox.Size = new System.Drawing.Size(470, 20);
             this.stereoImgPathTextBox.TabIndex = 47;
             this.stereoImgPathTextBox.Text = "C:\\CodeStuff\\cvproj\\resources\\stereoImg";
+            // 
+            // stopStereoCapButton
+            // 
+            this.stopStereoCapButton.Location = new System.Drawing.Point(282, 72);
+            this.stopStereoCapButton.Name = "stopStereoCapButton";
+            this.stopStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.stopStereoCapButton.TabIndex = 48;
+            this.stopStereoCapButton.Text = "Stop";
+            this.stopStereoCapButton.UseVisualStyleBackColor = true;
+            this.stopStereoCapButton.Click += new System.EventHandler(this.stopStereoCapButton_Click);
             // 
             // Form1
             // 
@@ -1455,6 +1467,7 @@
         private System.Windows.Forms.Timer testDifRotationTimer;
         private System.Windows.Forms.RadioButton stereoPictureRadioButton;
         private System.Windows.Forms.TextBox stereoImgPathTextBox;
+        private System.Windows.Forms.Button stopStereoCapButton;
     }
 }
 

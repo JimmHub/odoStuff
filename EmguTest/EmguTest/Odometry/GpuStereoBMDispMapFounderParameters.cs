@@ -8,5 +8,7 @@ namespace EmguTest.Odometry
 {
     public class GpuStereoBMDispMapFounderParameters : DispMapFounderParameters
     {
+        public int NumberOfDisparities { get; set; }
+        public int BlockSize { get; set; }
     }
 }

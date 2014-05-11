@@ -1053,7 +1053,7 @@ namespace EmguTest
                     //var features = this.opticFlowProcessor.GetFeaturesToTrack(
                     //    stereoFrame: frame,
                     //    useGpu: true);
-                    var depthMap = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked, null);
+                    var depthMap = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked, this.GetParametersForStereoMapSolver(this.useGPUCheckBox.Checked));
                     stuff1Bmp = depthMap.ToBitmap();
                     
                     //update frame
@@ -1099,6 +1099,59 @@ namespace EmguTest
                 }
                 stereoFrame.Dispose();
             }
+        }
+
+        //SEARCH: depth map solver parameters
+        private DispMapFounderParameters GetParametersForStereoMapSolver(bool useGpu)
+        {
+            if (useGpu)
+            {
+                return this.GetParametersForStereoMapSolverGPU();
+            }
+            else
+            {
+                return this.GetParametersForStereoMapSolverCPU();
+            }
+        }
+
+        private DispMapFounderParameters GetParametersForStereoMapSolverGPU()
+        {
+            int numDisparities = GetSliderValue(Num_Disparities);
+            int SAD = GetSliderValue(SAD_Window);
+            return new GpuStereoBMDispMapFounderParameters()
+            {
+                NumberOfDisparities = numDisparities,
+                BlockSize = SAD
+            };
+        }
+
+        private DispMapFounderParameters GetParametersForStereoMapSolverCPU()
+        {
+            int numDisparities = GetSliderValue(Num_Disparities);
+            int minDispatities = GetSliderValue(Min_Disparities);
+            int SAD = GetSliderValue(SAD_Window);
+            int P1 = 8 * 1 * SAD * SAD;//GetSliderValue(P1_Slider);
+            int P2 = 32 * 1 * SAD * SAD;//GetSliderValue(P2_Slider);
+            int disp12MaxDiff = GetSliderValue(Disp12MaxDiff);
+            int PreFilterCap = GetSliderValue(pre_filter_cap);
+            int UniquenessRatio = GetSliderValue(uniquenessRatio);
+            int SpeckleWindow = GetSliderValue(Speckle_Window);
+            int SpeckleRange = GetSliderValue(specklerange);
+
+            return new StereoSGBMDispMapFounderParameters()
+            {
+                MinDisparity = minDispatities,
+                NumDisparities = numDisparities,
+                BlockSize = SAD,
+                P1 = P1,
+                P2 = P2,
+                Disp12MaxDiff = disp12MaxDiff,
+                PreFilterCap = PreFilterCap,
+                UniquenessRatio = SpeckleRange,
+                SpeckleWindowSize = SpeckleWindow,
+                SpeckleRange = SpeckleRange,
+                Mode = StereoSGBM.Mode.SGBM
+            };
         }
 
         private int GetSliderValue(TrackBar Control)
@@ -1556,6 +1609,14 @@ namespace EmguTest
         private void label26_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void stopStereoCapButton_Click(object sender, EventArgs e)
+        {
+            if (this.StereoVideoStreamProvider != null)
+            {
+                this.StereoVideoStreamProvider.StopStream();
+            }
         }
 
         
