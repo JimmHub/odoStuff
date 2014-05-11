@@ -1002,7 +1002,7 @@ namespace EmguTest
             this.videoForm.RenderToStuffPictureBox2(bmp);
         }
 
-        //RENDER STEREO FRAME TO VIDEO FORM
+        //SEARCH: RENDER STEREO FRAME TO VIDEO FORM
         private void StereoStreamFrameRender(VideoSource.StereoFrameSequenceElement stereoFrame)
         {
             this.UpdateCurPrevMEMSOrient();
@@ -1053,7 +1053,7 @@ namespace EmguTest
                     //var features = this.opticFlowProcessor.GetFeaturesToTrack(
                     //    stereoFrame: frame,
                     //    useGpu: true);
-                    var depthMap = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked);
+                    var depthMap = this.opticFlowProcessor.GetDispMap(leftGrayImg, rightGrayImg, this.useGPUCheckBox.Checked, null);
                     stuff1Bmp = depthMap.ToBitmap();
                     
                     //update frame

@@ -178,6 +178,8 @@
       <DependentUpon>MEMSForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSource\MEMS\NewAMGFrameEventArgs.cs" />
+    <Compile Include="Odometry\DispMapFounderParameters.cs" />
+    <Compile Include="Odometry\GpuStereoBMDispMapFounderParameters.cs" />
     <Compile Include="Odometry\MonoCameraCalibrationData.cs" />
     <Compile Include="Odometry\MonoCameraParams.cs" />
     <Compile Include="Odometry\OpticFlowProcessor.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Odometry\CameraCalibrator.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationGrabbedData.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
+    <Compile Include="Odometry\StereoSGBMDispMapFounderParameters.cs" />
     <Compile Include="Utils\CvHelper.cs" />
     <Compile Include="Utils\DateTimeHelper.cs" />
     <Compile Include="Utils\FramesStorageManager.cs" />

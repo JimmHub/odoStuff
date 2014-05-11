@@ -125,8 +125,10 @@ namespace EmguTest.Odometry
             return result;
         }
 
-        public  Image<Gray, short> GetDispMapGPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg)
+        public  Image<Gray, short> GetDispMapGPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, DispMapFounderParameters parameters)
         {
+            var algoParams = (GpuStereoBMDispMapFounderParameters)parameters;
+
             using(var leftGpuImg = new GpuImage<Gray, byte>(leftImg))
             using(var rightGpuImg = new GpuImage<Gray, byte>(rightImg))
             using (GpuStereoBM sbm = new GpuStereoBM(256, 19))
@@ -137,8 +139,10 @@ namespace EmguTest.Odometry
             }
         }
 
-        public Image<Gray, short> GetDispMapCPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg)
+        public Image<Gray, short> GetDispMapCPU(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, DispMapFounderParameters parameters)
         {
+            var algoParams = (StereoSGBMDispMapFounderParameters)parameters;
+
             using (StereoSGBM sgbm = new StereoSGBM(0, 128, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM))
             //using (var leftProcessImg = leftImg.Copy())
             //using (var rightProcessImg = rightImg.Copy())
@@ -159,21 +163,21 @@ namespace EmguTest.Odometry
             }
         }
 
-        public Image<Gray, short> GetDispMap(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, bool useGPU)
+        public Image<Gray, short> GetDispMap(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, bool useGPU, DispMapFounderParameters parameters)
         {
             if (useGPU)
             {
-                return this.GetDispMapGPU(leftImg, rightImg);
+                return this.GetDispMapGPU(leftImg, rightImg, parameters);
             }
             else
             {
-                return this.GetDispMapCPU(leftImg, rightImg);
+                return this.GetDispMapCPU(leftImg, rightImg, parameters);
             }
         }
 
-        public Image<Gray, short> GetDispMap(Image<Bgr, byte> leftImg, Image<Bgr, byte> rightImg, bool useGPU)
+        public Image<Gray, short> GetDispMap(Image<Bgr, byte> leftImg, Image<Bgr, byte> rightImg, bool useGPU, DispMapFounderParameters parameters)
         {
-            return this.GetDispMap(leftImg.Convert<Gray, byte>(), rightImg.Convert<Gray, byte>(), useGPU);
+            return this.GetDispMap(leftImg.Convert<Gray, byte>(), rightImg.Convert<Gray, byte>(), useGPU, parameters);
         }
     }
 }
