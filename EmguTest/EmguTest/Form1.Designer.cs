@@ -138,6 +138,8 @@
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
+            this.stereoPictureRadioButton = new System.Windows.Forms.RadioButton();
+            this.stereoImgPathTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -724,6 +726,8 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoImgPathTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoPictureRadioButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.useGPUCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.renderFraturesCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.renderGrayCheckBox);
@@ -1158,7 +1162,7 @@
             // fileCapRadioButton
             // 
             this.fileCapRadioButton.AutoSize = true;
-            this.fileCapRadioButton.Location = new System.Drawing.Point(586, 78);
+            this.fileCapRadioButton.Location = new System.Drawing.Point(371, 55);
             this.fileCapRadioButton.Name = "fileCapRadioButton";
             this.fileCapRadioButton.Size = new System.Drawing.Size(116, 17);
             this.fileCapRadioButton.TabIndex = 25;
@@ -1169,7 +1173,7 @@
             // 
             this.camCapRadioButton.AutoSize = true;
             this.camCapRadioButton.Checked = true;
-            this.camCapRadioButton.Location = new System.Drawing.Point(586, 55);
+            this.camCapRadioButton.Location = new System.Drawing.Point(371, 32);
             this.camCapRadioButton.Name = "camCapRadioButton";
             this.camCapRadioButton.Size = new System.Drawing.Size(123, 17);
             this.camCapRadioButton.TabIndex = 24;
@@ -1181,7 +1185,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(489, 32);
+            this.label11.Location = new System.Drawing.Point(274, 9);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(91, 13);
             this.label11.TabIndex = 23;
@@ -1189,7 +1193,7 @@
             // 
             // stereoFileNameTextBox
             // 
-            this.stereoFileNameTextBox.Location = new System.Drawing.Point(586, 29);
+            this.stereoFileNameTextBox.Location = new System.Drawing.Point(371, 6);
             this.stereoFileNameTextBox.Name = "stereoFileNameTextBox";
             this.stereoFileNameTextBox.Size = new System.Drawing.Size(339, 20);
             this.stereoFileNameTextBox.TabIndex = 22;
@@ -1274,6 +1278,24 @@
             // testDifRotationTimer
             // 
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
+            // 
+            // stereoPictureRadioButton
+            // 
+            this.stereoPictureRadioButton.AutoSize = true;
+            this.stereoPictureRadioButton.Location = new System.Drawing.Point(371, 78);
+            this.stereoPictureRadioButton.Name = "stereoPictureRadioButton";
+            this.stereoPictureRadioButton.Size = new System.Drawing.Size(146, 17);
+            this.stereoPictureRadioButton.TabIndex = 45;
+            this.stereoPictureRadioButton.Text = "stereoPictureRadioButton";
+            this.stereoPictureRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // stereoImgPathTextBox
+            // 
+            this.stereoImgPathTextBox.Location = new System.Drawing.Point(523, 78);
+            this.stereoImgPathTextBox.Name = "stereoImgPathTextBox";
+            this.stereoImgPathTextBox.Size = new System.Drawing.Size(470, 20);
+            this.stereoImgPathTextBox.TabIndex = 47;
+            this.stereoImgPathTextBox.Text = "C:\\CodeStuff\\cvproj\\resources\\stereoImg";
             // 
             // Form1
             // 
@@ -1431,6 +1453,8 @@
         private System.Windows.Forms.CheckBox renderFraturesCheckBox;
         private System.Windows.Forms.CheckBox useGPUCheckBox;
         private System.Windows.Forms.Timer testDifRotationTimer;
+        private System.Windows.Forms.RadioButton stereoPictureRadioButton;
+        private System.Windows.Forms.TextBox stereoImgPathTextBox;
     }
 }
 

@@ -817,7 +817,7 @@ namespace EmguTest
             }
         }
 
-        //video provider init
+        //SEARCH: init video provider
         private void startStereoCapButton_Click(object sender, EventArgs e)
         {
             if (this.camCapRadioButton.Checked)
@@ -828,9 +828,14 @@ namespace EmguTest
             {
                 this.InitStereoVideoStreamFromFileCap();
             }
-            
+            else if (this.stereoPictureRadioButton.Checked)
+            {
+                this.InitStereoVideoStreamFromStereoPictures();
+            }
+
             if (this.StereoVideoStreamProvider != null)
             {
+                this.StereoVideoStreamProvider.StartStream();
                 //event test
                 if (!this.isNewStereoFrameEventSinged)
                 {
@@ -841,29 +846,12 @@ namespace EmguTest
             }
         }
 
-        void StereoVideoStreamProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
-        {
-            if (this.isNewStereoFrameInProcess)
-            {
-                return;
-            }
-            this.isNewStereoFrameInProcess = true;
-            
-            if (this.StereoVideoStreamProvider.IsFunctioning())
-            {
-                this.StereoStreamFrameRender(e.NewStereoFrame);
-            }
-
-            this.isNewStereoFrameInProcess = false;
-        }
-
         private void InitStereoVideoStreamFromFileCap()
         {
             String fileName = this.stereoFileNameTextBox.Text;
             if (File.Exists(fileName))
             {
                 this.StereoVideoStreamProvider = new VideoSource.StereoGeminateAForgeFileVideoStreamProvider(fileName, (int)(1.0 / 30 * 1000));
-                this.StereoVideoStreamProvider.StartStream();
             }
             else
             {
@@ -873,7 +861,7 @@ namespace EmguTest
 
         private void InitStereoVideoStreamFromCamCap()
         {
-            int leftCapId = 0; 
+            int leftCapId = 0;
             int rightCapId = 0;
             try
             {
@@ -895,8 +883,32 @@ namespace EmguTest
             this.StereoVideoStreamProvider = new VideoSource.StereoCamVideoStreamProvider(
                 leftCapId: leftCapId,
                 rightCapId: rightCapId);
+        }
 
-            this.StereoVideoStreamProvider.StartStream();
+        private void InitStereoVideoStreamFromStereoPictures()
+        {
+            var stereoPath = this.stereoImgPathTextBox.Text;
+            var files = Directory.GetFiles(stereoPath);
+            var leftPath = files.Where(x => x.Contains("_left")).First();
+            var rightPath = files.Where(x => x.Contains("_right")).First();
+
+            this.StereoVideoStreamProvider = new VideoSource.StereoStaticPicturesAsVideoStreamProvider(leftPath, rightPath, (int)(1000.0 / 30));
+        }
+
+        void StereoVideoStreamProvider_NewStereoFrameEvent(object sender, VideoSource.NewStereoFrameEventArgs e)
+        {
+            if (this.isNewStereoFrameInProcess)
+            {
+                return;
+            }
+            this.isNewStereoFrameInProcess = true;
+            
+            if (this.StereoVideoStreamProvider.IsFunctioning())
+            {
+                this.StereoStreamFrameRender(e.NewStereoFrame);
+            }
+
+            this.isNewStereoFrameInProcess = false;
         }
 
         private void ChangeLeftCamCapStereoStreamProvider(int cap)
@@ -1537,6 +1549,11 @@ namespace EmguTest
         }
 
         private void camCapRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label26_Click(object sender, EventArgs e)
         {
 
         }

@@ -155,6 +155,7 @@
     <Compile Include="DataSource\StereoMEMSDataProvider.cs" />
     <Compile Include="DataSource\StereoMEMSDataProviderCVCapFromFile.cs" />
     <Compile Include="DataSource\StereoMEMSDataProviderCVUSBCapWebMEMS.cs" />
+    <Compile Include="DataSource\VideoSource\StereoStaticPicturesAsVideoStreamProvider.cs" />
     <Compile Include="Disparity\DisparityBuilder.cs" />
     <Compile Include="EmguMain.cs" />
     <Compile Include="FeatureTracker\FeatureTracker.cs" />
