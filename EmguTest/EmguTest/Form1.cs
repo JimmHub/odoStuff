@@ -987,17 +987,34 @@ namespace EmguTest
             
         }
 
+        private double GetTranslationRenderCoeff()
+        {
+            var stringVal = this.transCoeffTextBox.Text;
+            double val = 1;
+            try
+            {
+                val = double.Parse(stringVal);
+            }
+            catch
+            {
+                val = 1.0;
+                this.transCoeffTextBox.Text = val.ToString();
+            }
+            return val;
+        }
+
         private void RenderTranslatoin(MCvPoint3D64f position)
         {
-            double xScale = 4;
-            double yScale = 4;
+            double xScale = this.GetTranslationRenderCoeff();
+            double yScale = this.GetTranslationRenderCoeff();
             Bitmap bmp = new Bitmap(1000, 1000);
             double xOffset = bmp.Width / 2;
             double yOffset = bmp.Height / 2;
+            var pointSize = new Size(bmp.Width / 100, bmp.Height / 100);
             var g = Graphics.FromImage(bmp);
             g.Clear(Color.White);
 
-            g.DrawRectangle(Pens.Red, new Rectangle(new Point((int)(position.x / xScale + xOffset), (int)(position.y / yScale + yOffset)), new Size(2, 2)));
+            g.DrawRectangle(Pens.Red, new Rectangle(new Point((int)(position.x / xScale + xOffset), (int)(position.z / yScale + yOffset)), pointSize));
 
             this.videoForm.RenderToStuffPictureBox2(bmp);
         }
@@ -1087,6 +1104,7 @@ namespace EmguTest
                             this.RenderTranslatoin(this.position3d);
                         }
                         Console.WriteLine("TRANSLATION: X={0}; Y={1}; Z={2}", tDiff.Value.x, tDiff.Value.y, tDiff.Value.z);
+                        Console.WriteLine("POSITION: X={0}; Y={1}; Z={2}", position3d.x, position3d.y, position3d.z);
                     }
                 }
                 ////

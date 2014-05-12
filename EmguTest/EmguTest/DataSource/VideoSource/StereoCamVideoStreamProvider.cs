@@ -91,8 +91,8 @@ namespace EmguTest.VideoSource
                     }
                     catch { }
                 }
-                //left.Dispose();
-                //right.Dispose();
+                left.Dispose();
+                right.Dispose();
                 return this.CurrentFrame;
             }
         }

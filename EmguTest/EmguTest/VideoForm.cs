@@ -44,14 +44,14 @@ namespace EmguTest
 
         public void RenderStereoFrame(Bitmap leftFrame, Bitmap rightFrame)
         {
-            if (this.capLeftPictureBox.Image != null)
-            {
-                this.capLeftPictureBox.Image.Dispose();
-            }
-            if (this.capRightPictureBox.Image != null)
-            {
-                this.capRightPictureBox.Image.Dispose();
-            }
+            //if (this.capLeftPictureBox.Image != null)
+            //{
+            //    this.capLeftPictureBox.Image.Dispose();
+            //}
+            //if (this.capRightPictureBox.Image != null)
+            //{
+            //    this.capRightPictureBox.Image.Dispose();
+            //}
 
             this.capLeftPictureBox.Image = new Bitmap(leftFrame);
             this.capRightPictureBox.Image = new Bitmap(rightFrame);

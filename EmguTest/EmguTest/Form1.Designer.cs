@@ -85,6 +85,9 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.stopStereoCapButton = new System.Windows.Forms.Button();
+            this.stereoImgPathTextBox = new System.Windows.Forms.TextBox();
+            this.stereoPictureRadioButton = new System.Windows.Forms.RadioButton();
             this.useGPUCheckBox = new System.Windows.Forms.CheckBox();
             this.renderFraturesCheckBox = new System.Windows.Forms.CheckBox();
             this.renderGrayCheckBox = new System.Windows.Forms.CheckBox();
@@ -138,9 +141,8 @@
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
-            this.stereoPictureRadioButton = new System.Windows.Forms.RadioButton();
-            this.stereoImgPathTextBox = new System.Windows.Forms.TextBox();
-            this.stopStereoCapButton = new System.Windows.Forms.Button();
+            this.transCoeffTextBox = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -727,6 +729,8 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label26);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.transCoeffTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stopStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoImgPathTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoPictureRadioButton);
@@ -768,6 +772,34 @@
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
             // 
+            // stopStereoCapButton
+            // 
+            this.stopStereoCapButton.Location = new System.Drawing.Point(282, 72);
+            this.stopStereoCapButton.Name = "stopStereoCapButton";
+            this.stopStereoCapButton.Size = new System.Drawing.Size(75, 23);
+            this.stopStereoCapButton.TabIndex = 48;
+            this.stopStereoCapButton.Text = "Stop";
+            this.stopStereoCapButton.UseVisualStyleBackColor = true;
+            this.stopStereoCapButton.Click += new System.EventHandler(this.stopStereoCapButton_Click);
+            // 
+            // stereoImgPathTextBox
+            // 
+            this.stereoImgPathTextBox.Location = new System.Drawing.Point(523, 78);
+            this.stereoImgPathTextBox.Name = "stereoImgPathTextBox";
+            this.stereoImgPathTextBox.Size = new System.Drawing.Size(470, 20);
+            this.stereoImgPathTextBox.TabIndex = 47;
+            this.stereoImgPathTextBox.Text = "C:\\CodeStuff\\cvproj\\resources\\stereoImg";
+            // 
+            // stereoPictureRadioButton
+            // 
+            this.stereoPictureRadioButton.AutoSize = true;
+            this.stereoPictureRadioButton.Location = new System.Drawing.Point(371, 78);
+            this.stereoPictureRadioButton.Name = "stereoPictureRadioButton";
+            this.stereoPictureRadioButton.Size = new System.Drawing.Size(146, 17);
+            this.stereoPictureRadioButton.TabIndex = 45;
+            this.stereoPictureRadioButton.Text = "stereoPictureRadioButton";
+            this.stereoPictureRadioButton.UseVisualStyleBackColor = true;
+            // 
             // useGPUCheckBox
             // 
             this.useGPUCheckBox.AutoSize = true;
@@ -805,7 +837,7 @@
             // 
             // testSyncLiveDataButton
             // 
-            this.testSyncLiveDataButton.Location = new System.Drawing.Point(816, 576);
+            this.testSyncLiveDataButton.Location = new System.Drawing.Point(695, 534);
             this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
             this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncLiveDataButton.TabIndex = 41;
@@ -950,7 +982,7 @@
             this.SAD_Window.SmallChange = 2;
             this.SAD_Window.TabIndex = 11;
             this.SAD_Window.TickFrequency = 2;
-            this.SAD_Window.Value = 3;
+            this.SAD_Window.Value = 11;
             this.SAD_Window.Scroll += new System.EventHandler(this.SAD_Window_Scroll);
             // 
             // label21
@@ -993,7 +1025,7 @@
             this.Num_Disparities.Size = new System.Drawing.Size(313, 45);
             this.Num_Disparities.TabIndex = 7;
             this.Num_Disparities.TickFrequency = 16;
-            this.Num_Disparities.Value = 64;
+            this.Num_Disparities.Value = 80;
             this.Num_Disparities.Scroll += new System.EventHandler(this.Num_Disparities_Scroll);
             // 
             // label23
@@ -1034,6 +1066,7 @@
             this.Min_Disparities.Size = new System.Drawing.Size(313, 45);
             this.Min_Disparities.TabIndex = 0;
             this.Min_Disparities.TickFrequency = 16;
+            this.Min_Disparities.Value = 96;
             // 
             // showDepthMapCheckBox
             // 
@@ -1050,7 +1083,7 @@
             // 
             // testSyncDataSourceStartButton
             // 
-            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(714, 587);
+            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(614, 533);
             this.testSyncDataSourceStartButton.Name = "testSyncDataSourceStartButton";
             this.testSyncDataSourceStartButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncDataSourceStartButton.TabIndex = 38;
@@ -1060,7 +1093,7 @@
             // 
             // syncDataSourcePathTextBox
             // 
-            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(463, 584);
+            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(396, 535);
             this.syncDataSourcePathTextBox.Name = "syncDataSourcePathTextBox";
             this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(212, 20);
             this.syncDataSourcePathTextBox.TabIndex = 37;
@@ -1281,33 +1314,22 @@
             // 
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
-            // stereoPictureRadioButton
+            // transCoeffTextBox
             // 
-            this.stereoPictureRadioButton.AutoSize = true;
-            this.stereoPictureRadioButton.Location = new System.Drawing.Point(371, 78);
-            this.stereoPictureRadioButton.Name = "stereoPictureRadioButton";
-            this.stereoPictureRadioButton.Size = new System.Drawing.Size(146, 17);
-            this.stereoPictureRadioButton.TabIndex = 45;
-            this.stereoPictureRadioButton.Text = "stereoPictureRadioButton";
-            this.stereoPictureRadioButton.UseVisualStyleBackColor = true;
+            this.transCoeffTextBox.Location = new System.Drawing.Point(440, 587);
+            this.transCoeffTextBox.Name = "transCoeffTextBox";
+            this.transCoeffTextBox.Size = new System.Drawing.Size(47, 20);
+            this.transCoeffTextBox.TabIndex = 49;
+            this.transCoeffTextBox.Text = "1";
             // 
-            // stereoImgPathTextBox
+            // label26
             // 
-            this.stereoImgPathTextBox.Location = new System.Drawing.Point(523, 78);
-            this.stereoImgPathTextBox.Name = "stereoImgPathTextBox";
-            this.stereoImgPathTextBox.Size = new System.Drawing.Size(470, 20);
-            this.stereoImgPathTextBox.TabIndex = 47;
-            this.stereoImgPathTextBox.Text = "C:\\CodeStuff\\cvproj\\resources\\stereoImg";
-            // 
-            // stopStereoCapButton
-            // 
-            this.stopStereoCapButton.Location = new System.Drawing.Point(282, 72);
-            this.stopStereoCapButton.Name = "stopStereoCapButton";
-            this.stopStereoCapButton.Size = new System.Drawing.Size(75, 23);
-            this.stopStereoCapButton.TabIndex = 48;
-            this.stopStereoCapButton.Text = "Stop";
-            this.stopStereoCapButton.UseVisualStyleBackColor = true;
-            this.stopStereoCapButton.Click += new System.EventHandler(this.stopStereoCapButton_Click);
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(377, 594);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(57, 13);
+            this.label26.TabIndex = 50;
+            this.label26.Text = "trans coeff";
             // 
             // Form1
             // 
@@ -1468,6 +1490,8 @@
         private System.Windows.Forms.RadioButton stereoPictureRadioButton;
         private System.Windows.Forms.TextBox stereoImgPathTextBox;
         private System.Windows.Forms.Button stopStereoCapButton;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox transCoeffTextBox;
     }
 }
 
