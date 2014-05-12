@@ -33,6 +33,7 @@ namespace EmguTest.VideoSource
             this.RightCapture = new Capture(rightCapId);
             this.RightCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 1280);
             this.RightCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT, 720);
+            Thread.Sleep(1000);
         }
 
         override public event NewStereoFrameEventHandler NewStereoFrameEvent;
@@ -46,40 +47,50 @@ namespace EmguTest.VideoSource
         override public StereoFrameSequenceElement GetCurrentFrame()
         {
             //TODO: ditry hack
-            try
+            var res = new StereoFrameSequenceElement();
+            bool isFrameOK = false;
+            while (!isFrameOK)
             {
-                lock (_currentFrameLock)
+                try
                 {
-                    return new StereoFrameSequenceElement()
+                    lock (_currentFrameLock)
                     {
-                        LeftRawFrame = Image.FromHbitmap(this.CurrentFrame.LeftRawFrame.GetHbitmap()),
-                        RightRawFrame = Image.FromHbitmap(this.CurrentFrame.RightRawFrame.GetHbitmap()),
-                        TimeStamp = this.CurrentFrame.TimeStamp
-                    };
+
+                        res.LeftRawFrame = new Bitmap(this.CurrentFrame.LeftRawFrame);
+                        res.RightRawFrame = new Bitmap(this.CurrentFrame.RightRawFrame);
+                        res.TimeStamp = this.CurrentFrame.TimeStamp;
+                        isFrameOK = true;
+                    }
                 }
+                catch { }
             }
-            catch 
-            {
-                return new StereoFrameSequenceElement()
-                    {
-                         IsLeftFrameEmpty = true,
-                         IsRightFrameEmpty = true
-                    };
-            }
+            return res;
         }
 
         override public StereoFrameSequenceElement GetNextFrame()
         {
             lock (_currentFrameLock)
             {
-                var left = this.LeftCapture.QueryFrame();
-                var right = this.RightCapture.QueryFrame();
-                this.CurrentFrame = new StereoFrameSequenceElement()
+                //dirty hack because emgu cv is fucking shit, avoid
+                Image<Bgr, byte> left = null;
+                Image<Bgr, byte> right = null;
+                bool isFrameOK = false;
+                while (!isFrameOK)
                 {
-                    LeftRawFrame = new Bitmap(left.ToBitmap()),//.Clone(),
-                    RightRawFrame = new Bitmap(right.ToBitmap()),
-                    TimeStamp = DateTime.UtcNow
-                };
+                    try
+                    {
+                        left = this.LeftCapture.QueryFrame();
+                        right = this.RightCapture.QueryFrame();
+                        this.CurrentFrame = new StereoFrameSequenceElement()
+                        {
+                            LeftRawFrame = new Bitmap(left.ToBitmap()),//.Clone(),
+                            RightRawFrame = new Bitmap(right.ToBitmap()),
+                            TimeStamp = DateTime.UtcNow
+                        };
+                        isFrameOK = true;
+                    }
+                    catch { }
+                }
                 //left.Dispose();
                 //right.Dispose();
                 return this.CurrentFrame;

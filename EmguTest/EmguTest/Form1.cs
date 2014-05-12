@@ -1380,12 +1380,19 @@ namespace EmguTest
             }
             else
             {
-                this.stereoCalibListSaveFolderBrowserDialog.ShowDialog();
-                var path = this.stereoCalibListSaveFolderBrowserDialog.SelectedPath;
-                var prefix = this.prefixCalibListTextBox.Text;
-                if (!String.IsNullOrEmpty(path))
+                try
                 {
-                    Utils.FramesStorageManager.SaveGrabbedStereoFramesToDisc(this.StereoCalibrationGrabbedList, path, prefix);
+                    this.stereoCalibListSaveFolderBrowserDialog.ShowDialog();
+                    var path = this.stereoCalibListSaveFolderBrowserDialog.SelectedPath;
+                    var prefix = this.prefixCalibListTextBox.Text;
+                    if (!String.IsNullOrEmpty(path))
+                    {
+                        Utils.FramesStorageManager.SaveGrabbedStereoFramesToDisc(this.StereoCalibrationGrabbedList, path, prefix);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
