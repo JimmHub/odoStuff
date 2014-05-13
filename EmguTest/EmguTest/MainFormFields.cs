@@ -123,6 +123,9 @@ namespace EmguTest
         OpticFlowFrameContainer prevStereoDepthFrame;
         OpticFlowFrameContainer currStereoDepthFrame;
         MCvPoint3D64f position3d;
+
+        double transCoeffX = 1;
+        double transCoeffY = 1;
         
     }
 }

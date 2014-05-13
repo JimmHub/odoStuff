@@ -20,10 +20,10 @@ namespace EmguTest.Odometry
 {
     class VisualOdometer
     {
-        public static MCvPoint3D64f? GetTranslation(double[][] rotMatrArray, OpticFlowFrameContainer prevFrame, OpticFlowFrameContainer currFrame, StereoCameraParams cameraParams)
+        public static MCvPoint3D64f? GetTranslation(double[][] rotMatrArray, OpticFlowFrameContainer prevFrame, OpticFlowFrameContainer currFrame, StereoCameraParams cameraParams, out List<PointF> currFeaturesList, out List<PointF> prevFeaturesList)
         {
 
-            int MaxFeaturesCount = 40;
+            int MaxFeaturesCount = 400;
             double QualityLevel = 0.01;
             double MinDistance = 1;
             int BlockSize = 10;
@@ -37,6 +37,8 @@ namespace EmguTest.Odometry
                 currFrame == null ||
                 cameraParams == null)
             {
+                prevFeaturesList = null;
+                currFeaturesList = null;
                 return null;
             }
 
@@ -77,10 +79,16 @@ namespace EmguTest.Odometry
                 }
             }
 
+            var actPrevFreatures = new List<PointF>();
+            var actCurrFreatures = new List<PointF>();
+
             for (int i = 0; i < prevFeatures.Count(); ++i)
             {
                 if (status[i] == 1)
                 {
+                    actPrevFreatures.Add(prevFeatures[i]);
+                    actCurrFreatures.Add(currFeatures[i]);
+
                     int xp = (int)prevFeatures[i].X;
                     int yp = (int)prevFeatures[i].Y;
                     if (yp < reprojPrevDepthMap.Height && yp >=0 && xp < reprojPrevDepthMap.Width && xp >= 0)
@@ -117,6 +125,8 @@ namespace EmguTest.Odometry
             var Y = currCentroid.y - rotPrevCentr.y;
             var Z = currCentroid.z - rotPrevCentr.z;
 
+            prevFeaturesList = actPrevFreatures;
+            currFeaturesList = actCurrFreatures;
             return new MCvPoint3D64f(X, Y, Z);
         }
 

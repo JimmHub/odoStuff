@@ -85,6 +85,8 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.label26 = new System.Windows.Forms.Label();
+            this.transCoeffXTextBox = new System.Windows.Forms.TextBox();
             this.stopStereoCapButton = new System.Windows.Forms.Button();
             this.stereoImgPathTextBox = new System.Windows.Forms.TextBox();
             this.stereoPictureRadioButton = new System.Windows.Forms.RadioButton();
@@ -141,8 +143,10 @@
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
-            this.transCoeffTextBox = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
+            this.perfOdometryCheckBox = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.transCoeffYTextBox = new System.Windows.Forms.TextBox();
+            this.changeTransCoeffsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -729,8 +733,12 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.changeTransCoeffsButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.label27);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.transCoeffYTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.perfOdometryCheckBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label26);
-            this.calibratedStereoCaptureTabPage.Controls.Add(this.transCoeffTextBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.transCoeffXTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stopStereoCapButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoImgPathTextBox);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.stereoPictureRadioButton);
@@ -771,6 +779,23 @@
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(393, 565);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(67, 13);
+            this.label26.TabIndex = 50;
+            this.label26.Text = "trans coeff X";
+            // 
+            // transCoeffXTextBox
+            // 
+            this.transCoeffXTextBox.Location = new System.Drawing.Point(466, 559);
+            this.transCoeffXTextBox.Name = "transCoeffXTextBox";
+            this.transCoeffXTextBox.Size = new System.Drawing.Size(47, 20);
+            this.transCoeffXTextBox.TabIndex = 49;
+            this.transCoeffXTextBox.Text = "1";
             // 
             // stopStereoCapButton
             // 
@@ -821,6 +846,7 @@
             this.renderFraturesCheckBox.TabIndex = 43;
             this.renderFraturesCheckBox.Text = "render features";
             this.renderFraturesCheckBox.UseVisualStyleBackColor = true;
+            this.renderFraturesCheckBox.CheckedChanged += new System.EventHandler(this.renderFraturesCheckBox_CheckedChanged);
             // 
             // renderGrayCheckBox
             // 
@@ -837,7 +863,7 @@
             // 
             // testSyncLiveDataButton
             // 
-            this.testSyncLiveDataButton.Location = new System.Drawing.Point(695, 534);
+            this.testSyncLiveDataButton.Location = new System.Drawing.Point(165, 615);
             this.testSyncLiveDataButton.Name = "testSyncLiveDataButton";
             this.testSyncLiveDataButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncLiveDataButton.TabIndex = 41;
@@ -1083,7 +1109,7 @@
             // 
             // testSyncDataSourceStartButton
             // 
-            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(614, 533);
+            this.testSyncDataSourceStartButton.Location = new System.Drawing.Point(84, 614);
             this.testSyncDataSourceStartButton.Name = "testSyncDataSourceStartButton";
             this.testSyncDataSourceStartButton.Size = new System.Drawing.Size(75, 23);
             this.testSyncDataSourceStartButton.TabIndex = 38;
@@ -1093,9 +1119,9 @@
             // 
             // syncDataSourcePathTextBox
             // 
-            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(396, 535);
+            this.syncDataSourcePathTextBox.Location = new System.Drawing.Point(6, 617);
             this.syncDataSourcePathTextBox.Name = "syncDataSourcePathTextBox";
-            this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(212, 20);
+            this.syncDataSourcePathTextBox.Size = new System.Drawing.Size(72, 20);
             this.syncDataSourcePathTextBox.TabIndex = 37;
             // 
             // useCalibratedStereoRenderCheckBox
@@ -1314,22 +1340,42 @@
             // 
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
-            // transCoeffTextBox
+            // perfOdometryCheckBox
             // 
-            this.transCoeffTextBox.Location = new System.Drawing.Point(440, 587);
-            this.transCoeffTextBox.Name = "transCoeffTextBox";
-            this.transCoeffTextBox.Size = new System.Drawing.Size(47, 20);
-            this.transCoeffTextBox.TabIndex = 49;
-            this.transCoeffTextBox.Text = "1";
+            this.perfOdometryCheckBox.AutoSize = true;
+            this.perfOdometryCheckBox.Location = new System.Drawing.Point(396, 538);
+            this.perfOdometryCheckBox.Name = "perfOdometryCheckBox";
+            this.perfOdometryCheckBox.Size = new System.Drawing.Size(69, 17);
+            this.perfOdometryCheckBox.TabIndex = 51;
+            this.perfOdometryCheckBox.Text = "odometry";
+            this.perfOdometryCheckBox.UseVisualStyleBackColor = true;
             // 
-            // label26
+            // label27
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(377, 594);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(57, 13);
-            this.label26.TabIndex = 50;
-            this.label26.Text = "trans coeff";
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(393, 591);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(67, 13);
+            this.label27.TabIndex = 53;
+            this.label27.Text = "trans coeff Y";
+            // 
+            // transCoeffYTextBox
+            // 
+            this.transCoeffYTextBox.Location = new System.Drawing.Point(466, 585);
+            this.transCoeffYTextBox.Name = "transCoeffYTextBox";
+            this.transCoeffYTextBox.Size = new System.Drawing.Size(47, 20);
+            this.transCoeffYTextBox.TabIndex = 52;
+            this.transCoeffYTextBox.Text = "0,25";
+            // 
+            // changeTransCoeffsButton
+            // 
+            this.changeTransCoeffsButton.Location = new System.Drawing.Point(390, 615);
+            this.changeTransCoeffsButton.Name = "changeTransCoeffsButton";
+            this.changeTransCoeffsButton.Size = new System.Drawing.Size(160, 23);
+            this.changeTransCoeffsButton.TabIndex = 54;
+            this.changeTransCoeffsButton.Text = "change trans coeffs";
+            this.changeTransCoeffsButton.UseVisualStyleBackColor = true;
+            this.changeTransCoeffsButton.Click += new System.EventHandler(this.changeTransCoeffsButton_Click);
             // 
             // Form1
             // 
@@ -1491,7 +1537,11 @@
         private System.Windows.Forms.TextBox stereoImgPathTextBox;
         private System.Windows.Forms.Button stopStereoCapButton;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.TextBox transCoeffTextBox;
+        private System.Windows.Forms.TextBox transCoeffXTextBox;
+        private System.Windows.Forms.CheckBox perfOdometryCheckBox;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox transCoeffYTextBox;
+        private System.Windows.Forms.Button changeTransCoeffsButton;
     }
 }
 

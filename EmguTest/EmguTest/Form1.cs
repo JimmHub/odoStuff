@@ -139,6 +139,9 @@ namespace EmguTest
             }
 
             this.position3d = new MCvPoint3D64f(0, 0, 0);
+
+            //init start trans coeffs
+            changeTransCoeffsButton_Click(null, null);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -987,26 +990,20 @@ namespace EmguTest
             
         }
 
-        private double GetTranslationRenderCoeff()
+        private double GetTranslationRenderCoeffX()
         {
-            var stringVal = this.transCoeffTextBox.Text;
-            double val = 1;
-            try
-            {
-                val = double.Parse(stringVal);
-            }
-            catch
-            {
-                val = 1.0;
-                this.transCoeffTextBox.Text = val.ToString();
-            }
-            return val;
+            return this.transCoeffX;
+        }
+
+        private double GetTranslationRenderCoeffY()
+        {
+            return this.transCoeffY;
         }
 
         private void RenderTranslatoin(MCvPoint3D64f position)
         {
-            double xScale = this.GetTranslationRenderCoeff();
-            double yScale = this.GetTranslationRenderCoeff();
+            double xScale = this.GetTranslationRenderCoeffX();
+            double yScale = this.GetTranslationRenderCoeffY();
             Bitmap bmp = new Bitmap(1000, 1000);
             double xOffset = bmp.Width / 2;
             double yOffset = bmp.Height / 2;
@@ -1056,13 +1053,13 @@ namespace EmguTest
 
                 if (this.renderGrayCheckBox.Checked)
                 {
-                    leftFrameRender = leftGrayImg.ToBitmap();
-                    rightFrameRender = rightGrayImg.ToBitmap();
+                    leftFrameRender = new Bitmap(leftGrayImg.ToBitmap());
+                    rightFrameRender = new Bitmap(rightGrayImg.ToBitmap());
                 }
                 else
                 {
-                    leftFrameRender = leftImg.ToBitmap();
-                    rightFrameRender = rightImg.ToBitmap();
+                    leftFrameRender = new Bitmap(leftImg.ToBitmap());
+                    rightFrameRender = new Bitmap(rightImg.ToBitmap());
                 }
 
                 if (this.showDepthMapCheckBox.Checked)
@@ -1084,27 +1081,54 @@ namespace EmguTest
                 }
 
                 //try to use odometry
-                if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null && this.StereoCameraParams != null)
+                if (this.perfOdometryCheckBox.Checked)
                 {
-                    var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
-                    var tDiff = VisualOdometer.GetTranslation(
-                        rotMatrArray: rotMatr,
-                        prevFrame: this.prevStereoDepthFrame,
-                        currFrame: this.currStereoDepthFrame,
-                        cameraParams: this.StereoCameraParams
-                        );
-                    if (tDiff != null)
+                    if (this.StereoCameraParams != null)
                     {
-                        if (!(double.IsNaN(tDiff.Value.x) || double.IsNaN(tDiff.Value.y) || double.IsNaN(tDiff.Value.z)))
+                        var rotMatrix = new Matrix<double>(3, 3);
+                        rotMatrix.SetIdentity();
+                        var rotMatr = Utils.CvHelper.MatrixToArray(rotMatrix);
+                        rotMatrix.Dispose();
+                        if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null)
                         {
-                            this.position3d.x += tDiff.Value.x;
-                            this.position3d.y += tDiff.Value.y;
-                            this.position3d.z += tDiff.Value.z;
-
-                            this.RenderTranslatoin(this.position3d);
+                            rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
                         }
-                        Console.WriteLine("TRANSLATION: X={0}; Y={1}; Z={2}", tDiff.Value.x, tDiff.Value.y, tDiff.Value.z);
-                        Console.WriteLine("POSITION: X={0}; Y={1}; Z={2}", position3d.x, position3d.y, position3d.z);
+                        List<PointF> currFreatures;
+                        List<PointF> prevFeatures;
+                        var tDiff = VisualOdometer.GetTranslation(
+                            rotMatrArray: rotMatr,
+                            prevFrame: this.prevStereoDepthFrame,
+                            currFrame: this.currStereoDepthFrame,
+                            cameraParams: this.StereoCameraParams,
+                            currFeaturesList: out currFreatures,
+                            prevFeaturesList: out prevFeatures
+                            );
+                        if (tDiff != null)
+                        {
+                            if (!(double.IsNaN(tDiff.Value.x) || double.IsNaN(tDiff.Value.y) || double.IsNaN(tDiff.Value.z)))
+                            {
+                                this.position3d.x += tDiff.Value.x;
+                                this.position3d.y += tDiff.Value.y;
+                                this.position3d.z += tDiff.Value.z;
+
+                                this.RenderTranslatoin(this.position3d);
+                            }
+                            Console.WriteLine("TRANSLATION: X={0}; Y={1}; Z={2}", tDiff.Value.x, tDiff.Value.y, tDiff.Value.z);
+                            Console.WriteLine("POSITION: X={0}; Y={1}; Z={2}", position3d.x, position3d.y, position3d.z);
+                        }
+                        if (this.renderFraturesCheckBox.Checked)
+                        {
+                            if (currFreatures != null && prevFeatures != null)
+                            {
+                                var dotSize = new Size(10, 10);
+                                var g = Graphics.FromImage(leftFrameRender);
+                                for (int i = 0; i < currFreatures.Count; ++i)
+                                {
+                                    g.DrawEllipse(Pens.Red, currFreatures[i].X - dotSize.Width / 2, currFreatures[i].Y - dotSize.Height / 2, dotSize.Width, dotSize.Height);
+                                    g.DrawLine(Pens.Red, currFreatures[i], prevFeatures[i]);
+                                }
+                            }
+                        }
                     }
                 }
                 ////
@@ -1649,6 +1673,45 @@ namespace EmguTest
             {
                 this.StereoVideoStreamProvider.StopStream();
             }
+        }
+
+        private void renderFraturesCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeTransCoeffsButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.transCoeffX = double.Parse(this.transCoeffXTextBox.Text);
+                if(this.transCoeffX == 0)
+                {
+                    this.transCoeffX = 1;
+                    this.transCoeffXTextBox.Text = transCoeffX.ToString();
+                }
+            }
+            catch
+            {
+                this.transCoeffX = 1;
+                this.transCoeffXTextBox.Text = transCoeffX.ToString();
+            }
+
+            try
+            {
+                this.transCoeffY = double.Parse(this.transCoeffYTextBox.Text);
+                if (this.transCoeffY == 0)
+                {
+                    this.transCoeffY = 1;
+                    this.transCoeffYTextBox.Text = transCoeffY.ToString();
+                }
+            }
+            catch
+            {
+                this.transCoeffY = 1;
+                this.transCoeffYTextBox.Text = transCoeffY.ToString();
+            }
+            
         }
 
         
