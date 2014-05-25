@@ -170,9 +170,9 @@ namespace EmguTest.MEMS
             //}
             ////
             //manual res set up
-            res[0][0] = -resMatrix[0, 0]; res[0][1] = -resMatrix[0, 1]; res[0][2] = resMatrix[0, 2];
-            res[1][0] = -resMatrix[1, 0]; res[1][1] = -resMatrix[1, 1]; res[1][2] = resMatrix[1, 2];
-            res[2][0] = -resMatrix[2, 0]; res[2][1] = -resMatrix[2, 1]; res[2][2] = resMatrix[2, 2];
+            res[0][0] = resMatrix[0, 0]; res[0][1] = resMatrix[0, 1]; res[0][2] = resMatrix[0, 2];
+            res[1][0] = resMatrix[1, 0]; res[1][1] = resMatrix[1, 1]; res[1][2] = resMatrix[1, 2];
+            res[2][0] = resMatrix[2, 0]; res[2][1] = resMatrix[2, 1]; res[2][2] = resMatrix[2, 2];
             ////
 
             return res;
@@ -203,8 +203,17 @@ namespace EmguTest.MEMS
             return res;
         }
 
-        public static Matrix<double> MCvPoint3D64fToMatrix(MCvPoint3D64f point)
+        public static Matrix<double> MCvPoint3D64fToMatrix(MCvPoint3D64f point, bool vertical = false)
         {
+            if (vertical)
+            {
+                return new Matrix<double>(new double[,] 
+                {
+                    {point.x},
+                    {point.y},
+                    {point.z}
+                });
+            }
             return new Matrix<double>(new double[,] 
             {
                 {point.x, point.y, point.z}
@@ -355,13 +364,13 @@ namespace EmguTest.MEMS
 
         public void GetOrthoNormalAccMagnetBasis(MCvPoint3D64f accPoint, MCvPoint3D64f magnetPoint, out MCvPoint3D64f x, out MCvPoint3D64f y, out MCvPoint3D64f z)
         {
-            var accMagnetCross = accPoint.CrossProduct(magnetPoint);
+            var magnetAccCross = magnetPoint.CrossProduct(accPoint);
 
-            var magnetNormal = accMagnetCross.CrossProduct(accPoint);
+            var magnetNormal = accPoint.CrossProduct(magnetAccCross);
 
             var aNorm = this.GetNormalizedPoint(accPoint);
             var mNorm = this.GetNormalizedPoint(magnetNormal);
-            var amNorm = this.GetNormalizedPoint(accMagnetCross);
+            var amNorm = this.GetNormalizedPoint(magnetAccCross);
 
             x = this.GetPointNorm(mNorm).CompareTo(double.NaN) == 0 ? new MCvPoint3D64f(1, 0, 0) : mNorm;
             //y = aNorm.Norm.CompareTo(double.NaN) == 0 ? new MCvPoint3D64f(0, 1, 0) : new MCvPoint3D64f(-aNorm.x, -aNorm.y, -aNorm.z);
@@ -381,11 +390,11 @@ namespace EmguTest.MEMS
             return res;
         }
 
-        public double[][] GetRotationMatrixBetweenTwoStates(double[][] state1, double[][] state2)
+        public double[][] GetRotationMatrixBetweenTwoStates(double[][] state1, double[][] state2, Matrix<double> calibMatrix)
         {
             var size = new Size(state1.Length, state1.Length);
-            var state1M = Utils.CvHelper.ArrayToMatrix(state1, size);
-            var state2M = Utils.CvHelper.ArrayToMatrix(state2, size);
+            var state1M = calibMatrix.Mul(Utils.CvHelper.ArrayToMatrix(state1, size));
+            var state2M = calibMatrix.Mul(Utils.CvHelper.ArrayToMatrix(state2, size));
 
             var state1MInv = new Matrix<double>(state1M.Size); 
             CvInvoke.cvInvert(state1M, state1MInv, SOLVE_METHOD.CV_LU);

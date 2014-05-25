@@ -37,9 +37,9 @@
                         <Transform3DGroup>
                             <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
                             <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
-                            <RotateTransform3D d:EulerAngles="0,0,-30.406">
+                            <RotateTransform3D d:EulerAngles="0,0,0">
                                 <RotateTransform3D.Rotation>
-                                    <AxisAngleRotation3D Axis="0,0,-1" Angle="30.406"/>
+                                    <AxisAngleRotation3D Axis="0,0,0" Angle="0"/>
                                 </RotateTransform3D.Rotation>
                             </RotateTransform3D>
                             <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>

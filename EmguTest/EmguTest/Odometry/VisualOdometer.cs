@@ -120,17 +120,30 @@ namespace EmguTest.Odometry
             var currCentroid = GetCentroid(actCurrPoints);
 
             var rotMatrix = Utils.CvHelper.ArrayToMatrix(rotMatrArray, new Size(3, 3));
-            var rotPrevCentr = MEMSOrientationCalculator.MatrixToMCvPoint3D64f(MEMSOrientationCalculator.MCvPoint3D64fToMatrix(prevCentroid).Mul(rotMatrix));
-            var X = currCentroid.x - rotPrevCentr.x;
-            var Y = currCentroid.y - rotPrevCentr.y;
-            var Z = currCentroid.z - rotPrevCentr.z;
+            var inRotMatrix = Utils.CvHelper.InverseMatrix(rotMatrix);
+            
+            var rotPrevCentr = inRotMatrix.Mul(prevCentroid);
+            
+            //raw tranalstion
+            var rawT = new Matrix<double>(rotPrevCentr.Size);
+            rawT[0, 0] = currCentroid[0, 0] - rotPrevCentr[0, 0];
+            rawT[1, 0] = currCentroid[1, 0] - rotPrevCentr[1, 0];
+            rawT[2, 0] = currCentroid[2, 0] - rotPrevCentr[2, 0];
+            
+            //camera translation
+            var camT = rotMatrix.Mul(rawT);
+            //var camT = rawT;
+
+            var X = camT[0, 0];
+            var Y = camT[1, 0];
+            var Z = camT[2, 0];
 
             prevFeaturesList = actPrevFreatures;
             currFeaturesList = actCurrFreatures;
             return new MCvPoint3D64f(X, Y, Z);
         }
 
-        protected static MCvPoint3D64f GetCentroid(MCvPoint3D32f[] points)
+        protected static Matrix<double> GetCentroid(MCvPoint3D32f[] points)
         {
             int count = points.Length;
             double X = 0;
@@ -148,7 +161,12 @@ namespace EmguTest.Odometry
             Y /= count;
             Z /= count;
 
-            return new MCvPoint3D64f(X, Y, Z);
+            return new Matrix<double>( new double[,]
+                {
+                    {X},
+                    {Y},
+                    {Z}
+                });
         }
     }
     

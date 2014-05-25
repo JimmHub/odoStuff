@@ -57,7 +57,13 @@ namespace EmguTest
                 this.CamRight = null;
             }
             ////
+            //init orientation calibration matrix
             this.opticFlowProcessor = new OpticFlowProcessor();
+            this.orientCalibMatrix = new Matrix<double>(3, 3);
+            this.orientCalibMatrix.SetIdentity();
+            this.orientCalibMatrix = Utils.CvHelper.InverseMatrix(this.orientCalibMatrix);
+            ////
+            
         }
 
         private void RunEmgu()
@@ -1091,7 +1097,7 @@ namespace EmguTest
                         rotMatrix.Dispose();
                         if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null)
                         {
-                            rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
+                            rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr, this.orientCalibMatrix);
                         }
                         List<PointF> currFreatures;
                         List<PointF> prevFeatures;
@@ -1526,6 +1532,15 @@ namespace EmguTest
             }
             if (orient != null)
             {
+                //render calibrated
+                if (this.renderCalibOrientCheckBox.Checked)
+                {
+                    orient = Utils.CvHelper.MatrixToArray(
+                                this.orientCalibMatrix.Mul(
+                                    Utils.CvHelper.ArrayToMatrix(orient, new Size(3, 3))
+                                )
+                             );
+                }
                 this.RenderOrientationTransformation(orient);
             }
         }
@@ -1647,7 +1662,7 @@ namespace EmguTest
             this.UpdateCurPrevMEMSOrient();
             if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null)
             {
-                var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr);
+                var rotMatr = this.OrientationCalc.GetRotationMatrixBetweenTwoStates(this.prevMEMSRotMatr, this.currentMEMSRotMatr, this.orientCalibMatrix);
                 this.RenderOrientationTransformation(rotMatr);
             }
         }
@@ -1712,6 +1727,24 @@ namespace EmguTest
                 this.transCoeffYTextBox.Text = transCoeffY.ToString();
             }
             
+        }
+
+        private void grabOrientButton_Click(object sender, EventArgs e)
+        {
+            if (this.memsRotMatr != null)
+            {
+                this.orientCalibMatrix = Utils.CvHelper.InverseMatrix(Utils.CvHelper.ArrayToMatrix(this.memsRotMatr, new Size(3, 3)));
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nullPointCoordButton_Click(object sender, EventArgs e)
+        {
+            this.position3d = new MCvPoint3D64f(0, 0, 0);
         }
 
         

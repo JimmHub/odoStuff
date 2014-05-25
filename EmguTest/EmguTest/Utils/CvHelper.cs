@@ -67,5 +67,12 @@ namespace EmguTest.Utils
             }
             return res;
         }
+
+        public static Matrix<double> InverseMatrix(Matrix<double> m)
+        {
+            var inv = new Matrix<double>(m.Size);
+            CvInvoke.cvInvert(m, inv, SOLVE_METHOD.CV_LU);
+            return inv;
+        }
     }
 }

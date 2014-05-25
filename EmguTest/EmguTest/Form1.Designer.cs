@@ -85,6 +85,10 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.changeTransCoeffsButton = new System.Windows.Forms.Button();
+            this.label27 = new System.Windows.Forms.Label();
+            this.transCoeffYTextBox = new System.Windows.Forms.TextBox();
+            this.perfOdometryCheckBox = new System.Windows.Forms.CheckBox();
             this.label26 = new System.Windows.Forms.Label();
             this.transCoeffXTextBox = new System.Windows.Forms.TextBox();
             this.stopStereoCapButton = new System.Windows.Forms.Button();
@@ -143,10 +147,9 @@
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
-            this.perfOdometryCheckBox = new System.Windows.Forms.CheckBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.transCoeffYTextBox = new System.Windows.Forms.TextBox();
-            this.changeTransCoeffsButton = new System.Windows.Forms.Button();
+            this.grabOrientButton = new System.Windows.Forms.Button();
+            this.renderCalibOrientCheckBox = new System.Windows.Forms.CheckBox();
+            this.nullPointCoordButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -733,6 +736,9 @@
             // 
             // calibratedStereoCaptureTabPage
             // 
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.nullPointCoordButton);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.renderCalibOrientCheckBox);
+            this.calibratedStereoCaptureTabPage.Controls.Add(this.grabOrientButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.changeTransCoeffsButton);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.label27);
             this.calibratedStereoCaptureTabPage.Controls.Add(this.transCoeffYTextBox);
@@ -779,6 +785,43 @@
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
+            // 
+            // changeTransCoeffsButton
+            // 
+            this.changeTransCoeffsButton.Location = new System.Drawing.Point(390, 615);
+            this.changeTransCoeffsButton.Name = "changeTransCoeffsButton";
+            this.changeTransCoeffsButton.Size = new System.Drawing.Size(160, 23);
+            this.changeTransCoeffsButton.TabIndex = 54;
+            this.changeTransCoeffsButton.Text = "change trans coeffs";
+            this.changeTransCoeffsButton.UseVisualStyleBackColor = true;
+            this.changeTransCoeffsButton.Click += new System.EventHandler(this.changeTransCoeffsButton_Click);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(393, 591);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(67, 13);
+            this.label27.TabIndex = 53;
+            this.label27.Text = "trans coeff Y";
+            // 
+            // transCoeffYTextBox
+            // 
+            this.transCoeffYTextBox.Location = new System.Drawing.Point(466, 585);
+            this.transCoeffYTextBox.Name = "transCoeffYTextBox";
+            this.transCoeffYTextBox.Size = new System.Drawing.Size(47, 20);
+            this.transCoeffYTextBox.TabIndex = 52;
+            this.transCoeffYTextBox.Text = "0,25";
+            // 
+            // perfOdometryCheckBox
+            // 
+            this.perfOdometryCheckBox.AutoSize = true;
+            this.perfOdometryCheckBox.Location = new System.Drawing.Point(396, 538);
+            this.perfOdometryCheckBox.Name = "perfOdometryCheckBox";
+            this.perfOdometryCheckBox.Size = new System.Drawing.Size(69, 17);
+            this.perfOdometryCheckBox.TabIndex = 51;
+            this.perfOdometryCheckBox.Text = "odometry";
+            this.perfOdometryCheckBox.UseVisualStyleBackColor = true;
             // 
             // label26
             // 
@@ -1340,42 +1383,36 @@
             // 
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
-            // perfOdometryCheckBox
+            // grabOrientButton
             // 
-            this.perfOdometryCheckBox.AutoSize = true;
-            this.perfOdometryCheckBox.Location = new System.Drawing.Point(396, 538);
-            this.perfOdometryCheckBox.Name = "perfOdometryCheckBox";
-            this.perfOdometryCheckBox.Size = new System.Drawing.Size(69, 17);
-            this.perfOdometryCheckBox.TabIndex = 51;
-            this.perfOdometryCheckBox.Text = "odometry";
-            this.perfOdometryCheckBox.UseVisualStyleBackColor = true;
+            this.grabOrientButton.Location = new System.Drawing.Point(569, 614);
+            this.grabOrientButton.Name = "grabOrientButton";
+            this.grabOrientButton.Size = new System.Drawing.Size(75, 23);
+            this.grabOrientButton.TabIndex = 55;
+            this.grabOrientButton.Text = "grabOrient";
+            this.grabOrientButton.UseVisualStyleBackColor = true;
+            this.grabOrientButton.Click += new System.EventHandler(this.grabOrientButton_Click);
             // 
-            // label27
+            // renderCalibOrientCheckBox
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(393, 591);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(67, 13);
-            this.label27.TabIndex = 53;
-            this.label27.Text = "trans coeff Y";
+            this.renderCalibOrientCheckBox.AutoSize = true;
+            this.renderCalibOrientCheckBox.Location = new System.Drawing.Point(650, 617);
+            this.renderCalibOrientCheckBox.Name = "renderCalibOrientCheckBox";
+            this.renderCalibOrientCheckBox.Size = new System.Drawing.Size(157, 17);
+            this.renderCalibOrientCheckBox.TabIndex = 56;
+            this.renderCalibOrientCheckBox.Text = "render calibrated orientation";
+            this.renderCalibOrientCheckBox.UseVisualStyleBackColor = true;
+            this.renderCalibOrientCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // transCoeffYTextBox
+            // nullPointCoordButton
             // 
-            this.transCoeffYTextBox.Location = new System.Drawing.Point(466, 585);
-            this.transCoeffYTextBox.Name = "transCoeffYTextBox";
-            this.transCoeffYTextBox.Size = new System.Drawing.Size(47, 20);
-            this.transCoeffYTextBox.TabIndex = 52;
-            this.transCoeffYTextBox.Text = "0,25";
-            // 
-            // changeTransCoeffsButton
-            // 
-            this.changeTransCoeffsButton.Location = new System.Drawing.Point(390, 615);
-            this.changeTransCoeffsButton.Name = "changeTransCoeffsButton";
-            this.changeTransCoeffsButton.Size = new System.Drawing.Size(160, 23);
-            this.changeTransCoeffsButton.TabIndex = 54;
-            this.changeTransCoeffsButton.Text = "change trans coeffs";
-            this.changeTransCoeffsButton.UseVisualStyleBackColor = true;
-            this.changeTransCoeffsButton.Click += new System.EventHandler(this.changeTransCoeffsButton_Click);
+            this.nullPointCoordButton.Location = new System.Drawing.Point(569, 555);
+            this.nullPointCoordButton.Name = "nullPointCoordButton";
+            this.nullPointCoordButton.Size = new System.Drawing.Size(160, 23);
+            this.nullPointCoordButton.TabIndex = 57;
+            this.nullPointCoordButton.Text = "null point coord";
+            this.nullPointCoordButton.UseVisualStyleBackColor = true;
+            this.nullPointCoordButton.Click += new System.EventHandler(this.nullPointCoordButton_Click);
             // 
             // Form1
             // 
@@ -1542,6 +1579,9 @@
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.TextBox transCoeffYTextBox;
         private System.Windows.Forms.Button changeTransCoeffsButton;
+        private System.Windows.Forms.Button grabOrientButton;
+        private System.Windows.Forms.CheckBox renderCalibOrientCheckBox;
+        private System.Windows.Forms.Button nullPointCoordButton;
     }
 }
 
