@@ -127,5 +127,6 @@ namespace EmguTest
         double transCoeffX = 1;
         double transCoeffY = 1;
         Matrix<double> orientCalibMatrix;
+        Matrix<double> svdDiffRotMatrix;
     }
 }

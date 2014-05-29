@@ -85,6 +85,9 @@
             this.rightStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.leftStereoOriginalPictureBox = new System.Windows.Forms.PictureBox();
             this.calibratedStereoCaptureTabPage = new System.Windows.Forms.TabPage();
+            this.nullPointCoordButton = new System.Windows.Forms.Button();
+            this.renderCalibOrientCheckBox = new System.Windows.Forms.CheckBox();
+            this.grabOrientButton = new System.Windows.Forms.Button();
             this.changeTransCoeffsButton = new System.Windows.Forms.Button();
             this.label27 = new System.Windows.Forms.Label();
             this.transCoeffYTextBox = new System.Windows.Forms.TextBox();
@@ -147,9 +150,6 @@
             this.stereoCalibListSaveFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.stereoMEMSRenderTimer = new System.Windows.Forms.Timer(this.components);
             this.testDifRotationTimer = new System.Windows.Forms.Timer(this.components);
-            this.grabOrientButton = new System.Windows.Forms.Button();
-            this.renderCalibOrientCheckBox = new System.Windows.Forms.CheckBox();
-            this.nullPointCoordButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -578,6 +578,7 @@
             this.stereoCalibFolderTextBox.Name = "stereoCalibFolderTextBox";
             this.stereoCalibFolderTextBox.Size = new System.Drawing.Size(149, 20);
             this.stereoCalibFolderTextBox.TabIndex = 18;
+            this.stereoCalibFolderTextBox.Text = "C:\\CodeStuff\\cvproj\\resources\\qwe1280720_base2_2";
             // 
             // calibrateFromGrabbedListButton
             // 
@@ -785,6 +786,37 @@
             this.calibratedStereoCaptureTabPage.Text = "calibratedStereoCaptureT";
             this.calibratedStereoCaptureTabPage.UseVisualStyleBackColor = true;
             this.calibratedStereoCaptureTabPage.Click += new System.EventHandler(this.calibratedStereoCaptureTabPage_Click);
+            // 
+            // nullPointCoordButton
+            // 
+            this.nullPointCoordButton.Location = new System.Drawing.Point(569, 555);
+            this.nullPointCoordButton.Name = "nullPointCoordButton";
+            this.nullPointCoordButton.Size = new System.Drawing.Size(160, 23);
+            this.nullPointCoordButton.TabIndex = 57;
+            this.nullPointCoordButton.Text = "null point coord";
+            this.nullPointCoordButton.UseVisualStyleBackColor = true;
+            this.nullPointCoordButton.Click += new System.EventHandler(this.nullPointCoordButton_Click);
+            // 
+            // renderCalibOrientCheckBox
+            // 
+            this.renderCalibOrientCheckBox.AutoSize = true;
+            this.renderCalibOrientCheckBox.Location = new System.Drawing.Point(650, 617);
+            this.renderCalibOrientCheckBox.Name = "renderCalibOrientCheckBox";
+            this.renderCalibOrientCheckBox.Size = new System.Drawing.Size(157, 17);
+            this.renderCalibOrientCheckBox.TabIndex = 56;
+            this.renderCalibOrientCheckBox.Text = "render calibrated orientation";
+            this.renderCalibOrientCheckBox.UseVisualStyleBackColor = true;
+            this.renderCalibOrientCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // grabOrientButton
+            // 
+            this.grabOrientButton.Location = new System.Drawing.Point(569, 614);
+            this.grabOrientButton.Name = "grabOrientButton";
+            this.grabOrientButton.Size = new System.Drawing.Size(75, 23);
+            this.grabOrientButton.TabIndex = 55;
+            this.grabOrientButton.Text = "grabOrient";
+            this.grabOrientButton.UseVisualStyleBackColor = true;
+            this.grabOrientButton.Click += new System.EventHandler(this.grabOrientButton_Click);
             // 
             // changeTransCoeffsButton
             // 
@@ -1382,37 +1414,6 @@
             // testDifRotationTimer
             // 
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
-            // 
-            // grabOrientButton
-            // 
-            this.grabOrientButton.Location = new System.Drawing.Point(569, 614);
-            this.grabOrientButton.Name = "grabOrientButton";
-            this.grabOrientButton.Size = new System.Drawing.Size(75, 23);
-            this.grabOrientButton.TabIndex = 55;
-            this.grabOrientButton.Text = "grabOrient";
-            this.grabOrientButton.UseVisualStyleBackColor = true;
-            this.grabOrientButton.Click += new System.EventHandler(this.grabOrientButton_Click);
-            // 
-            // renderCalibOrientCheckBox
-            // 
-            this.renderCalibOrientCheckBox.AutoSize = true;
-            this.renderCalibOrientCheckBox.Location = new System.Drawing.Point(650, 617);
-            this.renderCalibOrientCheckBox.Name = "renderCalibOrientCheckBox";
-            this.renderCalibOrientCheckBox.Size = new System.Drawing.Size(157, 17);
-            this.renderCalibOrientCheckBox.TabIndex = 56;
-            this.renderCalibOrientCheckBox.Text = "render calibrated orientation";
-            this.renderCalibOrientCheckBox.UseVisualStyleBackColor = true;
-            this.renderCalibOrientCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // nullPointCoordButton
-            // 
-            this.nullPointCoordButton.Location = new System.Drawing.Point(569, 555);
-            this.nullPointCoordButton.Name = "nullPointCoordButton";
-            this.nullPointCoordButton.Size = new System.Drawing.Size(160, 23);
-            this.nullPointCoordButton.TabIndex = 57;
-            this.nullPointCoordButton.Text = "null point coord";
-            this.nullPointCoordButton.UseVisualStyleBackColor = true;
-            this.nullPointCoordButton.Click += new System.EventHandler(this.nullPointCoordButton_Click);
             // 
             // Form1
             // 

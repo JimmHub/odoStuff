@@ -63,7 +63,10 @@ namespace EmguTest
             this.orientCalibMatrix.SetIdentity();
             this.orientCalibMatrix = Utils.CvHelper.InverseMatrix(this.orientCalibMatrix);
             ////
-            
+            //iterative rotation matrix
+            this.svdDiffRotMatrix = new Matrix<double>(3, 3);
+            this.svdDiffRotMatrix.SetIdentity();
+            ////
         }
 
         private void RunEmgu()
@@ -148,6 +151,7 @@ namespace EmguTest
 
             //init start trans coeffs
             changeTransCoeffsButton_Click(null, null);
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -395,6 +399,7 @@ namespace EmguTest
             return true;
         }
 
+        //SEARCH: render MEMStransformation
         private void RenderOrientationTransformation(double[][] transformMatr3f)
         {
             if (this.IsMEMSRenderFormAccessible())
@@ -1101,14 +1106,22 @@ namespace EmguTest
                         }
                         List<PointF> currFreatures;
                         List<PointF> prevFeatures;
-                        var tDiff = VisualOdometer.GetTranslation(
+                        Matrix<double> resRotation;
+                        var tDiff = VisualOdometer.GetTranslationAndRotation(
                             rotMatrArray: rotMatr,
                             prevFrame: this.prevStereoDepthFrame,
                             currFrame: this.currStereoDepthFrame,
                             cameraParams: this.StereoCameraParams,
                             currFeaturesList: out currFreatures,
-                            prevFeaturesList: out prevFeatures
+                            prevFeaturesList: out prevFeatures,
+                            resRotation: out resRotation
                             );
+
+                        if (resRotation != null)
+                        {
+                            this.svdDiffRotMatrix = resRotation.Mul(this.svdDiffRotMatrix);
+                        }
+
                         if (tDiff != null)
                         {
                             if (!(double.IsNaN(tDiff.Value.x) || double.IsNaN(tDiff.Value.y) || double.IsNaN(tDiff.Value.z)))
@@ -1138,9 +1151,10 @@ namespace EmguTest
                     }
                 }
                 ////
-
+                this.memsRenderForm.Invoke((MethodInvoker)delegate { this.RenderOrientationTransformation(Utils.CvHelper.MatrixToArray(this.svdDiffRotMatrix)); });
                 //general lr render
                 this.videoForm.RenderStereoFrame(leftFrameRender, rightFrameRender);
+
                 if (stuff1Bmp != null)
                 {
                     this.videoForm.RenderToStuffPictureBox1(stuff1Bmp);
