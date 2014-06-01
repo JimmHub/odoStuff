@@ -399,7 +399,11 @@ namespace EmguTest.MEMS
             var state1MInv = new Matrix<double>(state1M.Size); 
             CvInvoke.cvInvert(state1M, state1MInv, SOLVE_METHOD.CV_LU);
 
-            var res = state1MInv.Mul(state2M);
+            //var diff = state1MInv.Mul(state2M);
+
+            //var res = state1M.Mul(diff).Mul(state1MInv);
+
+            var res = state2M.Mul(state1MInv);
 
             return Utils.CvHelper.MatrixToArray(res);
         }

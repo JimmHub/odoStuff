@@ -128,5 +128,7 @@ namespace EmguTest
         double transCoeffY = 1;
         Matrix<double> orientCalibMatrix;
         Matrix<double> svdDiffRotMatrix;
+        VisualOdometer visualOdometer;
+        CameraCalibrator cameraCalibrator;
     }
 }

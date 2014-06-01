@@ -209,6 +209,11 @@
     <Compile Include="Odometry\StereoCameraCalibrationGrabbedData.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
     <Compile Include="Odometry\StereoSGBMDispMapFounderParameters.cs" />
+    <Compile Include="Odometry\VisualOdometerDisparitiesParams.cs" />
+    <Compile Include="Odometry\VisualOdometerFeaturesOpticFlowParams.cs" />
+    <Compile Include="Odometry\VisualOdometerFeaturesToTrackParams.cs" />
+    <Compile Include="Odometry\VisualOdometerFeaturesToTrackParamsST.cs" />
+    <Compile Include="Odometry\VisualOdometerFeaturesOpticFlowParamsLK.cs" />
     <Compile Include="Utils\CvHelper.cs" />
     <Compile Include="Utils\DateTimeHelper.cs" />
     <Compile Include="Utils\FramesStorageManager.cs" />

@@ -137,7 +137,7 @@ namespace EmguTest
             this.timer2.Enabled = false;
             this.timer3.Enabled = false;
             this.memsTestOutputTimer.Enabled = true;
-            this.stereoCapTimer.Enabled = true;
+            this.stereoCapTimer.Enabled = false;
             ////
 
             this.FeatureTracker = new LKFeatureTracker(stereoCap);
@@ -151,6 +151,12 @@ namespace EmguTest
 
             //init start trans coeffs
             changeTransCoeffsButton_Click(null, null);
+
+            //init visual odometer
+            this.visualOdometer = new VisualOdometer();
+
+            //init camera calibrator
+            this.cameraCalibrator = new CameraCalibrator();
             
         }
 
@@ -544,7 +550,7 @@ namespace EmguTest
                 SampleImagesNames = this.MonoCalibTestFiles,
                 BoardSquareSize = new Size(9, 6)
             };
-            var cameraRes = CameraCalibrator.CalibrateMono(calibData);
+            var cameraRes = this.cameraCalibrator.CalibrateMono(calibData);
 
             this.MonoCameraParams = cameraRes;
             //var img = new Image<Bgr, byte>(images[0]);
@@ -615,7 +621,7 @@ namespace EmguTest
                 BoardSquareSize = new Size(9, 6)
             };
             this.StereoCalibData = stereoCalibData;
-            this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
+            this.StereoCameraParams = this.cameraCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
             if (this.StereoCameraParams != null && this.StereoCalibData != null)
@@ -1107,14 +1113,18 @@ namespace EmguTest
                         List<PointF> currFreatures;
                         List<PointF> prevFeatures;
                         Matrix<double> resRotation;
-                        var tDiff = VisualOdometer.GetTranslationAndRotation(
+                        var featuresToTrackParams = this.GetVisualOdometerFeaturesToTrackParams();
+                        var featuresOpticFlowParams = this.GetVisualOdometerFeaturesOpticFlowParams();
+                        var tDiff = this.visualOdometer.GetTranslationAndRotation(
                             rotMatrArray: rotMatr,
                             prevFrame: this.prevStereoDepthFrame,
                             currFrame: this.currStereoDepthFrame,
                             cameraParams: this.StereoCameraParams,
                             currFeaturesList: out currFreatures,
                             prevFeaturesList: out prevFeatures,
-                            resRotation: out resRotation
+                            resRotation: out resRotation,
+                            featuresToTrackParams: featuresToTrackParams,
+                            featuresOpticFlowParams: featuresOpticFlowParams
                             );
 
                         if (resRotation != null)
@@ -1161,6 +1171,27 @@ namespace EmguTest
                 }
                 stereoFrame.Dispose();
             }
+        }
+
+        private VisualOdometerFeaturesToTrackParams GetVisualOdometerFeaturesToTrackParams()
+        {
+            return new VisualOdometerFeaturesToTrackParamsST()
+            {
+                MaxFeaturesCount = 400,
+                QualityLevel = 0.01,
+                MinDistance = 1,
+                BlockSize = 10
+            };
+        }
+
+        private VisualOdometerFeaturesOpticFlowParams GetVisualOdometerFeaturesOpticFlowParams()
+        {
+            return new VisualOdometerFeaturesOpticFlowParamsLK()
+            {
+                WinSize = new Size(80, 80),
+                PyrLevel = 4,
+                PyrLkTerm = new MCvTermCriteria(100, 0.001)
+            };
         }
 
         //SEARCH: depth map solver parameters
@@ -1425,7 +1456,7 @@ namespace EmguTest
                 GrabbedFrames = this.StereoCalibrationGrabbedList
             };
             this.StereoCalibData = stereoCalibData;
-            this.StereoCameraParams = CameraCalibrator.CalibrateStereo(stereoCalibData);
+            this.StereoCameraParams = this.cameraCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
             if (this.StereoCameraParams != null && this.StereoCalibData != null)
@@ -1672,6 +1703,11 @@ namespace EmguTest
         }
 
         private void testDifRotationTimer_Tick(object sender, EventArgs e)
+        {
+            this.RenderMEMSDiffOrientation();
+        }
+
+        private void RenderMEMSDiffOrientation()
         {
             this.UpdateCurPrevMEMSOrient();
             if (this.prevMEMSRotMatr != null && this.currentMEMSRotMatr != null)

@@ -20,7 +20,16 @@ namespace EmguTest.Odometry
 {
     class VisualOdometer
     {
-        public static MCvPoint3D64f? GetTranslationAndRotation(double[][] rotMatrArray, OpticFlowFrameContainer prevFrame, OpticFlowFrameContainer currFrame, StereoCameraParams cameraParams, out List<PointF> currFeaturesList, out List<PointF> prevFeaturesList, out Matrix<double> resRotation)
+        public MCvPoint3D64f? GetTranslationAndRotation(
+            double[][] rotMatrArray,
+            OpticFlowFrameContainer prevFrame,
+            OpticFlowFrameContainer currFrame,
+            StereoCameraParams cameraParams,
+            out List<PointF> currFeaturesList,
+            out List<PointF> prevFeaturesList,
+            out Matrix<double> resRotation,
+            VisualOdometerFeaturesToTrackParams featuresToTrackParams,
+            VisualOdometerFeaturesOpticFlowParams featuresOpticFlowParams)
         {
             if (
                 rotMatrArray == null ||
@@ -35,16 +44,22 @@ namespace EmguTest.Odometry
             }
 
             var leftPrevGrayImg = new Image<Gray, byte>(prevFrame.StereoFrame.LeftRawFrame);
+            var rightPrevGrayImg = new Image<Gray, byte>(prevFrame.StereoFrame.RightRawFrame);
+
             var leftCurrGrayImg = new Image<Gray, byte>(currFrame.StereoFrame.LeftRawFrame);
+            var rightCurrGrayImg = new Image<Gray, byte>(currFrame.StereoFrame.RightRawFrame);
             
-            var prevFeatures = GetFeaturesToTrack(leftPrevGrayImg);
+            var prevFeatures = GetFeaturesToTrack(leftPrevGrayImg, featuresToTrackParams);
             PointF[] prevCorrFeatures;
             PointF[] currCorrFeatures;
 
-            GetCorrespFeatures(prevFeatures, leftPrevGrayImg, leftCurrGrayImg, out prevCorrFeatures, out currCorrFeatures);
+            GetFeaturesOpticFlow(prevFeatures, leftPrevGrayImg, leftCurrGrayImg, out prevCorrFeatures, out currCorrFeatures, featuresOpticFlowParams);
 
-            var prev3dPoints = ReprojectTo3d(leftPrevGrayImg, null, prevCorrFeatures, prevFrame.DepthMapImg, cameraParams.Q);
-            var curr3dPoints = ReprojectTo3d(leftCurrGrayImg, null, currCorrFeatures, currFrame.DepthMapImg, cameraParams.Q);
+            var prevDisps = GetDisparities(leftPrevGrayImg, rightPrevGrayImg, prevCorrFeatures, prevFrame.DepthMapImg, null);
+            var prev3dPoints = ReprojectTo3d(leftPrevGrayImg, prevDisps, prevCorrFeatures, cameraParams.Q);
+
+            var currDisps = GetDisparities(leftCurrGrayImg, rightCurrGrayImg, currCorrFeatures, currFrame.DepthMapImg, null);
+            var curr3dPoints = ReprojectTo3d(leftCurrGrayImg, currDisps, currCorrFeatures, cameraParams.Q);
 
             var prevAct3dPointsList = new List<Matrix<double>>();
             var currAct3dPointsList = new List<Matrix<double>>();
@@ -160,7 +175,7 @@ namespace EmguTest.Odometry
             return new MCvPoint3D64f(X, Y, Z);
         }
 
-        protected static double GetSVDRotation(Matrix<double>[] p1, Matrix<double>[] p2, out Matrix<double> rotation)
+        protected double GetSVDRotation(Matrix<double>[] p1, Matrix<double>[] p2, out Matrix<double> rotation)
         {
             var centr1 = GetCentroid(p1);
             var centr2 = GetCentroid(p2);
@@ -206,7 +221,7 @@ namespace EmguTest.Odometry
             return detX;
         }
 
-        protected static Matrix<double> GetCentroid(Matrix<double>[] points)
+        protected Matrix<double> GetCentroid(Matrix<double>[] points)
         {
             var pointsMCv = new MCvPoint3D32f[points.Count()];
             for (int i = 0; i < points.Count(); ++i)
@@ -217,7 +232,7 @@ namespace EmguTest.Odometry
             return GetCentroid(pointsMCv);
         }
 
-        protected static Matrix<double> GetCentroid(MCvPoint3D32f[] points)
+        protected Matrix<double> GetCentroid(MCvPoint3D32f[] points)
         {
             int count = points.Length;
             double X = 0;
@@ -243,21 +258,23 @@ namespace EmguTest.Odometry
                 });
         }
 
-        public static PointF[] GetFeaturesToTrack(Image<Gray, byte> img)
+        public PointF[] GetFeaturesToTrack(Image<Gray, byte> img, VisualOdometerFeaturesToTrackParams parameters)
         {
-            int MaxFeaturesCount = 400;
-            double QualityLevel = 0.01;
-            double MinDistance = 1;
-            int BlockSize = 10;
+            var param = (VisualOdometerFeaturesToTrackParamsST)parameters;
+            int MaxFeaturesCount = param.MaxFeaturesCount;// = 400;
+            double QualityLevel = param.QualityLevel;// = 0.01;
+            double MinDistance = param.MinDistance;// = 1;
+            int BlockSize = param.BlockSize;// = 10;
             var goodFeatures = img.GoodFeaturesToTrack(MaxFeaturesCount, QualityLevel, MinDistance, BlockSize);
             return goodFeatures[0];
         }
 
-        public static void GetCorrespFeatures(PointF[] origF, Image<Gray, byte> img1, Image<Gray, byte> img2, out PointF[] prevCorrFeatures, out PointF[] currCorrFeatures)
+        public void GetFeaturesOpticFlow(PointF[] origF, Image<Gray, byte> img1, Image<Gray, byte> img2, out PointF[] prevCorrFeatures, out PointF[] currCorrFeatures, VisualOdometerFeaturesOpticFlowParams parameters)
         {
-            Size WinSize = new Size(80, 80);
-            int PyrLevel = 4;
-            MCvTermCriteria PyrLkTerm = new MCvTermCriteria(100, 0.001);
+            var param = (VisualOdometerFeaturesOpticFlowParamsLK)parameters;
+            Size WinSize = param.WinSize;// new Size(80, 80);
+            int PyrLevel = param.PyrLevel;// 4;
+            MCvTermCriteria PyrLkTerm = param.PyrLkTerm;// new MCvTermCriteria(100, 0.001);
 
             var status = new Byte[origF.Count()];
             var error = new float[origF.Count()];
@@ -290,10 +307,9 @@ namespace EmguTest.Odometry
             currCorrFeatures = cAct.ToArray();
         }
 
-        public static Matrix<double>[] ReprojectTo3d(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, PointF[] points, Image<Gray, short> precalcDepthMap, Matrix<double> Q)
+        public Matrix<double>[] ReprojectTo3d(Image<Gray, byte> leftImg, double[] disps, PointF[] points, Matrix<double> Q)
         {
             var res = new Matrix<double>[points.Count()];
-            var disps = GetDisparities(leftImg, rightImg, points, precalcDepthMap);
             for (int i = 0; i < points.Count(); ++i)
             {
                 if (points[i].X >= leftImg.Width || points[i].X < 0 || points[i].Y >= leftImg.Height || points[i].Y < 0)
@@ -334,7 +350,7 @@ namespace EmguTest.Odometry
             return res;
         }
 
-        public static double[] GetDisparities(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, PointF[] points, Image<Gray, short> precalcDepthMap)
+        public double[] GetDisparities(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, PointF[] points, Image<Gray, short> precalcDepthMap, VisualOdometerDisparitiesParams parameters)
         {
             var res = new double[points.Count()];
 

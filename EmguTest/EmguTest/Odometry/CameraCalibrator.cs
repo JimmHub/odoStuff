@@ -14,7 +14,7 @@ namespace EmguTest.Odometry
 {
     class CameraCalibrator
     {
-        public static StereoCameraParams CalibrateStereo(StereoCameraCalibrationData calibData)
+        public StereoCameraParams CalibrateStereo(StereoCameraCalibrationData calibData)
         {
             var imgCount = calibData.GetCalibListSize();
             
@@ -168,7 +168,7 @@ namespace EmguTest.Odometry
             };
         }
 
-        protected static FindCornersCalibrationResult FindCorners(Image<Bgr, byte> image, StereoCameraCalibrationData calibData, ref Size? imgSize)
+        protected FindCornersCalibrationResult FindCorners(Image<Bgr, byte> image, StereoCameraCalibrationData calibData, ref Size? imgSize)
         {
             if (imgSize == null)
             {
@@ -218,7 +218,7 @@ namespace EmguTest.Odometry
             };
         }
 
-        public static MonoCameraParams CalibrateMono(MonoCameraCalibrationData calibData)
+        public MonoCameraParams CalibrateMono(MonoCameraCalibrationData calibData)
         {
             var imgCount = calibData.SampleImagesNames.Count;
             var imagePoints = new List<List<PointF>>();

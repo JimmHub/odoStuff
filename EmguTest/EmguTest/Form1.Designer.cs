@@ -1407,12 +1407,12 @@
             // 
             // stereoMEMSRenderTimer
             // 
-            this.stereoMEMSRenderTimer.Enabled = true;
             this.stereoMEMSRenderTimer.Interval = 1;
             this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
             // 
             // testDifRotationTimer
             // 
+            this.testDifRotationTimer.Enabled = true;
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
             // Form1
