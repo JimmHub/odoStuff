@@ -16,23 +16,23 @@ using Emgu.CV.Features2D;
 
 namespace EmguTest.VideoSource
 {
-    public class StereoGeminateCVFileVideoStreamProvider : StereoVideoStreamProvider
+    public class StereoOCVGeminateFileVideoStreamProvider : StereoVideoStreamProvider
     {
-        public StereoGeminateCVFileVideoStreamProvider(Capture cap)
+        public StereoOCVGeminateFileVideoStreamProvider(Capture cap)
         {
             this.Init();
             this.Capture = cap;
             this.FrameInterval = 1.0 / 30 * 1000;   
         }
 
-        public StereoGeminateCVFileVideoStreamProvider(String fileName)
+        public StereoOCVGeminateFileVideoStreamProvider(String fileName)
         {
             this.Init();
             this.Capture = new Capture(fileName);
             this.FrameInterval = 1.0 / 30 * 1000;
         }
 
-        public StereoGeminateCVFileVideoStreamProvider(String fileName, double frameInterval)
+        public StereoOCVGeminateFileVideoStreamProvider(String fileName, double frameInterval)
         {
             this.Init();
             this.Capture = new Capture(fileName);

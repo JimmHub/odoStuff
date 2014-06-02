@@ -93,6 +93,21 @@ namespace EmguTest.MEMS
             return res;
         }
 
+        public override void StartStream()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void StopStream()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsStreamRunning()
+        {
+            throw new System.NotImplementedException();
+        }
+
         protected float ReadingsBytesToFloat(byte[] value)
         {
             return BitConverter.ToSingle(value.Reverse().ToArray(), 0);

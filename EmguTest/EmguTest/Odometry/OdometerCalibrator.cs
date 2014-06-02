@@ -12,7 +12,7 @@ using Emgu.CV.CvEnum;
 
 namespace EmguTest.Odometry
 {
-    class CameraCalibrator
+    class OdometerCalibrator
     {
         public StereoCameraParams CalibrateStereo(StereoCameraCalibrationData calibData)
         {

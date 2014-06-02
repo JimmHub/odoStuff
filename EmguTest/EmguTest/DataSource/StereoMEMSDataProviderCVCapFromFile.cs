@@ -265,7 +265,7 @@ namespace EmguTest.DataSource
 
             if (this.NewMEMSReadingsEvent != null)
             {
-                ThreadPool.QueueUserWorkItem(s => this.NewMEMSReadingsEvent(this, new NewAMGFrameEventArgs()
+                ThreadPool.QueueUserWorkItem(s => this.NewMEMSReadingsEvent(this, new NewMEMSReadingsSetEventArgs()
                 {
                     Readings = this.GetResultMEMSSet()
                 }));

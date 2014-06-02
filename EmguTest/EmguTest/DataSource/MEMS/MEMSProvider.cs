@@ -13,7 +13,10 @@ namespace EmguTest.MEMS
         abstract public MEMSReadingsSet3f GetCurrentReadingsSet();
         abstract public MEMSReadingsSet3f GetNextReadingsSet();
         abstract public event NewMEMSReadingsSetEventHandler NewMEMSReadingsEvent;
+        abstract public void StartStream();
+        abstract public void StopStream();
+        abstract public bool IsStreamRunning();
     }
 
-    public delegate void NewMEMSReadingsSetEventHandler(object sender, NewAMGFrameEventArgs e);
+    public delegate void NewMEMSReadingsSetEventHandler(object sender, NewMEMSReadingsSetEventArgs e);
 }

@@ -29,7 +29,8 @@ namespace EmguTest.Odometry
             out List<PointF> prevFeaturesList,
             out Matrix<double> resRotation,
             VisualOdometerFeaturesToTrackParams featuresToTrackParams,
-            VisualOdometerFeaturesOpticFlowParams featuresOpticFlowParams)
+            VisualOdometerFeaturesOpticFlowParams featuresOpticFlowParams,
+            VisualOdometerDisparitiesParams disparitiesParams)
         {
             if (
                 rotMatrArray == null ||
@@ -55,10 +56,10 @@ namespace EmguTest.Odometry
 
             GetFeaturesOpticFlow(prevFeatures, leftPrevGrayImg, leftCurrGrayImg, out prevCorrFeatures, out currCorrFeatures, featuresOpticFlowParams);
 
-            var prevDisps = GetDisparities(leftPrevGrayImg, rightPrevGrayImg, prevCorrFeatures, prevFrame.DepthMapImg, null);
+            var prevDisps = GetDisparities(leftPrevGrayImg, rightPrevGrayImg, prevCorrFeatures, prevFrame.DepthMapImg, disparitiesParams);
             var prev3dPoints = ReprojectTo3d(leftPrevGrayImg, prevDisps, prevCorrFeatures, cameraParams.Q);
 
-            var currDisps = GetDisparities(leftCurrGrayImg, rightCurrGrayImg, currCorrFeatures, currFrame.DepthMapImg, null);
+            var currDisps = GetDisparities(leftCurrGrayImg, rightCurrGrayImg, currCorrFeatures, currFrame.DepthMapImg, disparitiesParams);
             var curr3dPoints = ReprojectTo3d(leftCurrGrayImg, currDisps, currCorrFeatures, cameraParams.Q);
 
             var prevAct3dPointsList = new List<Matrix<double>>();
@@ -352,6 +353,9 @@ namespace EmguTest.Odometry
 
         public double[] GetDisparities(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, PointF[] points, Image<Gray, short> precalcDepthMap, VisualOdometerDisparitiesParams parameters)
         {
+            //TEST LK
+            //return this.GetDisparitiesLK(leftImg, rightImg, points, precalcDepthMap, parameters);
+            ////
             var res = new double[points.Count()];
 
             for (int i = 0; i < points.Count(); ++i)
@@ -363,6 +367,65 @@ namespace EmguTest.Odometry
                 }
 
                 res[i] = precalcDepthMap[(int)points[i].Y, (int)points[i].X].Intensity;
+            }
+
+            return res;
+        }
+
+        public double[] GetDisparitiesLK(Image<Gray, byte> leftImg, Image<Gray, byte> rightImg, PointF[] points, Image<Gray, short> precalcDepthMap, VisualOdometerDisparitiesParams parameters)
+        {
+            var param = (VisualOdometerDisparitiesParamsLK)parameters;
+            var res = new double[points.Count()];
+
+            Size WinSize = param.WinSize;// new Size(80, 80);
+            int PyrLevel = param.PyrLevel;// 4;
+            MCvTermCriteria PyrLkTerm = param.PyrLkTerm;// new MCvTermCriteria(100, 0.001);
+
+            var status = new Byte[points.Count()];
+            var error = new float[points.Count()];
+            var rightPoints = new PointF[points.Count()];
+
+            var subCorners = new PointF[1][];
+            subCorners[0] = points;
+            leftImg.FindCornerSubPix(
+                subCorners,
+                new Size(11, 11),
+                new Size(-1, -1),
+                new MCvTermCriteria(30, 0.01));
+
+            var leftCorners = subCorners[0];
+
+            var gpuP = new GpuPyrLKOpticalFlow(WinSize, PyrLevel, 30, false);
+            
+            OpticalFlow.PyrLK(
+                leftImg,
+                rightImg,
+                leftCorners,
+                WinSize,
+                PyrLevel,
+                PyrLkTerm,
+                out rightPoints,
+                out status,
+                out error);
+
+            for (int i = 0; i < points.Count(); ++i)
+            {
+                if (status[i] == 1)
+                {
+                    var disp = leftCorners[i].X - rightPoints[i].X;
+                    if (disp < 0)
+                    {
+                        res[i] = -1;
+                    }
+                    else
+                    {
+                        res[i] = disp;
+                    }
+                }
+                else
+                {
+                    res[i] = -1;
+                }
             }
 
             return res;

@@ -205,7 +205,7 @@
     <Compile Include="Odometry\OpticFlowProcessor.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationFilesData.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationData.cs" />
-    <Compile Include="Odometry\CameraCalibrator.cs" />
+    <Compile Include="Odometry\OdometerCalibrator.cs" />
     <Compile Include="Odometry\StereoCameraCalibrationGrabbedData.cs" />
     <Compile Include="Odometry\StereoCameraParams.cs" />
     <Compile Include="Odometry\StereoSGBMDispMapFounderParameters.cs" />
@@ -214,6 +214,7 @@
     <Compile Include="Odometry\VisualOdometerFeaturesToTrackParams.cs" />
     <Compile Include="Odometry\VisualOdometerFeaturesToTrackParamsST.cs" />
     <Compile Include="Odometry\VisualOdometerFeaturesOpticFlowParamsLK.cs" />
+    <Compile Include="Odometry\VisualOdometerDisparitiesParamsLK.cs" />
     <Compile Include="Utils\CvHelper.cs" />
     <Compile Include="Utils\DateTimeHelper.cs" />
     <Compile Include="Utils\FramesStorageManager.cs" />
@@ -240,10 +241,10 @@
     <Compile Include="Utils\StoppableThreadLoop.cs" />
     <Compile Include="DataSource\VideoSource\NewStereoFrameEventArgs.cs" />
     <Compile Include="DataSource\VideoSource\StereoAForgeCamVideoStreamProvider.cs" />
-    <Compile Include="DataSource\VideoSource\StereoCamVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoOCVUSBVideoStreamProvider.cs" />
     <Compile Include="DataSource\VideoSource\StereoFrameSequenceElement.cs" />
     <Compile Include="DataSource\VideoSource\StereoGeminateAForgeFileVideoStreamProvider.cs" />
-    <Compile Include="DataSource\VideoSource\StereoGeminateCVFileVideoStreamProvider.cs" />
+    <Compile Include="DataSource\VideoSource\StereoOCVGeminateFileVideoStreamProvider.cs" />
     <Compile Include="DataSource\VideoSource\StereoVideoStreamProvider.cs" />
     <Compile Include="VideoForm.cs">
       <SubType>Form</SubType>

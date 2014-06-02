@@ -16,15 +16,15 @@ using Emgu.CV.Features2D;
 
 namespace EmguTest.VideoSource
 {
-    public class StereoCamVideoStreamProvider : StereoVideoStreamProvider
+    public class StereoOCVUSBVideoStreamProvider : StereoVideoStreamProvider
     {
-        public StereoCamVideoStreamProvider(Capture leftCap, Capture rightCap)
+        public StereoOCVUSBVideoStreamProvider(Capture leftCap, Capture rightCap)
         {
             this.LeftCapture = leftCap;
             this.RightCapture = rightCap;
         }
 
-        public StereoCamVideoStreamProvider(int leftCapId, int rightCapId)
+        public StereoOCVUSBVideoStreamProvider(int leftCapId, int rightCapId)
         {
             this.LeftCapture = new Capture(leftCapId);
             this.LeftCapture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 1280);

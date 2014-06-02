@@ -28,7 +28,7 @@ namespace EmguTest.MEMS
 
         public double GyroSpeedMul = 1.410;
 
-        public double[][] GetAccMagnetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useAccMagnet, bool useGyroscope, bool useLowpassFilter, bool useAdaptiveFiltering, double accMagnetFilterCoeff, double gyroFilterCoeff)
+        public double[][] GetOrientationMatrix(MEMSReadingsSet3f newReadings, bool useAccMagnet, bool useGyroscope, bool useLowpassFilter, bool useAdaptiveFiltering, double accMagnetFilterCoeff, double gyroFilterCoeff)
         {
             if (useAdaptiveFiltering)
             {

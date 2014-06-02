@@ -156,7 +156,7 @@ namespace EmguTest
             this.visualOdometer = new VisualOdometer();
 
             //init camera calibrator
-            this.cameraCalibrator = new CameraCalibrator();
+            this.odometerCalibrator = new OdometerCalibrator();
             
         }
 
@@ -334,7 +334,7 @@ namespace EmguTest
 
             if (this.IsActualReadingsSet(nextReadings))
             {
-                double gyroCoeff = 0.5;
+                double gyroCoeff = 0.8;
                 double accMagnetCoeff = (double)this.accMagnetFilterTrackBar.Value / this.accMagnetFilterTrackBar.Maximum;
 
                 bool useAccMagnet = this.accMagnetCheckBox.Checked;
@@ -342,7 +342,7 @@ namespace EmguTest
                 bool useAdoptiveFilter = this.adoptiveFilterCheckBox.Checked;
 
                 this.ReadingsTestOuptut(nextReadings);
-                var orientMatr3f = this.OrientationCalc.GetAccMagnetOrientationMatrix(
+                var orientMatr3f = this.OrientationCalc.GetOrientationMatrix(
                     newReadings: nextReadings,
                     useAccMagnet: useAccMagnet,
                     useGyroscope: useGyro,
@@ -550,7 +550,7 @@ namespace EmguTest
                 SampleImagesNames = this.MonoCalibTestFiles,
                 BoardSquareSize = new Size(9, 6)
             };
-            var cameraRes = this.cameraCalibrator.CalibrateMono(calibData);
+            var cameraRes = this.odometerCalibrator.CalibrateMono(calibData);
 
             this.MonoCameraParams = cameraRes;
             //var img = new Image<Bgr, byte>(images[0]);
@@ -621,7 +621,7 @@ namespace EmguTest
                 BoardSquareSize = new Size(9, 6)
             };
             this.StereoCalibData = stereoCalibData;
-            this.StereoCameraParams = this.cameraCalibrator.CalibrateStereo(stereoCalibData);
+            this.StereoCameraParams = this.odometerCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
             if (this.StereoCameraParams != null && this.StereoCalibData != null)
@@ -900,7 +900,7 @@ namespace EmguTest
             {
                 MessageBox.Show("Error while creating rightCap from cap number:\n" + ex.Message);
             }
-            this.StereoVideoStreamProvider = new VideoSource.StereoCamVideoStreamProvider(
+            this.StereoVideoStreamProvider = new VideoSource.StereoOCVUSBVideoStreamProvider(
                 leftCapId: leftCapId,
                 rightCapId: rightCapId);
         }
@@ -1115,6 +1115,7 @@ namespace EmguTest
                         Matrix<double> resRotation;
                         var featuresToTrackParams = this.GetVisualOdometerFeaturesToTrackParams();
                         var featuresOpticFlowParams = this.GetVisualOdometerFeaturesOpticFlowParams();
+                        var disparitiesParams = this.GetVisualOdometerDisparitiesParams();
                         var tDiff = this.visualOdometer.GetTranslationAndRotation(
                             rotMatrArray: rotMatr,
                             prevFrame: this.prevStereoDepthFrame,
@@ -1124,7 +1125,8 @@ namespace EmguTest
                             prevFeaturesList: out prevFeatures,
                             resRotation: out resRotation,
                             featuresToTrackParams: featuresToTrackParams,
-                            featuresOpticFlowParams: featuresOpticFlowParams
+                            featuresOpticFlowParams: featuresOpticFlowParams,
+                            disparitiesParams: disparitiesParams
                             );
 
                         if (resRotation != null)
@@ -1190,6 +1192,16 @@ namespace EmguTest
             {
                 WinSize = new Size(80, 80),
                 PyrLevel = 4,
+                PyrLkTerm = new MCvTermCriteria(100, 0.001)
+            };
+        }
+
+        private VisualOdometerDisparitiesParams GetVisualOdometerDisparitiesParams()
+        {
+            return new VisualOdometerDisparitiesParamsLK()
+            {
+                WinSize = new Size(80, 80),
+                PyrLevel = 2,
                 PyrLkTerm = new MCvTermCriteria(100, 0.001)
             };
         }
@@ -1456,7 +1468,7 @@ namespace EmguTest
                 GrabbedFrames = this.StereoCalibrationGrabbedList
             };
             this.StereoCalibData = stereoCalibData;
-            this.StereoCameraParams = this.cameraCalibrator.CalibrateStereo(stereoCalibData);
+            this.StereoCameraParams = this.odometerCalibrator.CalibrateStereo(stereoCalibData);
 
             this.stereoCalibrationStatusLabel.Text = "calibrated";
             if (this.StereoCameraParams != null && this.StereoCalibData != null)
@@ -1543,7 +1555,7 @@ namespace EmguTest
             }
         }
 
-        void StereoMEMSDataProvider_NewMEMSReadingsEvent(object sender, NewAMGFrameEventArgs e)
+        void StereoMEMSDataProvider_NewMEMSReadingsEvent(object sender, NewMEMSReadingsSetEventArgs e)
         {
             //this.accMagnetFilterTrackBar.Invoke((MethodInvoker)delegate { this.ProcessMEMSReadings(e.Readings); }); 
             
@@ -1795,6 +1807,11 @@ namespace EmguTest
         private void nullPointCoordButton_Click(object sender, EventArgs e)
         {
             this.position3d = new MCvPoint3D64f(0, 0, 0);
+        }
+
+        private void useGPUCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         

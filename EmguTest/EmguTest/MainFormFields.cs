@@ -129,6 +129,6 @@ namespace EmguTest
         Matrix<double> orientCalibMatrix;
         Matrix<double> svdDiffRotMatrix;
         VisualOdometer visualOdometer;
-        CameraCalibrator cameraCalibrator;
+        OdometerCalibrator odometerCalibrator;
     }
 }

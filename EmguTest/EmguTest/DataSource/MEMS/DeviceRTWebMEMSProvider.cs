@@ -40,7 +40,7 @@ namespace EmguTest.MEMS
         {
             get
             {
-                return this.SocketConnected(this.ClientSocket);
+                return this.IsClientConnected(this.ClientSocket);
             }
             protected set
             {
@@ -92,7 +92,7 @@ namespace EmguTest.MEMS
         }
 
         protected Thread ServerRoutineThread { get; set; }
-        public bool IsThreadRunning
+        public bool IsServerThreadRunning
         {
             get
             {
@@ -128,7 +128,7 @@ namespace EmguTest.MEMS
                 try
                 {
                     byte[] recBuffer = new byte[RecMessageSize];
-                    while (this.SocketConnected(this.ClientSocket))
+                    while (this.IsClientConnected(this.ClientSocket))
                     {
                         var count = this.ClientSocket.Receive(recBuffer);
                         if (count == RecMessageSize)
@@ -162,7 +162,7 @@ namespace EmguTest.MEMS
             }
         }
 
-        protected bool SocketConnected(Socket s)
+        protected bool IsClientConnected(Socket s)
         {
             if (s == null)
             {
@@ -283,6 +283,21 @@ namespace EmguTest.MEMS
             return this.LastRecSet;
         }
 
+        public override void StartStream()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void StopStream()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsStreamRunning()
+        {
+            throw new System.NotImplementedException();
+        }
+        
         public const byte READINGS_TYPE_ACC = 0x01;
         public const byte READINGS_TYPE_MAGNET = 0x02;
         public const byte READINGS_TYPE_GYRO = 0x03;

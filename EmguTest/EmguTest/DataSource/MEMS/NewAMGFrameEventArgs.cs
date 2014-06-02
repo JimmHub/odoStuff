@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmguTest.MEMS
 {
-    public class NewAMGFrameEventArgs
+    public class NewMEMSReadingsSetEventArgs
     {
         public MEMSReadingsSet3f Readings { get; set; }
     }

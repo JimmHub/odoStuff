@@ -911,6 +911,7 @@
             this.useGPUCheckBox.TabIndex = 44;
             this.useGPUCheckBox.Text = "use GPU";
             this.useGPUCheckBox.UseVisualStyleBackColor = true;
+            this.useGPUCheckBox.CheckedChanged += new System.EventHandler(this.useGPUCheckBox_CheckedChanged);
             // 
             // renderFraturesCheckBox
             // 
@@ -1407,12 +1408,12 @@
             // 
             // stereoMEMSRenderTimer
             // 
+            this.stereoMEMSRenderTimer.Enabled = true;
             this.stereoMEMSRenderTimer.Interval = 1;
             this.stereoMEMSRenderTimer.Tick += new System.EventHandler(this.stereoMEMSRenderTimer_Tick);
             // 
             // testDifRotationTimer
             // 
-            this.testDifRotationTimer.Enabled = true;
             this.testDifRotationTimer.Tick += new System.EventHandler(this.testDifRotationTimer_Tick);
             // 
             // Form1
